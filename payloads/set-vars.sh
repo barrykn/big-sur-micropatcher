@@ -30,12 +30,8 @@ fi
 
 csrutil disable
 csrutil authenticated-root disable
+
 echo
-echo 'Now rebooting. Make sure to hold down Option for the startup selector!'
-
-# In my testing, it seems that the reboot can actually shut down Terminal
-# before it refreshes, so pause for a second to make sure all output is
-# visible before the reboot.
-sleep 1
-
-reboot
+echo 'Done changing boot-args and csrutil settings.
+echo 'You may now run the installer using:'
+echo '/Volumes/Image\ Volume/run-installer.sh'
