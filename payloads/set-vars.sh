@@ -32,6 +32,6 @@ csrutil disable
 csrutil authenticated-root disable
 
 echo
-echo 'Done changing boot-args and csrutil settings.
+echo 'Done changing boot-args and csrutil settings.'
 echo 'You may now run the installer using:'
 echo '/Volumes/Image\ Volume/run-installer.sh'
