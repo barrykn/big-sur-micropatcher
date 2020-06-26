@@ -30,6 +30,9 @@ fi
 mv "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive" \
    "$VOLUME/System/Library/CoreServices/PlatformSupport.plist"
 
+# Undo the com.apple.Boot.plist patch
+mv -f "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
+
 # Delete the shell scripts, patcher version info, and dylibs
 rm "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 
