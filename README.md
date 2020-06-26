@@ -7,9 +7,9 @@ This documentation is extremely bare-bones at the moment, but hopefully it's bet
 
 Quick instructions for use:
 
-1. Obtain a copy of the macOS Big Sur Developer Preview and use `createinstallmedia` as usual to create a bootable USB stick with the installer and recvoery environment, as you would on a supported Mac.
+1. Obtain a copy of the macOS Big Sur Developer Preview and use `createinstallmedia` as usual to create a bootable USB stick with the installer and recvoery environment, as you would on a supported Mac. (This patcher currently requires that the name of the USB stick remain "Install macOS Beta". Do not rename the USB stick at any point.)
 2. Also obtain a copy of ASentientBot's Hax.dylib or Hax2Lib.dylib (the latter is contained inside Hax2.app).
-3. Download this micropatcher, then run `micropatcher.sh` to patch the USB stick. (Make sure you do not rename the USB stick after step 1.)
+3. Download this micropatcher, then run `micropatcher.sh` to patch the USB stick. (If you are viewing this on GitHub, and you probably are, then click "Clone" then "Download ZIP".)
 4. After the patcher finishes, Copy Hax.dylib or Hax2Lib.dylib onto the USB stick. (Or you can do it before running the patcher if you prefer.)
 5. Boot from the USB stick.
 6. If you need to do any formatting or partitioning with Disk Utility, you can do it now, or between steps 8 and 9, it's up to you.
