@@ -1,4 +1,4 @@
-# big-sur-micropatcher
+# big-sur-micropatcher (Version 0.0.2pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 Thanks to jackluke and ASentientBot for their hard work to get Big Sur running on unsupported Macs!
@@ -8,9 +8,9 @@ This documentation is extremely bare-bones at the moment, but hopefully it's bet
 Quick instructions for use:
 
 1. Obtain a copy of the macOS Big Sur Developer Preview and use `createinstallmedia` as usual to create a bootable USB stick with the installer and recvoery environment, as you would on a supported Mac. (This patcher currently requires that the name of the USB stick remain "Install macOS Beta". Do not rename the USB stick at any point.)
-2. Also obtain a copy of ASentientBot's Hax.dylib or Hax2Lib.dylib (the latter is contained inside Hax2.app).
+2. Also obtain a copy of ASentientBot's Hax.dylib or Hax2.app.
 3. Download this micropatcher, then run `micropatcher.sh` to patch the USB stick. (If you are viewing this on GitHub, and you probably are, then click "Clone" then "Download ZIP".)
-4. After the patcher finishes, Copy Hax.dylib or Hax2Lib.dylib onto the USB stick. (Or you can do it before running the patcher if you prefer.)
+4. After the patcher finishes, Copy Hax.dylib or Hax2.app onto the USB stick. (Or you can do it before running the patcher if you prefer.)
 5. Boot from the USB stick.
 6. If you need to do any formatting or partitioning with Disk Utility, you can do it now, or between steps 8 and 9, it's up to you.
 7. Open Terminal, then run `/Volumes/Image\ Volume/set-vars.sh`. This script will change boot-args and csrutil settings as needed. Don't forget that tab completion is your friend! You can type `/V<tab>/I<tab>/se<tab>` at the command prompt -- that's much less typing! (Run `/Volumes/Image\ Volume/set-vars.sh -v` instead if you want verbose boot.)
