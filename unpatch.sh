@@ -34,5 +34,5 @@ mv "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive" \
 rm "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 
 echo 'Unpatcher finished.'
-echo 'Remember to manually delete any Hax dylibs on your USB stick, if you'
-echo 'are not immediately repatching.'
+echo 'Remember to manually delete Hax2.app or any Hax dylibs from your'
+echo 'USB stick, if you are not immediately repatching.'

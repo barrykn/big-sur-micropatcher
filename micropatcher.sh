@@ -57,8 +57,9 @@ echo 'Micropatcher finished.'
 # Finally, if necessary, remind the user of the last step that's needed
 # before the USB stick will actually be usable -- installation of a dylib
 # from ASentientBot.
-if [ ! -e "$VOLUME/Hax2Lib.dylib" ] && [ ! -e "$VOLUME/Hax.dylib" ]
+if [ ! -e "$VOLUME/Hax2Lib.dylib" ] && [ ! -e "$VOLUME/Hax.dylib" ] && \
+   [ ! -e "$VOLUME/Hax2.app" ]
 then
     echo "Remember to copy one of ASentientBot's Hax dylibs, either Hax.dylib"
-    echo "or Hax2Lib.dylib, onto your USB stick!"
+    echo "or Hax2Lib.dylib (or Hax2.app), onto your USB stick!"
 fi
