@@ -1,4 +1,4 @@
-# big-sur-micropatcher (Version 0.0.3)
+# big-sur-micropatcher (Version 0.0.4pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 Thanks to jackluke and ASentientBot for their hard work to get Big Sur running on unsupported Macs!
