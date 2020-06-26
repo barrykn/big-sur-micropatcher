@@ -6,18 +6,22 @@ BASE='/Volumes/Image Volume'
 APPNAME='Install macOS Beta.app'
 INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 
-if [ -f "$BASE/Hax2Lib.dylib" ]
+if [ -e "$BASE/Hax2.app" ]
+then
+    echo 'Found Hax2.app, so using embedded Hax2Lib.dylib'
+    LIBPATH="$BASE/Hax2.app/Contents/Resources/Hax2Lib.dylib"
+elif [ -e "$BASE/Hax2Lib.dylib" ]
 then
     echo 'Found Hax2Lib.dylib'
     LIBPATH="$BASE/Hax2Lib.dylib"
-elif [ -f "$BASE/Hax.dylib" ]
+elif [ -e "$BASE/Hax.dylib" ]
 then
     echo 'Found Hax.dylib'
     LIBPATH="$BASE/Hax.dylib"
 else
-    echo 'Neither Hax2Lib.dylib nor Hax.dylib were found. Please copy one'
-    echo 'of them onto your USB stick.'
-    exit
+    echo 'Could not find Hax2.app, Hax2Lib.dylib, or Hax.dylib.'
+    echo 'Please copy one of them onto your USB stick.'
+    exit 1
 fi
 
 launchctl setenv DYLD_INSERT_LIBRARIES "$LIBPATH"
