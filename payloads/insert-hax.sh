@@ -27,3 +27,5 @@ pmset -a displaysleep 0 sleep 0
 
 launchctl setenv DYLD_INSERT_LIBRARIES "$LIBPATH"
 
+echo
+echo 'You may now quit Terminal and start the Installer as normal.'

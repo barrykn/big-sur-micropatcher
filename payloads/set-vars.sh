@@ -33,5 +33,7 @@ csrutil authenticated-root disable
 
 echo
 echo 'Done changing boot-args and csrutil settings.'
-echo 'You may now run the installer using:'
-echo '/Volumes/Image\ Volume/run-installer.sh'
+echo
+
+# Now set things up to run the installer.
+"/Volumes/Image Volume/insert-hax.sh"

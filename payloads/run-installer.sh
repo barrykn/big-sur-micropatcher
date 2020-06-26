@@ -14,7 +14,7 @@ INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 
 # Before actually running the installer, run insert-dylib.sh to
 # set things up.
-"$BASE/insert-dylib.sh"
+"$BASE/insert-hax.sh"
 
 # The obvious, sane, and efficient approach would be to use the return
 # value of insert-dylib.sh to determine whether to proceed or stop. However,
