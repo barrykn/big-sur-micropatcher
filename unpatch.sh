@@ -25,6 +25,13 @@ then
     exit 1
 fi
 
+if [ ! -e "$VOLUME/Patch-Version.txt" ]
+then
+    echo 'Patch not detected on USB stick, but proceeding with unpatch anyway.'
+    echo 'This should do no harm. Any subsequent error messages are,'
+    echo 'in all likelihood, harmless.'
+    echo
+fi
 
 # Undo the boot-time compatibility check patch, if present
 echo 'Checking for boot-time compatibility check patch (v0.0.1/v0.0.2).'
