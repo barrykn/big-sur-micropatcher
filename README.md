@@ -17,7 +17,7 @@ Quick instructions for use:
 8. The Mac will reboot, so boot from the USB stick again.
 9. Open Terminal, then run `/Volumes/Image\ Volume/run-installer.sh`. This will inject the Hax dylib and start the installer. Come back in an hour or two and you should be at the macOS setup region prompt!
 
-This won't fix any post-installation issues, like nonfunctioning Wi-Fi or removing telemetry on systems with Penryn CPUs, but at least it will get a basic installation done on 2011/2012/2013 Macs. In the patcher's current condition, I don't expect USB support (necessary for keyboard and trackpad) to work on 2010 or earlier MacBooks, but I have not done any testing on those yet.
+This won't fix any post-installation issues, like nonfunctioning Wi-Fi or removing telemetry on systems with Penryn CPUs, but at least it will get a basic installation done on 2011/2012/2013 Macs. I don't expect USB support (necessary for keyboard and trackpad) to work on 2010 or earlier MacBooks right now, but I have not done any testing on those yet.
 
 If you want to undo the patcher's changes to boot-args and csrutil settings, then boot from the USB stick, open Terminal, and run `/Volumes/Image\ Volume/reset-vars.sh`.
 
