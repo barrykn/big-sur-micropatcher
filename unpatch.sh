@@ -26,16 +26,35 @@ then
 fi
 
 
-# Undo the boot-time compatibility check patch
-mv "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive" \
-   "$VOLUME/System/Library/CoreServices/PlatformSupport.plist"
+# Undo the boot-time compatibility check patch, if present
+echo 'Checking for boot-time compatibility check patch (v0.0.1/v0.0.2).'
+if [ -e "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive" ]
+then
+    echo 'Removing boot-time compatibility check patch.'
+    mv "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive" \
+       "$VOLUME/System/Library/CoreServices/PlatformSupport.plist"
+else
+    echo 'Boot-time compatibility check not present; continuing.'
+fi
 
-# Undo the com.apple.Boot.plist patch
-mv -f "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
+echo
 
-# Delete the shell scripts, patcher version info, and dylibs
+# Undo the com.apple.Boot.plist patch, if present
+echo 'Checking for com.apple.Boot.plist patch (v0.0.3+).'
+if [ -e "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" ]
+then
+    echo 'Removing com.apple.Boot.plist patch.'
+    mv -f "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
+else
+    echo 'com.apple.Boot.plist patch not present; continuing.'
+fi
+
+echo
+echo 'Removing shell scripts and patcher version info.'
+# Delete the shell scripts and patcher version info.
 rm "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 
+echo
 echo 'Unpatcher finished.'
 echo 'Remember to manually delete Hax2.app or any Hax dylibs from your'
 echo 'USB stick, if you are not immediately repatching.'
