@@ -30,6 +30,11 @@ else
     exit 1
 fi
 
+# On unsupported Macs, system sleep and display sleep often don't work
+# properly in the Recovery environment. So, disable them before
+# starting the installer.
+pmset -a displaysleep 0 sleep 0
+
 launchctl setenv DYLD_INSERT_LIBRARIES "$LIBPATH"
 
 # The installer **MUST** be backgrounded using &, or else the "Close Other
