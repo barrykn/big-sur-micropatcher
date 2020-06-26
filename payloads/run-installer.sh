@@ -12,30 +12,22 @@ APPNAME='Install macOS Beta.app'
 # be downloaded at this time. Try again later."
 INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 
-if [ -e "$BASE/Hax2.app" ]
+# Before actually running the installer, run insert-dylib.sh to
+# set things up.
+"$BASE/insert-dylib.sh"
+
+# The obvious, sane, and efficient approach would be to use the return
+# value of insert-dylib.sh to determine whether to proceed or stop. However,
+# it won't do any harm to waste a few milliseconds here, and we won't be
+# able to use the insert-dylib.sh return value once the v0.0.4 refactoring
+# is complete, so we'll check using launchctl getenv.
+if [ -z "`launchctl getenv DYLD_INSERT_LIBRARIES`" ]
 then
-    echo 'Found Hax2.app, so using embedded Hax2Lib.dylib'
-    LIBPATH="$BASE/Hax2.app/Contents/Resources/Hax2Lib.dylib"
-elif [ -e "$BASE/Hax2Lib.dylib" ]
-then
-    echo 'Found Hax2Lib.dylib'
-    LIBPATH="$BASE/Hax2Lib.dylib"
-elif [ -e "$BASE/Hax.dylib" ]
-then
-    echo 'Found Hax.dylib'
-    LIBPATH="$BASE/Hax.dylib"
-else
-    echo 'Could not find Hax2.app, Hax2Lib.dylib, or Hax.dylib.'
-    echo 'Please copy one of them onto your USB stick.'
+    # Error message will go here toward the end of v0.0.4 refactoring, but
+    # currently the error message is printed by insert-dylib.sh, so just
+    # stop the script here.
     exit 1
 fi
-
-# On unsupported Macs, system sleep and display sleep often don't work
-# properly in the Recovery environment. So, disable them before
-# starting the installer.
-pmset -a displaysleep 0 sleep 0
-
-launchctl setenv DYLD_INSERT_LIBRARIES "$LIBPATH"
 
 # The installer **MUST** be backgrounded using &, or else the "Close Other
 # Applications" button in the installer fails to close Terminal and the
