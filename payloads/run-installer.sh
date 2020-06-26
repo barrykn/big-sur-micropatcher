@@ -4,6 +4,12 @@
 
 BASE='/Volumes/Image Volume'
 APPNAME='Install macOS Beta.app'
+
+# Regarding the choice of InstallAssistant binary, there is also one
+# at /Install macOS Beta/Contents/MacOS/InstallAssistant -- but if you
+# use that one, it fails with:
+# "Installation requires downloading important content. That content can't
+# be downloaded at this time. Try again later."
 INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 
 if [ -e "$BASE/Hax2.app" ]
