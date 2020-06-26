@@ -30,6 +30,16 @@ then
     exit 1
 fi
 
+if [ -e "$VOLUME/Patch-Version.txt" ]
+then
+    echo "Cannot patch a USB stick which has already been patched."
+    echo "Ideally run createinstallmedia again, or at least run unpatch.sh"
+    echo "first."
+    echo
+    echo "Patcher cannot continue and will now exit."
+    exit 1
+fi
+
 
 # Patch out the boot-time compatibility check
 echo 'Patching boot-time compatibility check (thanks to jackluke)...'
