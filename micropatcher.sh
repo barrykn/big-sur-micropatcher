@@ -3,6 +3,8 @@ VERSIONNUM="0.0.3pre"
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 echo $VERSION
+echo Thanks to jackluke and ASentientBot for their hard work to get Big Sur
+echo running on unsupported Macs!
 # Add a blank line of output to make things easier on the eyes.
 echo
 
