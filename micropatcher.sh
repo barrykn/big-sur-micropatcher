@@ -41,10 +41,12 @@ then
 fi
 
 
-# Patch out the boot-time compatibility check
-echo 'Patching boot-time compatibility check (thanks to jackluke)...'
-mv "$VOLUME/System/Library/CoreServices/PlatformSupport.plist" \
-   "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive"
+# Patch com.apple.Boot.plist
+echo 'Patching com.apple.Boot.plist (thanks to jackluke)...'
+# It would seem more obvious to do mv then cp, but doing cp then cat lets us
+# use cat as a permissions-preserving Unix trick, just to be extra cautious.
+cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original"
+cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
 
 # Copy the shell scripts into place so that they may be used once the
 # USB stick is booted.

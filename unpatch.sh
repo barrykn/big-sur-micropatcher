@@ -44,7 +44,8 @@ echo 'Checking for com.apple.Boot.plist patch (v0.0.3+).'
 if [ -e "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" ]
 then
     echo 'Removing com.apple.Boot.plist patch.'
-    mv -f "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
+    cat "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" > "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
+    rm "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original"
 else
     echo 'com.apple.Boot.plist patch not present; continuing.'
 fi
