@@ -16,7 +16,7 @@ echo
 # there is only one Big Sur recovery USB stick plugged into this Mac.)
 VOLUME='/Volumes/Install macOS Beta'
 
-# A couple of quick sanity checks before we begin.
+# A quick sanity check before we begin.
 if [ ! -d "$VOLUME/Install macOS Beta.app" ]
 then
     echo "Failed to properly locate Big Sur recovery USB stick for unpatching."
