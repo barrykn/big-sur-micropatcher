@@ -2,6 +2,11 @@
 
 # Any command line arguments are passed to InstallAssistant.
 
+# As of micropatcher v0.0.4, this script is left present as a potential
+# convenience but is otherwise deprecated. Instead of running this script,
+# users should quit Terminal and run the Installer as normal.
+
+
 BASE='/Volumes/Image Volume'
 APPNAME='Install macOS Beta.app'
 
@@ -12,22 +17,14 @@ APPNAME='Install macOS Beta.app'
 # be downloaded at this time. Try again later."
 INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 
-# Before actually running the installer, run insert-dylib.sh to
-# set things up.
-"$BASE/insert-hax.sh"
-
-# The obvious, sane, and efficient approach would be to use the return
-# value of insert-dylib.sh to determine whether to proceed or stop. However,
-# it won't do any harm to waste a few milliseconds here, and we won't be
-# able to use the insert-dylib.sh return value once the v0.0.4 refactoring
-# is complete, so we'll check using launchctl getenv.
-if [ -z "`launchctl getenv DYLD_INSERT_LIBRARIES`" ]
-then
-    # Error message will go here toward the end of v0.0.4 refactoring, but
-    # currently the error message is printed by insert-dylib.sh, so just
-    # stop the script here.
-    exit 1
-fi
+# As of micropatcher version 0.0.4, it is the user's responsibility to
+# run insert-hax.sh before running this script. Users should generally
+# run set-vars.sh, which will itself invoke insert-hax.sh; furthermore,
+# this script is now deprecated. So, this should not be a problem.
+#
+# In the event that I turn out to be mistaken, I'll reintroduce error
+# checking in this script in a future micropatcher release. (I think it's
+# more likely that this script will be removed entirely, however.)
 
 # The installer **MUST** be backgrounded using &, or else the "Close Other
 # Applications" button in the installer fails to close Terminal and the
