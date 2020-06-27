@@ -16,7 +16,7 @@ Quick instructions for use:
 5. If you need to do any partitioning or formatting with Disk Utility, and you didn't do it in step 5, it's best to do it now.
 6. Open Terminal (in the Utilities menu), then run `/Volumes/Image\ Volume/set-vars.sh`. This script will change boot-args and csrutil settings as needed, and also set things up so the Installer will run properly. Don't forget that tab completion is your friend! You can type `/V<tab>/I<tab>/se<tab>` at the command prompt -- that's much less typing! (Run `/Volumes/Image\ Volume/set-vars.sh -v` instead if you want verbose boot. Note that verbose boot in Big Sur is *very* verbose, to the point that it actually slows down boot considerably -- but it's also very useful for troubleshooting.)
 7. Quit Terminal then start the Installer as you would on a supported Mac.
-10. Come back in an hour or two and you should be at the macOS setup region prompt!
+8. Come back in an hour or two and you should be at the macOS setup region prompt! (If you actually watch the installation process, don't be surprised if it seems to get stuck at "Less than a minute remaining..." for a long time. Allow it well over half an hour. It should eventually reboot on its own and keep going.)
 
 This won't fix any post-installation issues, like nonfunctioning Wi-Fi or removing telemetry on systems with Penryn CPUs, but at least it will get a basic installation done on 2011/2012/2013 Macs. I don't expect USB support (necessary for keyboard and trackpad) to work on 2010 or earlier MacBooks right now, but I have not done any testing on those yet.
 
