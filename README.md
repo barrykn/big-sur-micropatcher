@@ -1,11 +1,14 @@
 # big-sur-micropatcher (Version 0.0.5pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
-Thanks to ASentientBot and jackluke for their hard work to get Big Sur running on unsupported Macs! In particular:
--Thanks to ASentientBot for developing the Hax and Hax2 installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs.
--Thanks to jackluke for figuring out how to patch the Recovery USB to bypass compatibility checks and AMFI enforcement in the absence of NVRAM boot-args settings.
+(Note that [ParrotGeek has a Big Sur patcher](https://parrotgeek.com/bigsur/) now; it is an alternative that you should consider.)
 
-This documentation is extremely bare-bones at the moment, but hopefully it's better than nothing. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
+Thanks to ASentientBot and jackluke for their hard work to get Big Sur running on unsupported Macs! In particular:
+
+- Thanks to ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs.
+- Thanks to jackluke for figuring out how to patch the Recovery USB to bypass compatibility checks and AMFI enforcement in the absence of NVRAM boot-args settings.
+
+This documentation is bare-bones at the moment, but hopefully it's better than nothing. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
 Quick instructions for use:
 
@@ -18,8 +21,8 @@ Quick instructions for use:
 7. Quit Terminal then start the Installer as you would on a supported Mac.
 8. Come back in an hour or two and you should be at the macOS setup region prompt! (If you actually watch the installation process, don't be surprised if it seems to get stuck at "Less than a minute remaining..." for a long time. Allow it well over half an hour. It should eventually reboot on its own and keep going.)
 
-This won't fix any post-installation issues, like nonfunctioning Wi-Fi or removing telemetry on systems with Penryn CPUs, but at least it will get a basic installation done on 2011/2012/2013 Macs. I don't expect USB support (necessary for keyboard and trackpad) to work on 2010 or earlier MacBooks right now, but I have not done any testing on those yet.
+This won't fix any post-installation issues, like nonfunctioning Wi-Fi or removing telemetry on systems with Penryn CPUs, but at least it will get a basic installation done on 2011/2012/2013 Macs. It is essentially certain that USB support (necessary for booting off the USB stick, as well as keyboard and trackpad) will fail to work on 2010 or earlier MacBooks right now, but I have not done any testing on those yet.
 
 If you want to undo the patcher's changes to boot-args and csrutil settings, then boot from the USB stick, open Terminal, and run `/Volumes/Image\ Volume/reset-vars.sh`.
 
-The best way to remove the patch from the USB stick is to redo `createinstallmedia`, but if you are working on patcher development or otherwise need a faster way to do it, run `unpatch.sh`.
+The best way to remove the patch from the USB stick is to redo `createinstallmedia`, but if you are working on patcher development or otherwise need a faster way to do it, you can run `unpatch.sh`.
