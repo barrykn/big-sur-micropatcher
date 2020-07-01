@@ -70,13 +70,6 @@ chmod u+x "$VOLUME"/HaxLib.dylib
 
 echo 'Adding kexts...'
 cp -f payloads/*.kext.zip "$VOLUME"
-pushd "$VOLUME" > /dev/null
-for x in *.kext.zip
-do
-    unzip -q "$x"
-    rm -rf __MACOSX
-done
-popd > /dev/null
 
 # Save a file onto the USB stick that says what patcher & version was used,
 # so it can be identified later (e.g. for troubleshooting purposes).
