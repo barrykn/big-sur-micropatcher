@@ -47,7 +47,10 @@ fi
 echo 'Patching com.apple.Boot.plist (thanks to jackluke)...'
 # It would seem more obvious to do mv then cp, but doing cp then cat lets us
 # use cat as a permissions-preserving Unix trick, just to be extra cautious.
-cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original"
+if [ ! -e "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" ]
+then
+    cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original"
+fi
 cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
 
 # Copy the shell scripts into place so that they may be used once the
@@ -55,9 +58,15 @@ cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfigura
 echo 'Adding shell scripts...'
 cp -f payloads/*.sh "$VOLUME"
 
+# Copy HaxLib.dylib (from Hax3) into place
+echo "Adding HaxLib.dylib (from ASentientBot's Hax3)..."
+cp -f payloads/ASentientBot-Hax/HaxLib.dylib "$VOLUME"
+
 # Not sure if this is actually necessary, but let's play it safe and ensure
 # the shell scripts are executable.
 chmod u+x "$VOLUME"/*.sh
+# Same for the dylib
+chmod u+x "$VOLUME"/HaxLib.dylib
 
 # Save a file onto the USB stick that says what patcher & version was used,
 # so it can be identified later (e.g. for troubleshooting purposes).
@@ -66,14 +75,3 @@ echo "$VERSION" > "$VOLUME/Patch-Version.txt"
 
 echo
 echo 'Micropatcher finished.'
-
-
-# Finally, if necessary, remind the user of the last step that's needed
-# before the USB stick will actually be usable -- installation of a dylib
-# from ASentientBot.
-if [ ! -e "$VOLUME/Hax2Lib.dylib" ] && [ ! -e "$VOLUME/Hax.dylib" ] && \
-   [ ! -e "$VOLUME/Hax2.app" ]
-then
-    echo "Remember to copy one of ASentientBot's Hax dylibs, either Hax.dylib"
-    echo "or Hax2Lib.dylib (or Hax2.app), onto your USB stick!"
-fi
