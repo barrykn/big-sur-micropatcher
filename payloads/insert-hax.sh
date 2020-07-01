@@ -8,7 +8,7 @@ if [ -e "$BASE/Hax3.app" ]
 then
     echo 'Found Hax3.app, so using embedded HaxLib.dylib'
     LIBPATH="$BASE/Hax3.app/Contents/Resources/HaxLib.dylib"
-if [ -e "$BASE/Hax2.app" ]
+elif [ -e "$BASE/Hax2.app" ]
 then
     echo 'Found Hax2.app, so using embedded Hax2Lib.dylib'
     LIBPATH="$BASE/Hax2.app/Contents/Resources/Hax2Lib.dylib"
