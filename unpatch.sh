@@ -60,9 +60,13 @@ fi
 echo
 echo 'Removing shell scripts and patcher version info.'
 # Delete the shell scripts and patcher version info.
-rm "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
+rm -f "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
+
+# Now that the patcher is going to add the dylib itself, go ahead and
+# remove that too.
+echo 'Remvoing Hax dylib...'
+rm -f "$VOLUME"/*.dylib
+rm -rf "$VOLUME"/Hax*app
 
 echo
 echo 'Unpatcher finished.'
-echo 'Remember to manually delete Hax2.app or any Hax dylibs from your'
-echo 'USB stick, if you are not immediately repatching.'
