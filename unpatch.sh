@@ -65,8 +65,8 @@ rm -f "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 # Now that the patcher is going to add the dylib itself, go ahead and
 # remove that too.
 echo 'Remvoing Hax dylib...'
-rm -f "$VOLUME"/*.dylib
-rm -rf "$VOLUME"/Hax*app
+rm -f "$VOLUME"/Hax*.dylib
+rm -rf "$VOLUME"/Hax*.app
 
 echo
 echo 'Unpatcher finished.'
