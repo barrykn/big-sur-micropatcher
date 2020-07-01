@@ -84,4 +84,8 @@ echo 'Saving patcher version info...'
 echo "$VERSION" > "$VOLUME/Patch-Version.txt"
 
 echo
+echo 'Syncing.'
+sync
+
+echo
 echo 'Micropatcher finished.'

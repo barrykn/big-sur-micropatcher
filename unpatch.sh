@@ -69,4 +69,8 @@ rm -f "$VOLUME"/Hax*.dylib
 rm -rf "$VOLUME"/Hax*.app
 
 echo
+echo 'Syncing.'
+sync
+
+echo
 echo 'Unpatcher finished.'
