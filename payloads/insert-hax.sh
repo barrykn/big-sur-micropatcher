@@ -14,7 +14,7 @@ then
     LIBPATH="$BASE/Hax2.app/Contents/Resources/Hax2Lib.dylib"
 elif [ -e "$BASE/HaxLib.dylib" ]
 then
-    echo 'Found HaxLib.dylib (presumably from Hax3)'
+    echo 'Found HaxLib.dylib'
     LIBPATH="$BASE/HaxLib.dylib"
 elif [ -e "$BASE/Hax2Lib.dylib" ]
 then
@@ -25,8 +25,8 @@ then
     echo 'Found Hax.dylib'
     LIBPATH="$BASE/Hax.dylib"
 else
-    echo 'Could not find Hax2.app, Hax2Lib.dylib, or Hax.dylib.'
-    echo 'Please copy one of them onto your USB stick.'
+    echo "Could not find a Hax. As of micropatcher v0.0.5, this is a"
+    echo "patcher bug and not user error."
     exit 1
 fi
 
