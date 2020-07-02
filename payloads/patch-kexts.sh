@@ -6,8 +6,11 @@ IMGVOL="/Volumes/Image Volume"
 if [ ! -d "$IMGVOL" ]
 then
     echo 'You must use this script from inside the Recovery environment.'
-    echo 'Please restart your Mac from your patched Big Sur installer'
+    echo 'Please restart your Mac from the patched Big Sur installer'
     echo 'USB drive, then open Terminal and try again.'
+    echo
+    echo '(The ability to use this script without rebooting into the'
+    echo 'Recovery environment is planned for a future patcher release.)'
     exit 1
 fi
 
