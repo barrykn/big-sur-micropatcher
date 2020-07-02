@@ -124,13 +124,7 @@ fi
 
 popd
 
-# "this is required to update the prelinkedkernel" per jackluke,
-# but I wonder if it's really necessary in light of the kmutil command
-# that follows. Anyway, no harm to keep it here for now, and I can do more
-# testing later.
-kextcache -i "$VOLUME"
-
-# "this is required to update the BootKernelExtensions.kc" per jackluke
+# Now do the real kernel cache update stuff
 kmutil install --volume-root "$VOLUME" --update-all
 
 # The way you control kcditto's *destination* is by choosing which volume
