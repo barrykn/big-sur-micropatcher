@@ -17,7 +17,7 @@ fi
 # Figure out which kexts we're installing and where we're installing
 # them to.
 
-if [ "x$1" = "x--hdaonly" ]
+if [ "x$1" = "x--2011-no-wifi" ]
 then
     INSTALL_WIFI="NO"
     INSTALL_HDA="YES"
