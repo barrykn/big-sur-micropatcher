@@ -23,7 +23,7 @@ then
     INSTALL_HDA="YES"
     shift
     echo 'Installing AppleHDA to:'
-elif [ "x$1" = "x--hda" ]
+elif [ "x$1" = "x--2011" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
