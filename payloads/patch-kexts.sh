@@ -154,13 +154,16 @@ fi
 
 popd
 
-# "this is required to update the prelinkedkernel" per jackluke,
-# but I wonder if it's really necessary in light of the kmutil command
-# that follows. Anyway, no harm to keep it here for now, and I can do more
-# testing later.
+# According to jackluke on the MacRumors Forums, kextcache -i is "required
+# to update the prelinkedkernel" (the old way of doing things) and kmutil
+# is "required to update the BootKernelExtensions.kc" (the new way of doing
+# things).
+# 
+# All of my testing so far has been on installations using the new way,
+# but as far as I can tell, kextcache -i is at worst a no-op for kernel
+# cache users, so I may as well keep it there for the benefit of
+# prelinkedkernel users out there.
 kextcache -i "$VOLUME"
-
-# "this is required to update the BootKernelExtensions.kc" per jackluke
 kmutil install --volume-root "$VOLUME" --update-all
 
 # The way you control kcditto's *destination* is by choosing which volume
