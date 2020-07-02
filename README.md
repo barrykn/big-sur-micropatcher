@@ -24,6 +24,6 @@ Quick instructions for use:
 
 As of version 0.0.6, this patcher can now handle WiFi (see step 9 above). This patcher still won't fix many post-installation issues, like missing graphics acceleration on 2011 Macs or removing telemetry on systems with Penryn CPUs, but at least it will get a basic installation done on 2011/2012/2013 Macs. It is essentially certain that USB support (necessary for booting off the USB stick, as well as keyboard and trackpad) will fail to work on 2010 or earlier MacBooks right now, but I have not done any testing on those yet.
 
-If you want to undo the patcher's changes to boot-args and csrutil settings, then boot from the USB stick, open Terminal, and run `/Volumes/Image\ Volume/reset-vars.sh`.
+If you want to undo the patcher's changes to boot-args and csrutil settings, then boot from the USB stick, open Terminal, and run `/Volumes/Image\ Volume/reset-vars.sh`. For what it's worth, there is also a script for undoing the kext additions (such as 802.11n Wi-Fi), at `/Volumes/Image\ Volume/unpatch-kexts.sh`. (It is dependent on implementation details of patch-kexts.sh and may not be able to undo kext changes applied through other means.)
 
 The best way to remove the patch from the USB stick is to redo `createinstallmedia`, but if you are working on patcher development or otherwise need a faster way to do it, you can run `unpatch.sh`.
