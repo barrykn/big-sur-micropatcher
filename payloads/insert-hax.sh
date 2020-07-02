@@ -2,8 +2,6 @@
 
 BASE='/Volumes/Image Volume'
 
-# I should clean this up at a later point in patcher development, but
-# for now (late June/early July) I'll keep it flexible.
 if [ "x$1" = "x--seal" ]
 then
     echo 'Using Hax.dylib to enable volume sealing'
