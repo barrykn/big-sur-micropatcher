@@ -44,13 +44,13 @@ then
     exit 1
 fi
 
-# Check that the $VOLUME has macOS version "10.16" [sic]. This version
-# check will likely need an update for future Big Sur seeds, but that's OK.
+# Check that the $VOLUME has macOS build 20*. This version check will
+# hopefully keep working even after Apple bumps the version number to 11.
 SVPL="$VOLUME"/System/Library/CoreServices/SystemVersion.plist
 SVPL_VER=`fgrep '<string>10' "$SVPL" | sed -e 's@^.*<string>10@10@' -e 's@</string>@@' | uniq -d`
 SVPL_BUILD=`grep '<string>[0-9][0-9][A-Z]' "$SVPL" | sed -e 's@^.*<string>@@' -e 's@</string>@@'`
 
-if [ "x$SVPL_VER" = "x10.16" ]
+if echo $SVPL_BUILD | grep -q '^20'
 then
     echo -n "Volume appears to have a Big Sur installation (build" $SVPL_BUILD
     echo "). Continuing."
