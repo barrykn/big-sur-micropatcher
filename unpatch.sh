@@ -19,7 +19,7 @@ VOLUME='/Volumes/Install macOS Beta'
 # A quick sanity check before we begin.
 if [ ! -d "$VOLUME/Install macOS Beta.app" ]
 then
-    echo "Failed to properly locate Big Sur recovery USB stick for unpatching."
+    echo "Failed to locate Big Sur recovery USB stick for unpatching."
     echo
     echo "Patcher cannot continue and will now exit."
     exit 1

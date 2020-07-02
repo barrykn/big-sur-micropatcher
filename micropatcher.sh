@@ -25,7 +25,7 @@ fi
 
 if [ ! -d "$VOLUME/Install macOS Beta.app" ]
 then
-    echo "Failed to properly locate Big Sur recovery USB stick."
+    echo "Failed to locate Big Sur recovery USB stick."
     echo Remember to create it using createinstallmedia, and do not rename it.
     echo
     echo "Patcher cannot continue and will now exit."
