@@ -40,6 +40,7 @@ if [ ! -d "$VOLUME/System/Library/Extensions" ]
 then
     echo "Unable to find /System/Library/Extensions on the volume."
     echo "Cannot proceed. Make sure you specified the correct volume."
+    echo "(Make sure to specify the system volume, not the data volume.)"
     exit 1
 fi
 
