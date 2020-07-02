@@ -37,13 +37,39 @@ fi
 
 VOLUME="$1"
 echo "$VOLUME"
+echo
 
 # Sanity check to make sure that $VOLUME isn't an obvious mistake
+#
+# DO NOT check for /Syste/Library/CoreServices here, or Big Sur data drives
+# as well as system drives will pass the check!
 if [ ! -d "$VOLUME/System/Library/Extensions" ]
 then
-    echo "Unable to find /System/Library/Extensions on the volume:"
-    echo "$VOLUME"
+    echo "Unable to find /System/Library/Extensions on the volume."
     echo "Cannot proceed. Make sure you specified the correct volume."
+    exit 1
+fi
+
+# Check that the $VOLUME has macOS version "10.16" [sic]. This version
+# check will likely need an update for future Big Sur seeds, but that's OK.
+SVPL="$VOLUME"/System/Library/CoreServices/SystemVersion.plist
+if fgrep -q 10.16 "$SVPL"
+then
+    echo "Volume appears to have a Big Sur installation. Continuing."
+else
+    # Try to figure out the version number
+    SVPL_VER=`fgrep '<string>10' "$SVPL" | sed -e 's@^.*<string>10@10@' -e 's@</string>@@' | uniq -d`
+    SVPL_BUILD=`grep '<string>[0-9][0-9][A-Z]' "$SVPL" | sed -e 's@^.*<string>@@' -e 's@</string>@@'`
+    if [ -z "$SVPL_VER" ]
+    then
+        echo 'Unable to detect macOS version on volume. Make sure you chose'
+        echo 'the correct volume. Or, perhaps a newer patcher is required.'
+    else
+        echo 'Volume appears to have an older version of macOS. Probably'
+        echo 'version' "$SVPL_VER" "build" "$SVPL_BUILD"
+        echo 'Please make sure you specified the correct volume.'
+    fi
+
     exit 1
 fi
 
@@ -61,14 +87,14 @@ POPSLICE2=`echo $POPSLICE | sed -E 's@s[0-9]+$@@'`
 
 if [ $POPSLICE = $POPSLICE2 ]
 then
-    echo 'Device is an actual volume. Proceeding.'
+    echo 'Mounted volume is an actual volume, not a snapshot. Proceeding.'
 else
     echo
     echo 'ERROR:'
-    echo 'Device appears to be a mounted APFS snapshot (the mounted partition'
-    echo 'is a slice within a slice). The patcher was not expecting to'
-    echo 'encounter this within the Recovery environment, and an update to'
-    echo 'the patcher will be required. Kext installation will not proceed.'
+    echo 'Mounted volume appears to be an APFS snapshot, not the underlying'
+    echo 'volume. The patcher was not expecting to encounter this situation'
+    echo 'within the Recovery environment, and an update to the patcher will'
+    echo 'be required. Kext installation will not proceed.'
     exit 1
 fi
 
