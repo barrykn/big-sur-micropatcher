@@ -65,7 +65,7 @@ cp -f payloads/ASentientBot-Hax/Hax*.dylib "$VOLUME"
 # Not sure if this is actually necessary, but let's play it safe and ensure
 # the shell scripts are executable.
 chmod u+x "$VOLUME"/*.sh
-# Same for the dylib
+# Same for the dylibs
 chmod u+x "$VOLUME"/Hax*.dylib
 
 echo 'Adding kexts...'
