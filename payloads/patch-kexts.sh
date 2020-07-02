@@ -53,13 +53,14 @@ fi
 # Check that the $VOLUME has macOS version "10.16" [sic]. This version
 # check will likely need an update for future Big Sur seeds, but that's OK.
 SVPL="$VOLUME"/System/Library/CoreServices/SystemVersion.plist
-if fgrep -q 10.16 "$SVPL"
+SVPL_VER=`fgrep '<string>10' "$SVPL" | sed -e 's@^.*<string>10@10@' -e 's@</string>@@' | uniq -d`
+SVPL_BUILD=`grep '<string>[0-9][0-9][A-Z]' "$SVPL" | sed -e 's@^.*<string>@@' -e 's@</string>@@'`
+
+if [ "x$SVPL_VER" = "x10.16" ]
 then
-    echo "Volume appears to have a Big Sur installation. Continuing."
+    echo -n "Volume appears to have a Big Sur installation (build" $SVPL_BUILD
+    echo "). Continuing."
 else
-    # Try to figure out the version number
-    SVPL_VER=`fgrep '<string>10' "$SVPL" | sed -e 's@^.*<string>10@10@' -e 's@</string>@@' | uniq -d`
-    SVPL_BUILD=`grep '<string>[0-9][0-9][A-Z]' "$SVPL" | sed -e 's@^.*<string>@@' -e 's@</string>@@'`
     if [ -z "$SVPL_VER" ]
     then
         echo 'Unable to detect macOS version on volume. Make sure you chose'
