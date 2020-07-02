@@ -161,7 +161,7 @@ popd
 # 
 # All of my testing so far has been on installations using the new way,
 # but as far as I can tell, kextcache -i is at worst a no-op for kernel
-# cache users, so I may as well keep it there for the benefit of
+# collection users, so I may as well keep it there for the benefit of
 # prelinkedkernel users out there.
 kextcache -i "$VOLUME"
 kmutil install --volume-root "$VOLUME" --update-all
