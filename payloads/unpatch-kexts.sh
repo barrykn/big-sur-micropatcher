@@ -23,7 +23,16 @@ VOLUME="$1"
 echo "$VOLUME"
 echo
 
-# Sanity check to make sure that $VOLUME isn't an obvious mistake
+# Make sure a volume has been specified. (Without this, other error checks
+# eventually kick in, but the error messages get confusing.)
+if [ -z "$VOLUME" ]
+then
+    echo 'You must specify a target volume (such as /Volumes/Macintosh\ HD)'
+    echo 'on the command line.'
+    exit 1
+fi
+
+# Sanity check to make sure that the specified $VOLUME isn't an obvious mistake
 #
 # DO NOT check for /Syste/Library/CoreServices here, or Big Sur data drives
 # as well as system drives will pass the check!
