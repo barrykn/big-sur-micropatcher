@@ -4,29 +4,22 @@ BASE='/Volumes/Image Volume'
 
 # I should clean this up at a later point in patcher development, but
 # for now (late June/early July) I'll keep it flexible.
-if [ -e "$BASE/Hax3.app" ]
+if [ "x$1" = "x--seal" ]
 then
-    echo 'Found Hax3.app, so using embedded HaxLib.dylib'
-    LIBPATH="$BASE/Hax3.app/Contents/Resources/HaxLib.dylib"
-elif [ -e "$BASE/Hax2.app" ]
-then
-    echo 'Found Hax2.app, so using embedded Hax2Lib.dylib'
-    LIBPATH="$BASE/Hax2.app/Contents/Resources/Hax2Lib.dylib"
-elif [ -e "$BASE/HaxLib.dylib" ]
-then
-    echo 'Found HaxLib.dylib'
-    LIBPATH="$BASE/HaxLib.dylib"
-elif [ -e "$BASE/Hax2Lib.dylib" ]
-then
-    echo 'Found Hax2Lib.dylib'
-    LIBPATH="$BASE/Hax2Lib.dylib"
-elif [ -e "$BASE/Hax.dylib" ]
-then
-    echo 'Found Hax.dylib'
+    echo 'Using Hax.dylib to enable volume sealing'
     LIBPATH="$BASE/Hax.dylib"
 else
-    echo "Could not find a Hax. As of micropatcher v0.0.5, this is a"
-    echo "patcher bug and not user error."
+    echo 'Using HaxLib.dylib (Hax3) which will inhibit volume sealing'
+    LIBPATH="$BASE/HaxLib.dylib"
+fi
+
+# Check to make sure the dylib exists now, so we don't run the risk of
+# the user getting a mystery meat error message from the installer later.
+if [ ! -e "$LIBPATH" ]
+then
+    echo "Could not find the Hax. (This is most likely a patcher bug.)"
+    echo "For diagnostic purposes, the desired LIBPATH was:"
+    echo "$LIBPATH"
     exit 1
 fi
 

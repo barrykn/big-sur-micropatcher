@@ -2,6 +2,14 @@
 # This script adds user-specified parameters to the boot args, such as -v
 # for verbose boot.
 
+# New as of patcher v0.0.6: Use --seal as the first argument to have the
+# installer do volume sealing.
+if [ "x$1" = "x--seal" ]
+then
+    SEAL="--seal"
+    shift
+fi
+
 # Avoid adding a trailing space to boot-args in the general case,
 # just to be hyper-cautious.
 if [ -z "$*" ]
@@ -36,4 +44,4 @@ echo 'Done changing boot-args and csrutil settings.'
 echo
 
 # Now set things up to run the installer.
-"/Volumes/Image Volume/insert-hax.sh"
+"/Volumes/Image Volume/insert-hax.sh" $SEAL

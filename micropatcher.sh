@@ -58,15 +58,15 @@ cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfigura
 echo 'Adding shell scripts...'
 cp -f payloads/*.sh "$VOLUME"
 
-# Copy HaxLib.dylib (from Hax3) into place
-echo "Adding HaxLib.dylib (from ASentientBot's Hax3)..."
-cp -f payloads/ASentientBot-Hax/HaxLib.dylib "$VOLUME"
+# Copy Hax dylibs into place
+echo "Adding Hax dylibs..."
+cp -f payloads/ASentientBot-Hax/Hax*.dylib "$VOLUME"
 
 # Not sure if this is actually necessary, but let's play it safe and ensure
 # the shell scripts are executable.
 chmod u+x "$VOLUME"/*.sh
 # Same for the dylib
-chmod u+x "$VOLUME"/HaxLib.dylib
+chmod u+x "$VOLUME"/Hax*.dylib
 
 echo 'Adding kexts...'
 cp -f payloads/*.kext.zip "$VOLUME"

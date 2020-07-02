@@ -1,1 +1,1 @@
-HaxLib.dylib was extracted from ASentientBot's Hax3. Check README.md in the original-zips directory for more information.
+HaxLib.dylib was extracted from ASentientBot's Hax3, and Hax.dylib is ASentientBot's original installer Hax (which, unlike Hax2/Hax3, does not inhibit volume sealing). Check README.md in the original-zips directory for more information.
