@@ -150,7 +150,7 @@ popd
 # collection users, so I may as well keep it there for the benefit of
 # prelinkedkernel users out there.
 kextcache -i "$VOLUME"
-kmutil install --volume-root "$VOLUME" --update-all
+kmutil install --volume-root "$VOLUME" --update-all --force
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you

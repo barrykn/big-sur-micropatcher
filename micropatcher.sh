@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSIONNUM="0.0.6"
+VERSIONNUM="0.0.7"
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 echo $VERSION
