@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSIONNUM="0.0.7"
+VERSIONNUM="0.0.8"
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 echo $VERSION
@@ -15,6 +15,16 @@ VOLUME='/Volumes/Install macOS Beta'
 
 
 # A couple of quick sanity checks before we begin.
+if [ ! -d payloads ]
+then
+    echo '"payloads" folder was not found on first attempt, but trying again.'
+    echo '(This is unimportant if the second attempt succeeds.)'
+    echo
+    BASEDIR="`echo $0|sed -E 's@/[^/]*$@@'`"
+    [ -z "$BASEDIR" ] || cd "$BASEDIR"
+fi
+
+# Check again in case we changed directory after the first check
 if [ ! -d payloads ]
 then
     echo '"payloads" folder was not found.'
