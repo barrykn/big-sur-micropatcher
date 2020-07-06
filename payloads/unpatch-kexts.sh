@@ -119,15 +119,8 @@ fi
 # Now remove the new kexts and move the old ones back into place.
 pushd "$VOLUME/System/Library/Extensions"
 
-# This alone won't be sufficient once graphics kexts enter the picture,
-# but that's an issue to deal with in the future, not at this moment.
-
-if [ -z "`ls -1d *.original`" ]
+if [ -n "`ls -1d *.original`" ]
 then
-    echo 'No patched kexts found.'
-    # Don't exit the script here. That way, the kernel caches can still
-    # be rebuilt.
-else
     for x in *.original
     do
         BASENAME=`echo $x|sed -e 's@.original@@'`
@@ -135,6 +128,9 @@ else
         rm -rf "$BASENAME"
         mv "$x" "$BASENAME"
     done
+
+    echo 'Removing kexts for Intel HD 3000 graphics support'
+    rm -rf AppleIntelHD3000* AppleIntelSNB*
 fi
 
 popd
