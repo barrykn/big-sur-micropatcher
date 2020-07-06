@@ -20,18 +20,21 @@ fi
 if [ "x$1" = "x--2011-no-wifi" ]
 then
     INSTALL_WIFI="NO"
-    INSTALL_2011="YES"
+    INSTALL_HDA="YES"
+    INSTALL_HD3000="YES"
     shift
     echo 'Installing AppleHDA to:'
 elif [ "x$1" = "x--2011" ]
 then
     INSTALL_WIFI="YES"
-    INSTALL_2011="YES"
+    INSTALL_HDA="YES"
+    INSTALL_HD3000="YES"
     shift
     echo 'Installing IO80211Family and AppleHDA to:'
 else
     INSTALL_WIFI="YES"
-    INSTALL_2011="NO"
+    INSTALL_HDA="NO"
+    INSTALL_HD3000="NO"
     echo 'Installing IO80211Family to:'
 fi
 
@@ -132,7 +135,7 @@ fi
 # replacement.
 pushd "$VOLUME/System/Library/Extensions"
 
-if [ $INSTALL_WIFI = "YES" ]
+if [ "x$INSTALL_WIFI" = "xYES" ]
 then
     if [ -d IO80211Family.kext.original ]
     then
@@ -147,7 +150,7 @@ then
     chmod -R 755 IO80211Family.kext
 fi
 
-if [ $INSTALL_2011 = "YES" ]
+if [ "x$INSTALL_HDA" = "xYES" ]
 then
     if [ -d AppleHDA.kext.original ]
     then
@@ -156,14 +159,20 @@ then
         mv AppleHDA.kext AppleHDA.kext.original
     fi
 
-    rm -rf AppleIntelHD3000* AppleIntelSNB*
-
     unzip -q "$IMGVOL/HighSierra AppleHDA.kext.zip"
     rm -rf __MACOSX
+    chown -R 0:0 AppleHDA.kext
+    chmod -R 755 AppleHDA.kext
+fi
+
+if [ "x$INSTALL_HD3000" = "xYES" ]
+then
+    rm -rf AppleIntelHD3000* AppleIntelSNB*
+
     unzip -q "$IMGVOL/HD3000.kext.zip"
     rm -rf __MACOSX
-    chown -R 0:0 AppleHDA.kext AppleIntelHD3000* AppleIntelSNB*
-    chmod -R 755 AppleHDA.kext AppleIntelHD3000* AppleIntelSNB*
+    chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
+    chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
 fi
 
 popd
