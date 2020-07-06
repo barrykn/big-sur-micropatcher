@@ -23,14 +23,21 @@ then
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     shift
-    echo 'Installing AppleHDA to:'
+    echo 'Installing AppleHDA and HD3000 to:'
 elif [ "x$1" = "x--2011" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     shift
+    echo 'Installing IO80211Family, AppleHDA, and HD3000 to:'
+elif [ "x$1" = "x--hda" ]
+then
+    INSTALL_WIFI="YES"
+    INSTALL_HDA="YES"
+    INSTALL_HD3000="NO"
     echo 'Installing IO80211Family and AppleHDA to:'
+    shift
 else
     INSTALL_WIFI="YES"
     INSTALL_HDA="NO"
