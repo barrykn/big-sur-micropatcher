@@ -11,8 +11,23 @@ echo
 # Hardcoded for now. (The assumptions are that the recovery USB stick was
 # created using createinstallmedia and was not renamed afterward -- and that
 # there is only one Big Sur recovery USB stick plugged into this Mac.)
-VOLUME='/Volumes/Install macOS Beta'
-
+#
+# As of v0.0.9, changed to first check for the name that will probably be
+# used throughout the majority of the beta cycle.
+VOLUME='/Volumes/Install macOS Big Sur Beta'
+if [ ! -d "$VOLUME/Install macOS Big Sur Beta.app" ]
+then
+    # Check for beta 1 before giving up
+    VOLUME='/Volumes/Install macOS Beta'
+    if [ ! -d "$VOLUME/Install macOS Beta.app" ]
+    then
+        echo "Failed to locate Big Sur recovery USB stick."
+        echo Remember to create it using createinstallmedia, and do not rename it.
+        echo
+        echo "Patcher cannot continue and will now exit."
+        exit 1
+    fi
+fi
 
 # A couple of quick sanity checks before we begin.
 if [ ! -d payloads ]
@@ -28,15 +43,6 @@ fi
 if [ ! -d payloads ]
 then
     echo '"payloads" folder was not found.'
-    echo
-    echo "Patcher cannot continue and will now exit."
-    exit 1
-fi
-
-if [ ! -d "$VOLUME/Install macOS Beta.app" ]
-then
-    echo "Failed to locate Big Sur recovery USB stick."
-    echo Remember to create it using createinstallmedia, and do not rename it.
     echo
     echo "Patcher cannot continue and will now exit."
     exit 1
