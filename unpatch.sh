@@ -65,7 +65,10 @@ fi
 
 echo
 echo 'Removing kexts, shell scripts, and patcher version info.'
-rm -rf "$VOLUME"/*.kext "$VOLUME"/kexts
+# For v0.0.9 and earlier
+rm -rf "$VOLUME"/*.kext
+# For v0.0.10 and later
+rm -rf "$VOLUME"/kexts
 rm -f "$VOLUME"/*.kext.zip "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 
 # Now that the patcher is going to add the dylib itself, go ahead and
