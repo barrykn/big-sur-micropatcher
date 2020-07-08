@@ -1,4 +1,4 @@
-# big-sur-micropatcher (Version 0.0.9)
+# big-sur-micropatcher (Version 0.0.10pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 (Note that [ParrotGeek has a Big Sur patcher](https://parrotgeek.com/bigsur/) now; it is an alternative that you should consider.)
@@ -10,7 +10,7 @@ Thanks to ASentientBot and jackluke for their hard work to get Big Sur running o
 
 This documentation is bare-bones at the moment, but hopefully it's better than nothing. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
-This release of the patcher has been tested against Big Sur developer beta 1 (20A4299v) and developer beta 2 (20A4300b). This README was updated after this version of the patcher was released.
+This release of the patcher has been tested against Big Sur developer beta 1 (20A4299v) and developer beta 2 (20A4300b).
 
 Quick instructions for use:
 
