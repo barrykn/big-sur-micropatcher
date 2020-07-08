@@ -85,7 +85,7 @@ chmod u+x "$VOLUME"/*.sh
 chmod u+x "$VOLUME"/Hax*.dylib
 
 echo 'Adding kexts...'
-cp -f payloads/*.kext.zip "$VOLUME"
+cp -rf payloads/kexts "$VOLUME"
 
 # Save a file onto the USB stick that says what patcher & version was used,
 # so it can be identified later (e.g. for troubleshooting purposes).

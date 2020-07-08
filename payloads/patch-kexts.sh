@@ -151,7 +151,7 @@ then
         mv IO80211Family.kext IO80211Family.kext.original
     fi
 
-    unzip -q "$IMGVOL/IO80211Family.kext.zip"
+    unzip -q "$IMGVOL/kexts/IO80211Family.kext.zip"
     rm -rf __MACOSX
     chown -R 0:0 IO80211Family.kext
     chmod -R 755 IO80211Family.kext
@@ -166,7 +166,7 @@ then
         mv AppleHDA.kext AppleHDA.kext.original
     fi
 
-    unzip -q "$IMGVOL/HighSierra AppleHDA.kext.zip"
+    unzip -q "$IMGVOL/kexts/HighSierra AppleHDA.kext.zip"
     rm -rf __MACOSX
     chown -R 0:0 AppleHDA.kext
     chmod -R 755 AppleHDA.kext
@@ -176,7 +176,7 @@ if [ "x$INSTALL_HD3000" = "xYES" ]
 then
     rm -rf AppleIntelHD3000* AppleIntelSNB*
 
-    unzip -q "$IMGVOL/HD3000.kext.zip"
+    unzip -q "$IMGVOL/kexts/HD3000.kext.zip"
     rm -rf __MACOSX
     chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
     chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
