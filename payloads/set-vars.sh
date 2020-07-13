@@ -36,8 +36,11 @@ then
     exit 1
 fi
 
-csrutil disable
-csrutil authenticated-root disable
+# Hide the reboot messages, because the Installer will reboot when needed,
+# and rebooting earlier undoes insert-hax.sh, preventing the Installer
+# from working properly.
+(csrutil disable; csrutil authenticated-root disable) |
+sed -e 's@ Please restart the machine for the changes to take effect.@@'
 
 echo
 echo 'Done changing boot-args and csrutil settings.'
