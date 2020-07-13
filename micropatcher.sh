@@ -29,12 +29,11 @@ then
     fi
 fi
 
-# A couple of quick sanity checks before we begin.
+# Check if the payloads directory is inside the current directory. If not,
+# it's probably inside the same directory as this script, so find that
+# directory.
 if [ ! -d payloads ]
 then
-    echo '"payloads" folder was not found on first attempt, but trying again.'
-    echo '(This is unimportant if the second attempt succeeds.)'
-    echo
     BASEDIR="`echo $0|sed -E 's@/[^/]*$@@'`"
     [ -z "$BASEDIR" ] || cd "$BASEDIR"
 fi
