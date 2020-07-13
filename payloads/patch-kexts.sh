@@ -187,7 +187,7 @@ if [ "x$INSTALL_HD3000" = "xYES" ]
 then
     rm -rf AppleIntelHD3000* AppleIntelSNB*
 
-    unzip -q "$IMGVOL/kexts/HD3000.kext.zip"
+    unzip -q "$IMGVOL/kexts/HD3000.zip"
     chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
     chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
 fi
