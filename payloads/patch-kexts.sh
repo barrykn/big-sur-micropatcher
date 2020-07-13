@@ -58,9 +58,21 @@ then
     exit 1
 fi
 
-# Sanity check to make sure that the specified $VOLUME isn't an obvious mistake
-#
-# DO NOT check for /Syste/Library/CoreServices here, or Big Sur data drives
+# Sanity checks to make sure that the specified $VOLUME isn't an obvious mistake
+
+# First, make sure the volume exists. (If it doesn't exist, the next check
+# will fail anyway, but having a separate check for this case might make
+# troubleshooting easier.
+if [ ! -d "$VOLUME" ]
+then
+    echo "Unable to find the volume."
+    echo "Cannot proceed. Make sure you specified the correct volume."
+    exit 1
+fi
+
+# Next, check that the volume has /System/Library/Extensions (i.e. make sure
+# it's actually the system volume and not the data volume or something).
+# DO NOT check for /System/Library/CoreServices here, or Big Sur data drives
 # as well as system drives will pass the check!
 if [ ! -d "$VOLUME/System/Library/Extensions" ]
 then
