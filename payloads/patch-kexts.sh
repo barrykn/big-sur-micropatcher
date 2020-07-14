@@ -38,6 +38,14 @@ then
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
     echo 'Installing IO80211Family, AppleHDA, HD3000, and LegacyUSBInjector to:'
+elif [ "x$OPT" = "x--all"]
+then
+    INSTALL_WIFI="YES"
+    INSTALL_HDA="YES"
+    INSTALL_HD3000="YES"
+    INSTALL_LEGACY_USB="YES"
+    DEACTIVATE_TELEMETRY="YES"
+    echo 'Installing all kext patches to:'
 elif [ "x$OPT" = "x--hda" ]
 then
     INSTALL_WIFI="YES"
@@ -208,6 +216,13 @@ then
 fi
 
 popd
+
+if [ "x$DEACTIVATE_TELEMETRY" = "xYES" ]
+then
+    pushd "$VOLUME/System/Library/UserEventPlugins"
+    mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.inactive
+    popd
+fi
 
 # Update the kernel/kext collections.
 # kmutil *must* be invoked separately for boot and system KCs when
