@@ -1,4 +1,4 @@
-# big-sur-micropatcher (Version 0.0.11)
+# big-sur-micropatcher (Version 0.0.14pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 (Note that [ParrotGeek has a Big Sur patcher](https://parrotgeek.com/bigsur/) now; it is an alternative that you should consider.)
