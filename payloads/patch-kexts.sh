@@ -14,30 +14,34 @@ then
     exit 1
 fi
 
+# See if there's an option on the command line. If so, put it into OPT.
+if echo "$1" | grep -q '^--'
+then
+    OPT="$1"
+    shift
+fi
+
 # Figure out which kexts we're installing and where we're installing
 # them to.
 
-if [ "x$1" = "x--2011-no-wifi" ]
+if [ "x$OPT" = "x--2011-no-wifi" ]
 then
     INSTALL_WIFI="NO"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
-    shift
     echo 'Installing AppleHDA and HD3000 to:'
-elif [ "x$1" = "x--2011" ]
+elif [ "x$OPT" = "x--2011" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
-    shift
     echo 'Installing IO80211Family, AppleHDA, and HD3000 to:'
-elif [ "x$1" = "x--hda" ]
+elif [ "x$OPT" = "x--hda" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
     INSTALL_HD3000="NO"
     echo 'Installing IO80211Family and AppleHDA to:'
-    shift
 else
     INSTALL_WIFI="YES"
     INSTALL_HDA="NO"
