@@ -152,17 +152,28 @@ fi
 popd
 
 
-# According to jackluke on the MacRumors Forums, kextcache -i is "required
-# to update the prelinkedkernel" (the old way of doing things) and kmutil
-# is "required to update the BootKernelExtensions.kc" (the new way of doing
-# things).
-# 
-# All of my testing so far has been on installations using the new way,
-# but as far as I can tell, kextcache -i is at worst a no-op for kernel
-# collection users, so I may as well keep it there for the benefit of
-# prelinkedkernel users out there.
-kextcache -i "$VOLUME"
-kmutil install --volume-root "$VOLUME" --update-all --force
+# Update the kernel/kext collections.
+# kmutil *must* be invoked separately for boot and system KCs when
+# LegacyUSBInjector is being used, or the injector gets left out, at least
+# as of Big Sur beta 2. So, we'll always do it that way (even without
+# LegacyUSBInjector, it shouldn't do any harm).
+#
+# I suspect it's not supposed to require the chroot, but I was getting weird
+# "invalid argument" errors, and chrooting it eliminated those errors.
+# BTW, kmutil defaults to "--volume-root /" according to the manpage, so
+# it's probably redundant, but whatever.
+chroot "$VOLUME" kmutil create -n boot \
+    --kernel /System/Library/Kernels/kernel \
+    --volume-root / \
+    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+
+# When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
+# and --system-path!
+chroot "$VOLUME" kmutil create -n sys \
+    --kernel /System/Library/Kernels/kernel \
+    --volume-root / \
+    --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
+    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
