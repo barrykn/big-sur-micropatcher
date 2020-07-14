@@ -146,7 +146,7 @@ then
     echo 'Removing LegacyUSBInjector'
     rm -rf LegacyUSBInjector.kext
     echo 'Reactivating telemetry plugin'
-    mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.inactive" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
+    mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 fi
 
 popd

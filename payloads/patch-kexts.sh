@@ -220,7 +220,7 @@ popd
 if [ "x$DEACTIVATE_TELEMETRY" = "xYES" ]
 then
     pushd "$VOLUME/System/Library/UserEventPlugins"
-    mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.inactive
+    mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.disabled
     popd
 fi
 
