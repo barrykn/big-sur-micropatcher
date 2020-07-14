@@ -29,13 +29,15 @@ then
     INSTALL_WIFI="NO"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
-    echo 'Installing AppleHDA and HD3000 to:'
+    INSTALL_LEGACY_USB="YES"
+    echo 'Installing AppleHDA, HD3000, and LegacyUSBInjector to:'
 elif [ "x$OPT" = "x--2011" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
-    echo 'Installing IO80211Family, AppleHDA, and HD3000 to:'
+    INSTALL_LEGACY_USB="YES"
+    echo 'Installing IO80211Family, AppleHDA, HD3000, and LegacyUSBInjector to:'
 elif [ "x$OPT" = "x--hda" ]
 then
     INSTALL_WIFI="YES"
@@ -196,6 +198,15 @@ then
     chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
 fi
 
+if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
+then
+    rm -rf LegacyUSBInjector.kext
+
+    unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
+    chown -R 0:0 LegacyUSBInjector.kext
+    chmod -R 755 LegacyUSBInjector.kext
+fi
+
 popd
 
 # Update the kernel/kext collections.
@@ -208,10 +219,19 @@ popd
 # "invalid argument" errors, and chrooting it eliminated those errors.
 # BTW, kmutil defaults to "--volume-root /" according to the manpage, so
 # it's probably redundant, but whatever.
-chroot "$VOLUME" kmutil create -n boot \
-    --kernel /System/Library/Kernels/kernel \
-    --volume-root / \
-    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
+then
+    chroot "$VOLUME" kmutil create -n boot \
+        --kernel /System/Library/Kernels/kernel \
+        --volume-root / \
+        --bundle-path /System/Library/Extensions/LegacyUSBInjector.kext \
+        --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+else
+    chroot "$VOLUME" kmutil create -n boot \
+        --kernel /System/Library/Kernels/kernel \
+        --volume-root / \
+        --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+fi
 
 # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
 # and --system-path!
