@@ -3,8 +3,8 @@ VERSIONNUM="0.0.14pre"
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 echo $VERSION
-echo Thanks to jackluke and ASentientBot for their hard work to get Big Sur
-echo running on unsupported Macs!
+echo Thanks to jackluke, ASentientBot, highvoltage12v, testheit, and
+echo ParrotGeek for their hard work to get Big Sur running on unsupported Macs!
 # Add a blank line of output to make things easier on the eyes.
 echo
 
@@ -59,7 +59,7 @@ fi
 
 
 # Patch com.apple.Boot.plist
-echo 'Patching com.apple.Boot.plist (thanks to jackluke)...'
+echo 'Patching com.apple.Boot.plist...'
 # It would seem more obvious to do mv then cp, but doing cp then cat lets us
 # use cat as a permissions-preserving Unix trick, just to be extra cautious.
 if [ ! -e "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" ]
