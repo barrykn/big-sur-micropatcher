@@ -140,14 +140,18 @@ then
         rm -rf "$BASENAME"
         mv "$x" "$BASENAME"
     done
-
-    echo 'Removing kexts for Intel HD 3000 graphics support'
-    rm -rf AppleIntelHD3000* AppleIntelSNB*
-    echo 'Removing LegacyUSBInjector'
-    rm -rf LegacyUSBInjector.kext
-    echo 'Reactivating telemetry plugin'
-    mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 fi
+
+# And remove kexts whch did not overwrite newer versions.
+# (This was originally inside the if-then block, but that turned out to
+# be fragile when trying to test bug fixes to this script during
+# development.)
+echo 'Removing kexts for Intel HD 3000 graphics support'
+rm -rf AppleIntelHD3000* AppleIntelSNB*
+echo 'Removing LegacyUSBInjector'
+rm -rf LegacyUSBInjector.kext
+echo 'Reactivating telemetry plugin'
+mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 
 popd
 
