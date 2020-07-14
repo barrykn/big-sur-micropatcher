@@ -38,7 +38,7 @@ then
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
     echo 'Installing IO80211Family, AppleHDA, HD3000, and LegacyUSBInjector to:'
-elif [ "x$OPT" = "x--all"]
+elif [ "x$OPT" = "x--all" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
