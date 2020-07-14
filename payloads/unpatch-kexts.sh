@@ -143,6 +143,10 @@ then
 
     echo 'Removing kexts for Intel HD 3000 graphics support'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
+    echo 'Removing LegacyUSBInjector'
+    rm -rf LegacyUSBInjector.kext
+    echo 'Reactivating telemetry plugin'
+    mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.inactive" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 fi
 
 popd
