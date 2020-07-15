@@ -150,6 +150,8 @@ echo 'Removing kexts for Intel HD 3000 graphics support'
 rm -rf AppleIntelHD3000* AppleIntelSNB*
 echo 'Removing LegacyUSBInjector'
 rm -rf LegacyUSBInjector.kext
+echo 'Removing nvenet'
+rm -rf IONetworkingFamily.kext/Contents/Plugins/nvenet.kext
 echo 'Reactivating telemetry plugin'
 mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 

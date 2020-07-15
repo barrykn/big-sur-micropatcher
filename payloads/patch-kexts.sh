@@ -44,6 +44,7 @@ then
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
+    INSTALL_NVENET="YES"
     DEACTIVATE_TELEMETRY="YES"
     echo 'Installing all kext patches to:'
 elif [ "x$OPT" = "x--hda" ]
@@ -213,6 +214,16 @@ then
     unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
     chown -R 0:0 LegacyUSBInjector.kext
     chmod -R 755 LegacyUSBInjector.kext
+fi
+
+if [ "x$INSTALL_NVENET" = "xYES" ]
+then
+    pushd IONetworkingFamily.kext/Contents/Plugins
+    rm -rf nvenet.kext
+    unzip -q "$IMGVOL/kexts/nvenet.kext.zip"
+    chown -R 0:0 nvenet.kext
+    chmod -R 755 nvenet.kext
+    popd
 fi
 
 popd
