@@ -193,7 +193,7 @@ then
         mv AppleHDA.kext AppleHDA.kext.original
     fi
 
-    unzip -q "$IMGVOL/kexts/AppleHDA.kext.zip"
+    unzip -q "$IMGVOL/kexts/AppleHDA-17G14019.kext.zip"
     chown -R 0:0 AppleHDA.kext
     chmod -R 755 AppleHDA.kext
 fi
@@ -202,7 +202,7 @@ if [ "x$INSTALL_HD3000" = "xYES" ]
 then
     rm -rf AppleIntelHD3000* AppleIntelSNB*
 
-    unzip -q "$IMGVOL/kexts/HD3000.zip"
+    unzip -q "$IMGVOL/kexts/HD3000-17G14019.zip"
     chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
     chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
 fi
@@ -220,7 +220,7 @@ if [ "x$INSTALL_NVENET" = "xYES" ]
 then
     pushd IONetworkingFamily.kext/Contents/Plugins
     rm -rf nvenet.kext
-    unzip -q "$IMGVOL/kexts/nvenet.kext.zip"
+    unzip -q "$IMGVOL/kexts/nvenet-17G14019.kext.zip"
     chown -R 0:0 nvenet.kext
     chmod -R 755 nvenet.kext
     popd
