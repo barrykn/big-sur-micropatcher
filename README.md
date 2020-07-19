@@ -15,6 +15,8 @@ This documentation is bare-bones at the moment, but hopefully it's better than n
 
 This release of the patcher has been tested against Big Sur developer beta 2 (20A4300b). However, none of the changes in this release are expected to cause problems with developer beta 1 (20A4299v). The last release of this patcher to be tested with developer beta 1 was v0.0.9.
 
+Compatibility of various Mac models:
+Note that this information is incomplete and may not be 100% correct, but I'll add more information over time and fix any errors I learn about.
 
 (Nearly) Fully Compatible Mac models:
 - If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://www.apple.com/macos/big-sur-preview/) (search the page for "See if") first, to make sure that you actually need this patcher.
@@ -25,14 +27,15 @@ This release of the patcher has been tested against Big Sur developer beta 2 (20
 
 Partially compatible Mac models:
 - 2011 Macs: Several features may not work after initial installation (after step 8 finishes), including sleep, screen brightness control, Wi-Fi (unless you have upgraded to an 802.11ac Wi-Fi card), and graphics acceleration (unless you have upgraded the GPU in a 2011 iMac). With the exception of a 2011 iMac with upgraded GPU, no 2011 Mac models have full graphics acceleration under Big Sur at this point in time. Make sure to use the `--2011` command line option in step 9 (or `--2011-no-wifi` if you have upgraded to an 802.11ac Wi-Fi card). This fixes sound and Wi-Fi on all 2011 Macs. On 13" MacBook Pros it also fixes sleep and brightness control, and installs the correct Intel framebuffer driver (this is not actual acceleration but it still increases speed somewhat -- enough to make full-screen YouTube in Safari work with very few frame drops). For 15" and 17" MacBook Pros, disabling the discrete GPU will probably increase performance, and sleep and brightness control probably won't work without disabling it. (That isn't to say that sleep and brightness control will necessarily work even with the discrete GPU disabled -- but it'll probably work if you have a way of disabling the GPU that also keeps sleep and display brightness functional in a dosdude-patched Mojave or Catalina.) For a future patcher release, I will look into adding framebuffer drivers for Radeon HD cards for 2011 iMacs (to get the same quasi-acceleration as 13" MacBook Pros get), but I don't yet know what is possible, and if your iMac does not support graphics acceleration with dosdude's Mojave or Catalina Patchers, then don't expect any improvement in future patcher releases. For 2011 Mac Minis, models with Intel graphics will actually have better graphics performance than models with Radeon graphics, since the former will be able to use the same framebuffer driver that works on the 13" MacBook Pro.
-- 2009/2010 MacBook, and 2010 13" MacBook Pro: 
-- Late 2009/Mid 2010 iMacs: 
+- 2009/2010 MacBook and 2010 13" MacBook Pro: In addition to the features which don't work after initial installation on the 2011 13" MacBook Pros (Wi-Fi, sound, graphics acceleration, sleep, display brightness control), Ethernet and USB 1.1 also don't work. The `--all` option for patch-kexts.sh (step 9) installs fixes for Wi-Fi, sound, Ethernet, and USB (as of patcher v0.0.14), but the installation has to be performed on a newer Mac first (basically a 2011 or newer Mac, although some earlier Mac Pros might work too), with patch-kexts.sh run on that same newer Mac, *then* moved over to the 2009/2010 MacBook or 2010 13" MacBook Pro (via either a hard drive/SSD transplant or by using a USB enclosure or USB hard drive/SSD). Otherwise, the installer will boot because USB 2.0 works, but the keyboard and trackpad won't work because USB 1.1 doesn't work. I intend to improve support for these Mac models in future patcher releases; this won't immediately lead to accelerated graphics, but hopefully a working framebuffer in the patched installation and/or a patch for USB 1.1 support in the installer will be possible.
 - TODO: Finish this before the v0.0.14 release!
 
 Incompatible Mac models:
-- 2010 15"/17" MacBook Pro:
+- 2010 15"/17" MacBook Pro: These are crashing in AppleACPICPU.kext during boot. Someone needs to figure out why this crash is happening and create a patch to fix it, or Big Sur probably won't be running on these Macs.
 - TODO: Finish this before the v0.0.14 release!
 
+Who knows?
+- Late 2009/Mid 2010 iMacs: The best case scenario is that these are comparable to 2011 Macs. The worst case scenario is that they're comparable to the 2010 15"/17" MacBook Pros. Or it could be a situation similar to the 2009/2010 MacBook and 2010 13" MacBook Pro. Someone needs to try creating a USB installer, patching it, and booting it (so steps 1, 2, and 4 below), and report back on what happens.
 
 Quick instructions for use:
 
