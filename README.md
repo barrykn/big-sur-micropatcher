@@ -20,9 +20,10 @@ Note that this information is incomplete and may not be 100% correct, but I'll a
 
 Mostly compatible Mac models:
 - If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://www.apple.com/macos/big-sur-preview/) (search the page for "See if") first, to make sure that you actually need this patcher.
-- By the way, with the exception of Mac Pros, all of the Macs in this section officially support Mojave and Catalina.
+- By the way, with the exception of Mac Pros, all of the Macs in this section officially support Catalina. This section is basically "Macs without official Big Sur support but with Metal support", with the exception of pre-2012 iMacs that have upgraded GPUs.
 - Late 2013 iMacs: Everything should work (and, after step 8, you're finished -- no need for steps 9 or later).
-- 2010/2012 Mac Pro: I have received positive feedback about this patcher, but I do not know which features work perfectly and which don't.
+- 2010/2012 Mac Pro: I have received positive feedback about this patcher, but I do not know which features work perfectly and which don't. If I had to guess which features might be problematic, I would guess sleep and Wi-Fi. patch-kexts.sh (step 9) should fix Wi-Fi, but I don't know what effect it might have on sleep. (You should upgrade the graphics card, as you would for official compatiblity with macOS Mojave.)
+- 2009 Mac Pro: Once it's flashed to MacPro5,1 firmware, it should be equivalent to a 2010/2012 Mac Pro. (As with those, you will want to upgrade to a Mojave-compatible graphics card.)
 - Other 2012/2013 Macs: Most things should work after the initial installation, except for Wi-Fi (unless you have upgraded to an 802.11ac Wi-Fi card) or possibly GPU switching (on 15" MacBook Pros). Step 9 of the installation process fixes Wi-Fi support, but GPU switching may not yet be a solved problem.
 
 Partially compatible Mac models:
