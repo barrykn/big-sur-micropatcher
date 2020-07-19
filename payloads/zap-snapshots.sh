@@ -7,6 +7,14 @@
 
 VOLUME="$1"
 
+# Make sure a volume has been specified.
+if [ -z "$VOLUME" ]
+then
+    echo 'You must specify a target volume (such as /Volumes/Macintosh\ HD)'
+    echo 'on the command line.'
+    exit 1
+fi
+
 if mount -uw "$VOLUME"
 then
     # Remount succeeded. Do nothing in this block, and keep going.
