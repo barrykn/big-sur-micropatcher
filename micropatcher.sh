@@ -3,8 +3,9 @@ VERSIONNUM="0.0.14pre"
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 echo $VERSION
-echo Thanks to jackluke, ASentientBot, highvoltage12v, testheit, and
-echo ParrotGeek for their hard work to get Big Sur running on unsupported Macs!
+echo 'Thanks to jackluke, ASentientBot, highvoltage12v, testheit, and'
+echo 'ParrotGeek for their hard work to get Big Sur running on unsupported'
+echo 'Macs! (See the README for more information.)'
 # Add a blank line of output to make things easier on the eyes.
 echo
 
