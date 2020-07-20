@@ -3,13 +3,13 @@ A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 (Note that [ParrotGeek has a Big Sur patcher](https://parrotgeek.com/bigsur/) now; it is an alternative that you should consider.)
 
-Thanks to ASentientBot, jackluke, highvoltage12v, ParrotGeek, and testheit for their hard work to get Big Sur running on unsupported Macs! In particular:
+Thanks to the following people for their hard work to get Big Sur running on unsupported Macs:
 
-- Thanks to ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs.
-- Thanks to jackluke for figuring out how to patch the Recovery USB to bypass compatibility checks and AMFI enforcement in the absence of NVRAM boot-args settings.
-- Thanks to highvoltage12v for modifying IO80211Family.kext so that it can support 802.11n cards on Big Sur.
-- Thanks to ParrotGeek for developing the LegacyUSBInjector kernel extension that allows USB to work on various pre-2011 Mac models.
-- Thanks to testheit for describing how to use a kmutil feature that I was previously unaware of; this turned out to be a good way to make LegacyUSBInjector function under Big Sur.
+- ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs.
+- jackluke for figuring out how to patch the Recovery USB to bypass compatibility checks and AMFI enforcement in the absence of NVRAM boot-args settings.
+- highvoltage12v for modifying IO80211Family.kext so that it can support 802.11n cards on Big Sur.
+- ParrotGeek for developing the LegacyUSBInjector kernel extension that allows USB to work on various pre-2011 Mac models.
+- testheit for describing how to use a kmutil feature that I was previously unaware of; this turned out to be a good way to make LegacyUSBInjector function under Big Sur.
 
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
