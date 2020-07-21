@@ -214,6 +214,9 @@ then
     unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
     chown -R 0:0 LegacyUSBInjector.kext
     chmod -R 755 LegacyUSBInjector.kext
+
+    # parameter for kmutil later on
+    BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
 fi
 
 if [ "x$INSTALL_NVENET" = "xYES" ]
@@ -245,11 +248,6 @@ fi
 # "invalid argument" errors, and chrooting it eliminated those errors.
 # BTW, kmutil defaults to "--volume-root /" according to the manpage, so
 # it's probably redundant, but whatever.
-if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
-then
-    BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
-fi
-
 chroot "$VOLUME" kmutil create -n boot \
     --kernel /System/Library/Kernels/kernel \
     --volume-root / $BUNDLE_PATH \
