@@ -247,17 +247,13 @@ fi
 # it's probably redundant, but whatever.
 if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
 then
-    chroot "$VOLUME" kmutil create -n boot \
-        --kernel /System/Library/Kernels/kernel \
-        --volume-root / \
-        --bundle-path /System/Library/Extensions/LegacyUSBInjector.kext \
-        --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-else
-    chroot "$VOLUME" kmutil create -n boot \
-        --kernel /System/Library/Kernels/kernel \
-        --volume-root / \
-        --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+    BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
 fi
+
+chroot "$VOLUME" kmutil create -n boot \
+    --kernel /System/Library/Kernels/kernel \
+    --volume-root / $BUNDLE_PATH \
+    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
 
 # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
 # and --system-path!
