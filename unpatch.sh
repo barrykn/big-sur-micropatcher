@@ -11,22 +11,34 @@ echo "It's really best to recreate the USB stick using createinstallmedia,"
 echo "but this takes much less time and is useful for patcher development."
 echo
 
-# Hardcoded for now. (The assumptions are that the recovery USB stick was
-# created using createinstallmedia and was not renamed afterward -- and that
-# there is only one Big Sur recovery USB stick plugged into this Mac.)
-#
-# As of v0.0.9, changed to first check for the name that will probably be
-# used throughout the majority of the beta cycle.
-VOLUME='/Volumes/Install macOS Big Sur Beta'
-if [ ! -d "$VOLUME/Install macOS Big Sur Beta.app" ]
+# Allow the user to drag-and-drop the USB stick in Terminal, to specify the
+# path to the USB stick in question. (Otherwise it will try a hardcoded path
+# for beta 2 and up, followed by a hardcoded path for beta 1.)
+if [ -z "$1" ]
 then
-    # Check for beta 1 before giving up
-    VOLUME='/Volumes/Install macOS Beta'
-    if [ ! -d "$VOLUME/Install macOS Beta.app" ]
+    VOLUME='/Volumes/Install macOS Big Sur Beta'
+    if [ ! -d "$VOLUME/Install macOS Big Sur Beta.app" ]
+    then
+        # Check for beta 1 before giving up
+        VOLUME='/Volumes/Install macOS Beta'
+        if [ ! -d "$VOLUME/Install macOS Beta.app" ]
+        then
+            echo "Failed to locate Big Sur recovery USB stick for unpatching."
+            echo
+            echo "Unpatcher cannot continue and will now exit."
+            exit 1
+        fi
+    fi
+else
+    VOLUME="$1"
+    if [ ! -d "$VOLUME/Install macOS"*.app ]
     then
         echo "Failed to locate Big Sur recovery USB stick for unpatching."
+        echo "Make sure you specified the correct volume. You may also try"
+        echo "not specifying a volume and allowing the unpatcher to find"
+        echo "the volume itself."
         echo
-        echo "Patcher cannot continue and will now exit."
+        echo "Unpatcher cannot continue and will now exit."
         exit 1
     fi
 fi
