@@ -156,11 +156,8 @@ csrutil authenticated-root disable
 
 # Remount the volume read-write
 echo "Remounting volume as read-write..."
-if mount -uw "$VOLUME"
+if ! mount -uw "$VOLUME"
 then
-    # Remount succeeded. Do nothing in this block, and keep going.
-    true
-else
     echo "Remount failed. Kext installation cannot proceed."
     exit 1
 fi

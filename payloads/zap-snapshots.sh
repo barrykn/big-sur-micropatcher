@@ -15,11 +15,8 @@ then
     exit 1
 fi
 
-if mount -uw "$VOLUME"
+if ! mount -uw "$VOLUME"
 then
-    # Remount succeeded. Do nothing in this block, and keep going.
-    true
-else
     echo "Remount failed. Cannot proceed."
     exit 1
 fi
