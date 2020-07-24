@@ -13,7 +13,7 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
-This release of the patcher has been tested against Big Sur developer beta 2 (20A4300b). However, none of the changes in this release are expected to cause problems with developer beta 1 (20A4299v). The last release of this patcher to be tested with developer beta 1 was v0.0.9.
+This release of the patcher has been tested against Big Sur developer beta 2 (20A4300b). It should work with beta 1, and hopefully beta 3, but it has not been tested against those versions. (The last release of this patcher to be tested with developer beta 1 was v0.0.9.)
 
 ## Compatibility of various Mac models:
 Note that this information is incomplete and may not be 100% correct yet, but I'll add more information over time and fix any errors as I learn about them.
