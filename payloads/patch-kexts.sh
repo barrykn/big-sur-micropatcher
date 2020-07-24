@@ -1,5 +1,20 @@
 #!/bin/bash
 
+### begin function definitions ###
+# There's only one function for now, but there will probably be more
+# in the future.
+
+kmutilErrorCheck () {
+    if [ $? -ne 0 ]
+    then
+        echo 'kmutil failed. See above output for more information.'
+        echo 'patch-kexts.sh cannot continue.'
+        exit 1
+    fi
+}
+
+### end function definitions ###
+
 IMGVOL="/Volumes/Image Volume"
 # Make sure we're inside the recovery environment. This may not be the best
 # way to check, but it's simple and should work in the real world.
@@ -249,6 +264,7 @@ chroot "$VOLUME" kmutil create -n boot \
     --kernel /System/Library/Kernels/kernel \
     --volume-root / $BUNDLE_PATH \
     --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+kmutilErrorCheck
 
 # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
 # and --system-path!
@@ -257,6 +273,7 @@ chroot "$VOLUME" kmutil create -n sys \
     --volume-root / \
     --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
     --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+kmutilErrorCheck
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
@@ -265,4 +282,4 @@ chroot "$VOLUME" kmutil create -n sys \
 
 bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
 
-echo 'Done installing kexts.'
+echo 'Installed patch kexts successfully.'
