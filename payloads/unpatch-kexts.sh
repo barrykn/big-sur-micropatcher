@@ -180,6 +180,7 @@ popd
 # "invalid argument" errors, and chrooting it eliminated those errors.
 # BTW, kmutil defaults to "--volume-root /" according to the manpage, so
 # it's probably redundant, but whatever.
+echo 'Using kmutil to rebuild boot collection...'
 chroot "$VOLUME" kmutil create -n boot \
     --kernel /System/Library/Kernels/kernel \
     --volume-root / \
@@ -188,6 +189,7 @@ kmutilErrorCheck
 
 # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
 # and --system-path!
+echo 'Using kmutil to rebuild system collection...'
 chroot "$VOLUME" kmutil create -n sys \
     --kernel /System/Library/Kernels/kernel \
     --volume-root / \
