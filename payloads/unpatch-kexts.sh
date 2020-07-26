@@ -1,8 +1,6 @@
 #!/bin/bash
 
 ### begin function definitions ###
-# There's only one function for now, but there will probably be more
-# in the future.
 
 # Check for errors, and handle any errors appropriately, after any kmutil
 # invocation.
@@ -15,7 +13,24 @@ kmutilErrorCheck () {
     fi
 }
 
+# In the current directory, check for kexts which have been renamed from
+# *.kext to *.kext.original, then remove the new versions and rename the
+# old versions back into place.
+restoreOriginals () {
+    if [ -n "`ls -1d *.original`" ]
+    then
+        for x in *.original
+        do
+            BASENAME=`echo $x|sed -e 's@.original@@'`
+            echo 'Unpatching' $BASENAME
+            rm -rf "$BASENAME"
+            mv "$x" "$BASENAME"
+        done
+    fi
+}
+
 ### end function definitions ###
+
 
 IMGVOL="/Volumes/Image Volume"
 # Make sure we're inside the recovery environment. This may not be the best
@@ -143,23 +158,17 @@ then
 fi
 
 # Now remove the new kexts and move the old ones back into place.
+# First in /System/Library/Extensions, then in
+# /S/L/E/IONetworkingFamily.kext/Contents/Plugins
+# (then go back up to /System/Library/Extensions)
 pushd "$VOLUME/System/Library/Extensions"
+restoreOriginals
 
-if [ -n "`ls -1d *.original`" ]
-then
-    for x in *.original
-    do
-        BASENAME=`echo $x|sed -e 's@.original@@'`
-        echo 'Unpatching' $BASENAME
-        rm -rf "$BASENAME"
-        mv "$x" "$BASENAME"
-    done
-fi
+pushd IONetworkingFamily.kext/Contents/Plugins
+restoreOriginals
+popd
 
-# And remove kexts whch did not overwrite newer versions.
-# (This was originally inside the if-then block, but that turned out to
-# be fragile when trying to test bug fixes to this script during
-# development.)
+# And remove kexts which did not overwrite newer versions.
 echo 'Removing kexts for Intel HD 3000 graphics support'
 rm -rf AppleIntelHD3000* AppleIntelSNB*
 echo 'Removing LegacyUSBInjector'
