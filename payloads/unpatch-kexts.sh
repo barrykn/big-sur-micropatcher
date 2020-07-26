@@ -164,6 +164,8 @@ echo 'Removing LegacyUSBInjector'
 rm -rf LegacyUSBInjector.kext
 echo 'Removing nvenet'
 rm -rf IONetworkingFamily.kext/Contents/Plugins/nvenet.kext
+echo 'Removing GeForceTesla.kext and related kexts'
+rm -rf *Tesla*
 echo 'Reactivating telemetry plugin'
 mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 

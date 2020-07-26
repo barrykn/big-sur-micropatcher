@@ -4,6 +4,8 @@
 # There's only one function for now, but there will probably be more
 # in the future.
 
+# Check for errors, and handle any errors appropriately, after any kmutil
+# invocation.
 kmutilErrorCheck () {
     if [ $? -ne 0 ]
     then
@@ -59,6 +61,7 @@ then
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
+    INSTALL_GFTESLA="YES"
     INSTALL_NVENET="YES"
     DEACTIVATE_TELEMETRY="YES"
     echo 'Installing all kext patches to:'
@@ -229,6 +232,20 @@ then
 
     # parameter for kmutil later on
     BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
+fi
+
+if [ "x$INSTALL_GFTESLA" = "xYES" ]
+then
+    rm -rf *Tesla*
+
+    unzip -q "$IMGVOL/kexts/GeForceTesla-17G14019.zip"
+    unzip -q "$IMGVOL/kexts/NVDANV50HalTesla-17G14019.kext.zip"
+
+    unzip -q "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
+    rm -rf __MACOSX
+
+    chown -R 0:0 *Tesla*
+    chmod -R 755 *Tesla*
 fi
 
 if [ "x$INSTALL_NVENET" = "xYES" ]
