@@ -4,6 +4,8 @@
 # There's only one function for now, but there will probably be more
 # in the future.
 
+# Check for errors, and handle any errors appropriately, after any kmutil
+# invocation.
 kmutilErrorCheck () {
     if [ $? -ne 0 ]
     then
