@@ -277,7 +277,7 @@ then
         then
             rm -rf AppleBCM5701Ethernet.kext
         else
-            mv AppleBCM5701Ethernet.kext AppleHDA.kext.original
+            mv AppleBCM5701Ethernet.kext AppleBCM5701Ethernet.kext.original
         fi
 
         unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19G73.kext.zip"
