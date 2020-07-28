@@ -40,7 +40,6 @@ fi
 
 # Figure out which kexts we're installing and where we're installing
 # them to.
-
 if [ "x$OPT" = "x--2011-no-wifi" ]
 then
     INSTALL_WIFI="NO"
@@ -77,6 +76,10 @@ else
     INSTALL_HD3000="NO"
     echo 'Installing IO80211Family to:'
 fi
+
+# Hard-coded for now. Micropatcher v0.0.18 will probably add a command
+# line option to control this.
+INSTALL_BCM5701="YES"
 
 VOLUME="$1"
 echo "$VOLUME"
@@ -182,10 +185,11 @@ fi
 
 # Move the old kext out of the way, or delete if needed. Then unzip the
 # replacement.
-pushd "$VOLUME/System/Library/Extensions"
+pushd "$VOLUME/System/Library/Extensions" > /dev/null
 
 if [ "x$INSTALL_WIFI" = "xYES" ]
 then
+    echo 'Installing highvoltage12v patched IO80211Family.kext'
     if [ -d IO80211Family.kext.original ]
     then
         rm -rf IO80211Family.kext
@@ -201,6 +205,7 @@ fi
 
 if [ "x$INSTALL_HDA" = "xYES" ]
 then
+    echo 'Installing High Sierra AppleHDA.kext'
     if [ -d AppleHDA.kext.original ]
     then
         rm -rf AppleHDA.kext
@@ -215,6 +220,7 @@ fi
 
 if [ "x$INSTALL_HD3000" = "xYES" ]
 then
+    echo 'Installing High Sierra Intel HD 3000 kexts'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
 
     unzip -q "$IMGVOL/kexts/HD3000-17G14019.zip"
@@ -224,6 +230,7 @@ fi
 
 if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
 then
+    echo 'Installing LegacyUSBInjector.kext'
     rm -rf LegacyUSBInjector.kext
 
     unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
@@ -236,6 +243,7 @@ fi
 
 if [ "x$INSTALL_GFTESLA" = "xYES" ]
 then
+    echo 'Installing GeForce Tesla (9400M/320M) kexts'
     rm -rf *Tesla*
 
     unzip -q "$IMGVOL/kexts/GeForceTesla-17G14019.zip"
@@ -250,21 +258,48 @@ fi
 
 if [ "x$INSTALL_NVENET" = "xYES" ]
 then
-    pushd IONetworkingFamily.kext/Contents/Plugins
+    echo 'Installing High Sierra nvenet.kext'
+    pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
     rm -rf nvenet.kext
     unzip -q "$IMGVOL/kexts/nvenet-17G14019.kext.zip"
     chown -R 0:0 nvenet.kext
     chmod -R 755 nvenet.kext
-    popd
+    popd > /dev/null
 fi
 
-popd
+if [ "x$INSTALL_BCM5701" = "xYES" ]
+then
+    case $SVPL_BUILD in
+    20A4299v|20A4300b|20A5323*)
+        echo 'Installing Catalina AppleBCM5701Ethernet.kext'
+        pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
+
+        if [ -d AppleBCM5701Ethernet.kext.original ]
+        then
+            rm -rf AppleBCM5701Ethernet.kext
+        else
+            mv AppleBCM5701Ethernet.kext AppleHDA.kext.original
+        fi
+
+        unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19G73.kext.zip"
+        chown -R 0:0 AppleBCM5701Ethernet.kext
+        chmod -R 755 AppleBCM5701Ethernet.kext
+
+        popd > /dev/null
+        ;;
+    *)
+        ;;
+    esac
+fi
+
+popd > /dev/null
 
 if [ "x$DEACTIVATE_TELEMETRY" = "xYES" ]
 then
-    pushd "$VOLUME/System/Library/UserEventPlugins"
+    echo 'Deactivating com.apple.telemetry.plugin'
+    pushd "$VOLUME/System/Library/UserEventPlugins" > /dev/null
     mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.disabled
-    popd
+    popd > /dev/null
 fi
 
 # Update the kernel/kext collections.
