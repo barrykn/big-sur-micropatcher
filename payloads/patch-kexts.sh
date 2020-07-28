@@ -269,7 +269,7 @@ fi
 if [ "x$INSTALL_BCM5701" = "xYES" ]
 then
     case $SVPL_BUILD in
-    20A4299v|20A4300b|20A5323*)
+    20A5323*)
         echo 'Installing Catalina AppleBCM5701Ethernet.kext'
         pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
 
