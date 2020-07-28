@@ -45,7 +45,7 @@ Unknown status:
 
 ## Quick instructions for use:
 
-1. Obtain a copy of the macOS Big Sur Developer Preview and use `createinstallmedia` as usual to create a bootable USB stick with the installer and recvoery environment, as you would on a supported Mac. This patcher is easier to use if the installer USB stick is not renamed after `createinstallmedia` is used, but it can still work if the USB stick has been renamed (see next step).
+1. Obtain a copy of the macOS Big Sur Developer Preview and use `createinstallmedia` as usual to create a bootable USB stick with the installer and recovery environment, as you would on a supported Mac. This patcher is easier to use if the installer USB stick is not renamed after `createinstallmedia` is used, but it can still work if the USB stick has been renamed (see next step).
 2. Download this micropatcher, then run `micropatcher.sh` to patch the USB stick. (If you are viewing this on GitHub, and you probably are, then click "Clone" then "Download ZIP".) If the USB stick has been renamed or micropatcher.sh is otherwise unable to find the USB stick, then try specifying the pathname of the USB stick to micropatcher.sh. The easiest way to do that is to open a Terminal window, drag and drop micropatcher.sh into the Terminal window, go back to Finder, choose Computer from the Go menu, drag and drop the USB stick into the Terminal window, then press Return.
 3. Since Disk Utility in Big Sur may have new bugs, this may be a good time to use Disk Utility in High Sierra/Mojave/Catalina to do any partitioning or formatting you may need.
 4. Boot from the USB stick.
