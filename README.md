@@ -14,7 +14,7 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
 ## Compatibility between different releases of this patcher and different Big Sur developer beta releases
-- v0.0.16 (this release): Tested with developer beta 3 (20A5323l), but should be compatible with developer beta 1 and 2 as well.
+- v0.0.16-v0.0.17 (this release): Tested with developer beta 3 (20A5323l), but should be compatible with developer beta 1 and 2 as well.
 - v0.0.10-v0.0.15: Tested with developer beta 2 (20A4300b), but should be compatible with developer beta 1 and 3 as well.
 - v0.0.9: Tested with developer beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with developer beta 3 as well.
 - v0.0.1-v0.0.8: Only tested with and compatible with developer beta 1 (20A4299v). Not compatible with beta 2 and later.
