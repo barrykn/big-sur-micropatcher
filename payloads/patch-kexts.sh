@@ -46,6 +46,7 @@ then
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
+    INSTALL_BCM5701="YES"
     echo 'Installing AppleHDA, HD3000, and LegacyUSBInjector to:'
 elif [ "x$OPT" = "x--2011" ]
 then
@@ -53,6 +54,7 @@ then
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
+    INSTALL_BCM5701="YES"
     echo 'Installing IO80211Family, AppleHDA, HD3000, and LegacyUSBInjector to:'
 elif [ "x$OPT" = "x--all" ]
 then
@@ -62,6 +64,7 @@ then
     INSTALL_LEGACY_USB="YES"
     INSTALL_GFTESLA="YES"
     INSTALL_NVENET="YES"
+    INSTALL_BCM5701="YES"
     DEACTIVATE_TELEMETRY="YES"
     echo 'Installing all kext patches to:'
 elif [ "x$OPT" = "x--hda" ]
@@ -76,10 +79,6 @@ else
     INSTALL_HD3000="NO"
     echo 'Installing IO80211Family to:'
 fi
-
-# Hard-coded for now. Micropatcher v0.0.18 will probably add a command
-# line option to control this.
-INSTALL_BCM5701="YES"
 
 VOLUME="$1"
 echo "$VOLUME"
