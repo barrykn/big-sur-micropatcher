@@ -196,7 +196,7 @@ then
         mv IO80211Family.kext IO80211Family.kext.original
     fi
 
-    unzip -q "$IMGVOL/kexts/IO80211Family.kext.zip"
+    unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v.kext.zip"
     rm -rf __MACOSX
     chown -R 0:0 IO80211Family.kext
     chmod -R 755 IO80211Family.kext
