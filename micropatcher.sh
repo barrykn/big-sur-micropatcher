@@ -9,6 +9,14 @@ echo 'Macs! (See the README for more information.)'
 # Add a blank line of output to make things easier on the eyes.
 echo
 
+# Check for --force option on the command line
+# (currently does nothing, but that will change in the near future)
+if [ "x$1" = "x--force" ]
+then
+    FORCE="YES"
+    shift
+fi
+
 # Allow the user to drag-and-drop the USB stick in Terminal, to specify the
 # path to the USB stick in question. (Otherwise it will try a hardcoded path
 # for beta 2 and up, followed by a hardcoded path for beta 1.)
