@@ -22,11 +22,11 @@ else
 fi
 
 # Show the boot-args setting to the user.
-nvram -p | grep boot-args
+nvram boot-args
 
 # Sanity check before we continue. Yes, this detects an actual bug
 # that happened during patcher development.
-if [ -n "`nvram -p | grep boot-args | grep \'-no`" ]
+if [ -n "`nvram boot-args | grep \'-no`" ]
 then
     echo
     echo boot-args setting failed. This is a patcher bug which must be fixed.
