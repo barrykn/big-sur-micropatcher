@@ -389,7 +389,10 @@ kmutilErrorCheck
 # a new snapshot. (This behavior can be refined in a future release...)
 if [ "$VOLUME" != "/" ]
 then
+    echo 'Creating new root snapshot.'
     bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
+else
+    echo 'Booted directly from volume, so skipping snapshot creation.'
 fi
 
 # Maybe I should check here if we mounted the underlying volume, and unmount
