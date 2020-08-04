@@ -22,8 +22,10 @@ kmutilErrorCheck () {
 [ $UID = 0 ] || exec sudo "$0" "$@"
 
 IMGVOL="/Volumes/Image Volume"
-if [ ! -d "$IMGVOL" ]
+if [ -d "$IMGVOL" ]
 then
+    RECOVERY="YES"
+else
     RECOVERY="NO"
     # Not in the recovery environment, so we need a different path to the
     # patched USB.
@@ -60,6 +62,7 @@ then
     fi
 fi
 
+# Now that $IMGVOL has hopefully been corrected, check again.
 if [ ! -d "$IMGVOL" ]
 then
     echo "You must run this script from a patched macOS Big Sur"
@@ -125,9 +128,15 @@ echo
 # eventually kick in, but the error messages get confusing.)
 if [ -z "$VOLUME" ]
 then
-    echo 'You must specify a target volume (such as /Volumes/Macintosh\ HD)'
-    echo 'on the command line.'
-    exit 1
+    if [ "xRECOVERY" = "xYES" ]
+    then
+        echo 'You must specify a target volume (such as /Volumes/Macintosh\ HD)'
+        echo 'on the command line.'
+        exit 1
+    else
+        # Running under live installation, so assume /
+        VOLUME="/"
+    fi
 fi
 
 # Sanity checks to make sure that the specified $VOLUME isn't an obvious mistake
