@@ -202,9 +202,12 @@ then
     echo 'Mounted volume is an actual volume, not a snapshot. Proceeding.'
 else
     WASSNAPSHOT="YES"
-    echo "Mounted volume is a snapshot. Will now mount underlying volume"
-    echo "from $POPSLICE"
     VOLUME=`mktemp -d`
+    echo "Mounted volume is a snapshot. Will now mount underlying volume"
+    echo "from $POPSLICE at temporary mountpoint:"
+    echo "$VOLUME"
+    # Blank line for legibility
+    echo
     if ! mount -o nobrowse -t apfs "$POPSLICE" "$VOLUME"
     then
         echo 'Mounting underlying volume failed. Cannot proceed.'
@@ -396,7 +399,15 @@ else
     echo 'Booted directly from volume, so skipping snapshot creation.'
 fi
 
-# Maybe I should check here if we mounted the underlying volume, and unmount
-# it here. I guess I should. A later patcher version can try to do that.
+# Try to unmount the underlying volume if it was mounted by this script.
+# (Otherwise, trying to run this script again without rebooting causes
+# errors when this script tries to mount the underlying volume a second
+# time.)
+if [ "x$WASSNAPSHOT" = "xYES" ]
+then
+    echo "Attempting to unmount underlying volume (don't worry if this fails)."
+    echo "This may take a minute or two."
+    umount "$VOLUME" || diskutil unmount "$VOLUME"
+fi
 
 echo 'Installed patch kexts successfully.'
