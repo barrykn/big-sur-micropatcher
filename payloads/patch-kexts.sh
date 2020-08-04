@@ -187,10 +187,8 @@ else
     exit 1
 fi
 
-# Also check to make sure $VOLUME is an actual volume and not a snapshot.
-# Maybe I'll add code later to handle the snapshot case, but in the recovery
-# environment for Developer Preview 1, I've always seen it mount the actual
-# volume and not a snapshot.
+# Check whether the volume is actually the underlying volume, or if it is
+# a mounted snapshot.
 DEVICE=`df "$VOLUME" | tail -1 | sed -e 's@ .*@@'`
 echo 'Volume is mounted from device: ' $DEVICE
 
@@ -385,7 +383,14 @@ kmutilErrorCheck
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
 
-bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
+# If $VOLUME = "/" at this point in the script, then we are running in a
+# live installation and the system volume is not booted from a snapshot.
+# Otherwise, assume snapshot booting is configured and use bless to create
+# a new snapshot. (This behavior can be refined in a future release...)
+if [ "$VOLUME" != "/" ]
+then
+    bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
+fi
 
 # Maybe I should check here if we mounted the underlying volume, and unmount
 # it here. I guess I should. A later patcher version can try to do that.
