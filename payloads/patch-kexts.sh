@@ -124,7 +124,7 @@ VOLUME="$1"
 
 if [ -z "$VOLUME" ]
 then
-    if [ "xRECOVERY" = "xYES" ]
+    if [ "x$RECOVERY" = "xYES" ]
     then
         # Make sure a volume has been specified. (Without this, other error
         # checks eventually kick in, but the error messages get confusing.)
