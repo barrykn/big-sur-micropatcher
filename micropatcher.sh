@@ -2,6 +2,23 @@
 VERSIONNUM="0.0.18pre"
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
+### begin function definitions ###
+
+handlePermissionsFailure() {
+    if [ $UID != 0 ]
+    then
+        echo 'cp failed. Probably a permissions error. This is not expected, but'
+        echo 'patcher will attempt workaround by trying again as root.'
+        exec sudo "$0" "$@"
+    else
+        echo 'cp failed, even as root. This is unexpected.'
+        echo 'Patcher cannot continue.'
+        exit 1
+    fi
+}
+
+### end function definitions ###
+
 echo $VERSION
 echo 'Thanks to jackluke, ASentientBot, highvoltage12v, testheit, and'
 echo 'ParrotGeek for their hard work to get Big Sur running on unsupported'
@@ -87,7 +104,7 @@ echo 'Patching com.apple.Boot.plist...'
 # use cat as a permissions-preserving Unix trick, just to be extra cautious.
 if [ ! -e "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" ]
 then
-    cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original"
+    cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" || handlePermissionsFailure
 fi
 cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
 
