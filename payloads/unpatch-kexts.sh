@@ -4,7 +4,7 @@
 
 # Check for errors, and handle any errors appropriately, after any kmutil
 # invocation.
-kmutilErrorCheck () {
+kmutilErrorCheck() {
     if [ $? -ne 0 ]
     then
         echo 'kmutil failed. See above output for more information.'
@@ -16,7 +16,7 @@ kmutilErrorCheck () {
 # In the current directory, check for kexts which have been renamed from
 # *.kext to *.kext.original, then remove the new versions and rename the
 # old versions back into place.
-restoreOriginals () {
+restoreOriginals() {
     if [ -n "`ls -1d *.original`" ]
     then
         for x in *.original

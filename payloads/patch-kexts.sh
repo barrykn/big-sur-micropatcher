@@ -6,7 +6,7 @@
 
 # Check for errors, and handle any errors appropriately, after any kmutil
 # invocation.
-kmutilErrorCheck () {
+kmutilErrorCheck() {
     if [ $? -ne 0 ]
     then
         echo 'kmutil failed. See above output for more information.'
