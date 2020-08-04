@@ -187,8 +187,8 @@ else
     exit 1
 fi
 
-# Check whether the volume is actually the underlying volume, or if it is
-# a mounted snapshot.
+# Check whether the mounted device is actually the underlying volume,
+# or if it is a mounted snapshot.
 DEVICE=`df "$VOLUME" | tail -1 | sed -e 's@ .*@@'`
 echo 'Volume is mounted from device: ' $DEVICE
 
