@@ -199,12 +199,12 @@ POPSLICE2=`echo $POPSLICE | sed -E 's@s[0-9]+$@@'`
 if [ $POPSLICE = $POPSLICE2 ]
 then
     WASSNAPSHOT="NO"
-    echo 'Mounted volume is an actual volume, not a snapshot. Proceeding.'
+    echo 'Mounted device is an actual volume, not a snapshot. Proceeding.'
 else
     WASSNAPSHOT="YES"
     VOLUME=`mktemp -d`
-    echo "Mounted volume is a snapshot. Will now mount underlying volume"
-    echo "from $POPSLICE at temporary mountpoint:"
+    echo "Mounted device is a snapshot. Will now mount underlying volume"
+    echo "from device $POPSLICE at temporary mountpoint:"
     echo "$VOLUME"
     # Blank line for legibility
     echo
