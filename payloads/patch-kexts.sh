@@ -190,8 +190,10 @@ POPSLICE2=`echo $POPSLICE | sed -E 's@s[0-9]+$@@'`
 
 if [ $POPSLICE = $POPSLICE2 ]
 then
+    WASSNAPSHOT="NO"
     echo 'Mounted volume is an actual volume, not a snapshot. Proceeding.'
 else
+    WASSNAPSHOT="YES"
     echo "Mounted volume is a snapshot. Will now mount underlying volume"
     echo "from $POPSLICE"
     VOLUME=`mktemp -d`
@@ -202,7 +204,7 @@ else
     fi
 fi
 
-if [ "x$RECOVERY"="xYES" ]
+if [ "x$RECOVERY" = "xYES" ]
 then
     # It's likely that at least one of these was reenabled during installation.
     # But as we're in the recovery environment, there's no need to check --
@@ -212,12 +214,15 @@ then
     csrutil authenticated-root disable
 fi
 
-# Remount the volume read-write
-echo "Remounting volume as read-write..."
-if ! mount -uw "$VOLUME"
+if [ "x$WASSNAPSHOT" = "xNO" ]
 then
-    echo "Remount failed. Kext installation cannot proceed."
-    exit 1
+    # Remount the volume read-write
+    echo "Remounting volume as read-write..."
+    if ! mount -uw "$VOLUME"
+    then
+        echo "Remount failed. Kext installation cannot proceed."
+        exit 1
+    fi
 fi
 
 # Move the old kext out of the way, or delete if needed. Then unzip the
