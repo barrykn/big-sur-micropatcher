@@ -17,19 +17,56 @@ kmutilErrorCheck () {
 
 ### end function definitions ###
 
+# Make sure this script is running as root, otherwise use sudo to try again
+# as root.
+[ $UID = 0 ] || exec sudo "$0" "$@"
+
 IMGVOL="/Volumes/Image Volume"
-# Make sure we're inside the recovery environment. This may not be the best
-# way to check, but it's simple and should work in the real world.
 if [ ! -d "$IMGVOL" ]
 then
-    echo 'You must use this script from inside the Recovery environment.'
-    echo 'Please restart your Mac from the patched Big Sur installer'
-    echo 'USB drive, then open Terminal and try again.'
-    echo
-    echo '(The ability to use this script without rebooting into the'
-    echo 'Recovery environment is planned for a future patcher release.)'
+    RECOVERY="NO"
+    # Not in the recovery environment, so we need a different path to the
+    # patched USB.
+    if [ -d "/Volumes/Install macOS Big Sur Beta" ]
+    then
+        IMGVOL="/Volumes/Install macOS Big Sur Beta"
+    else
+        # if this is inaccurate, there's an error check in the next top-level
+        # if-then block which will catch it and do the right thing
+        IMGVOL="/Volumes/Install macOS Beta"
+    fi
+
+    # While we're at it, we need to check SIP & authenticated-root
+    # (both need to be disabled)
+    if ! csrutil status | grep -q 'disabled.$'
+    then
+        MUSTEXIT="YES"
+        csrutil status
+    fi
+
+    if ! csrutil authenticated-root status | grep -q 'disabled$'
+    then
+        MUSTEXIT="YES"
+        csrutil authenticated-root status
+    fi
+
+    if [ "x$MUSTEXIT" = "xYES" ]
+    then
+        echo "Please boot from the patched Big Sur installer USB and run the"
+        echo "following command in Terminal to fix this:"
+        echo "/Volumes/Image\ Volume/set-vars.sh"
+        echo "(or boot from the installer USB and fix it yourself)"
+        exit 1
+    fi
+fi
+
+if [ ! -d "$IMGVOL" ]
+then
+    echo "You must run this script from a patched macOS Big Sur"
+    echo "installer USB."
     exit 1
 fi
+
 
 # See if there's an option on the command line. If so, put it into OPT.
 if echo "$1" | grep -q '^--'
@@ -147,9 +184,7 @@ fi
 # volume and not a snapshot.
 DEVICE=`df "$VOLUME" | tail -1 | sed -e 's@ .*@@'`
 echo 'Volume is mounted from device: ' $DEVICE
-# The following code is somewhat convoluted for just checking if there's
-# a slice within a slice, but it should make things easier for future
-# code that will actually handle this case.
+
 POPSLICE=`echo $DEVICE | sed -E 's@s[0-9]+$@@'`
 POPSLICE2=`echo $POPSLICE | sed -E 's@s[0-9]+$@@'`
 
@@ -157,22 +192,25 @@ if [ $POPSLICE = $POPSLICE2 ]
 then
     echo 'Mounted volume is an actual volume, not a snapshot. Proceeding.'
 else
-    echo
-    echo 'ERROR:'
-    echo 'Mounted volume appears to be an APFS snapshot, not the underlying'
-    echo 'volume. The patcher was not expecting to encounter this situation'
-    echo 'within the Recovery environment, and an update to the patcher will'
-    echo 'be required. Kext installation will not proceed.'
-    exit 1
+    echo "Mounted volume is a snapshot. Will now mount underlying volume"
+    echo "from $POPSLICE"
+    VOLUME=`mktemp -d`
+    if ! mount -o nobrowse -t apfs "$POPSLICE" "$VOLUME"
+    then
+        echo 'Mounting underlying volume failed. Cannot proceed.'
+        exit 1
+    fi
 fi
 
-
-# It's likely that at least one of these was reenabled during installation.
-# But as we're in the recovery environment, there's no need to check --
-# we'll just redisable these. If they're already disabled, then there's
-# no harm done.
-csrutil disable
-csrutil authenticated-root disable
+if [ "x$RECOVERY"="xYES" ]
+then
+    # It's likely that at least one of these was reenabled during installation.
+    # But as we're in the recovery environment, there's no need to check --
+    # we'll just redisable these. If they're already disabled, then there's
+    # no harm done.
+    csrutil disable
+    csrutil authenticated-root disable
+fi
 
 # Remount the volume read-write
 echo "Remounting volume as read-write..."
@@ -334,5 +372,8 @@ kmutilErrorCheck
 "$VOLUME/usr/sbin/kcditto"
 
 bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
+
+# Maybe I should check here if we mounted the underlying volume, and unmount
+# it here. I guess I should. A later patcher version can try to do that.
 
 echo 'Installed patch kexts successfully.'
