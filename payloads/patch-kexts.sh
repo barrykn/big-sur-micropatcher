@@ -226,7 +226,6 @@ fi
 
 if [ "x$WASSNAPSHOT" = "xNO" ]
 then
-    # Remount the volume read-write
     echo "Remounting volume as read-write..."
     if ! mount -uw "$VOLUME"
     then
