@@ -121,23 +121,24 @@ else
 fi
 
 VOLUME="$1"
-echo "$VOLUME"
-echo
 
-# Make sure a volume has been specified. (Without this, other error checks
-# eventually kick in, but the error messages get confusing.)
 if [ -z "$VOLUME" ]
 then
     if [ "xRECOVERY" = "xYES" ]
     then
+        # Make sure a volume has been specified. (Without this, other error
+        # checks eventually kick in, but the error messages get confusing.)
         echo 'You must specify a target volume (such as /Volumes/Macintosh\ HD)'
         echo 'on the command line.'
         exit 1
     else
-        # Running under live installation, so assume /
+        # Running under live installation, so use / as default
         VOLUME="/"
     fi
 fi
+
+echo "$VOLUME"
+echo
 
 # Sanity checks to make sure that the specified $VOLUME isn't an obvious mistake
 
