@@ -164,8 +164,7 @@ then
     exit 1
 fi
 
-# Check that the $VOLUME has macOS build 20*. This version check will
-# hopefully keep working even after Apple bumps the version number to 11.
+# Check that the $VOLUME has macOS build 20*.
 SVPL="$VOLUME"/System/Library/CoreServices/SystemVersion.plist
 SVPL_VER=`fgrep '<string>10' "$SVPL" | sed -e 's@^.*<string>10@10@' -e 's@</string>@@' | uniq -d`
 SVPL_BUILD=`grep '<string>[0-9][0-9][A-Z]' "$SVPL" | sed -e 's@^.*<string>@@' -e 's@</string>@@'`
