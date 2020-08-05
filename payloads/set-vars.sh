@@ -2,8 +2,7 @@
 # This script adds user-specified parameters to the boot args, such as -v
 # for verbose boot.
 
-# New as of patcher v0.0.6: Use --seal as the first argument to have the
-# installer do volume sealing.
+# Use --seal as the first argument to have the installer do volume sealing.
 if [ "x$1" = "x--seal" ]
 then
     SEAL="--seal"
@@ -15,10 +14,10 @@ fi
 if [ -z "$*" ]
 then
     # no command line parameters
-    nvram boot-args="-no_compat_check amfi_get_out_of_my_way=1"
+    nvram boot-args="-no_compat_check"
 else
     # add command line parameters, such as -v, to boot-args
-    nvram boot-args="-no_compat_check amfi_get_out_of_my_way=1 $*"
+    nvram boot-args="-no_compat_check $*"
 fi
 
 # Show the boot-args setting to the user.
