@@ -39,7 +39,7 @@ fi
 # and rebooting earlier undoes insert-hax.sh, preventing the Installer
 # from working properly.
 (csrutil disable; csrutil authenticated-root disable) |
-sed -e 's@ Please restart the machine for the changes to take effect.@@'
+sed -e 's@Please restart the machine for the changes to take effect.@@'
 
 echo
 echo 'Done changing boot-args and csrutil settings.'
