@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 # Maybe I should make an actual Makefile, but this script compiles one
 # source file to two different binary files using two different sets of
 # compiler flags. In fact, considering that's nearly *all* this file does,
