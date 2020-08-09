@@ -60,11 +60,13 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	trace(@"force compatible");
 	return true;
 }
+#if 0
 -(BOOL)fakeHasSufficientSpaceForMSUInstall:(id)thing1 error:(id)thing2
 {
 	trace(@"force enough space");
 	return true;
 }
+#endif
 -(BOOL)fakeDoNotSealSystem
 {
 	trace(@"force disable seal");
@@ -85,7 +87,9 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	trace(@"loaded");
 	
 	swizzle(NSClassFromString(@"BIBuildInformation"),FakeFunctions.class,@selector(isUpdateInstallable:),@selector(fakeIsUpdateInstallable:),true);
+#if 0
 	swizzle(NSClassFromString(@"OSISCustomizationController"),FakeFunctions.class,@selector(hasSufficientSpaceForMSUInstall:error:),@selector(fakeHasSufficientSpaceForMSUInstall:error:),true);
+#endif
 	swizzle(NSClassFromString(@"OSISCustomizationController"),FakeFunctions.class,@selector(doNotSealSystem),@selector(fakeDoNotSealSystem),true);
 	swizzle(NSClassFromString(@"OSISUtilities"),FakeFunctions.class,@selector(apfsSupportedByROM),@selector(fakeAPFSSupportedByROM),false);
 }
