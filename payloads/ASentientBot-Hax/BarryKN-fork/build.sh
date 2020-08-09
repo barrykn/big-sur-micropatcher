@@ -7,6 +7,12 @@
 FLAGS="-dynamiclib -fmodules"
 
 rm -f HaxDoNotSeal.dylib HaxSeal.dylib
+
+if [ "x$1" = "x--clean" ]
+then
+    exit 0
+fi
+
 clang $FLAGS -DDO_NOT_SEAL HaxLib.m -o HaxDoNotSeal.dylib
 clang $FLAGS -DSEAL HaxLib.m -o HaxSeal.dylib
 codesign -f -s - HaxDoNotSeal.dylib HaxSeal.dylib
