@@ -67,11 +67,13 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	return true;
 }
 #endif
+#ifdef DO_NOT_SEAL
 -(BOOL)fakeDoNotSealSystem
 {
 	trace(@"force disable seal");
 	return true;
 }
+#endif
 +(BOOL)fakeAPFSSupportedByROM
 {
 	trace(@"APFS hack");
@@ -90,7 +92,12 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 #if 0
 	swizzle(NSClassFromString(@"OSISCustomizationController"),FakeFunctions.class,@selector(hasSufficientSpaceForMSUInstall:error:),@selector(fakeHasSufficientSpaceForMSUInstall:error:),true);
 #endif
+#ifdef DO_NOT_SEAL
+#warning Compiling with DO_NOT_SEAL
 	swizzle(NSClassFromString(@"OSISCustomizationController"),FakeFunctions.class,@selector(doNotSealSystem),@selector(fakeDoNotSealSystem),true);
+#else
+#warning Compiling without DO_NOT_SEAL
+#endif
 	swizzle(NSClassFromString(@"OSISUtilities"),FakeFunctions.class,@selector(apfsSupportedByROM),@selector(fakeAPFSSupportedByROM),false);
 }
 @end
