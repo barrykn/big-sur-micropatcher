@@ -367,7 +367,7 @@ fi
 echo 'Using kmutil to rebuild boot collection...'
 chroot "$VOLUME" kmutil create -n boot \
     --kernel /System/Library/Kernels/kernel \
-    --volume-root / $BUNDLE_PATH \
+    --variant-suffix release --volume-root / $BUNDLE_PATH \
     --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
 kmutilErrorCheck
 
@@ -376,7 +376,7 @@ kmutilErrorCheck
 echo 'Using kmutil to rebuild system collection...'
 chroot "$VOLUME" kmutil create -n sys \
     --kernel /System/Library/Kernels/kernel \
-    --volume-root / \
+    --variant-suffix release --volume-root / \
     --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
     --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
 kmutilErrorCheck
