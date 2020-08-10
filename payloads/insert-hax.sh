@@ -4,11 +4,11 @@ BASE='/Volumes/Image Volume'
 
 if [ "x$1" = "x--seal" ]
 then
-    echo 'Using Hax.dylib to enable volume sealing'
-    LIBPATH="$BASE/Hax.dylib"
+    echo 'Using HaxSeal.dylib to enable volume sealing'
+    LIBPATH="$BASE/HaxSeal.dylib"
 else
-    echo 'Using HaxLib.dylib (Hax3) which will inhibit volume sealing'
-    LIBPATH="$BASE/HaxLib.dylib"
+    echo 'Using HaxDoNotSeal.dylib which will inhibit volume sealing'
+    LIBPATH="$BASE/HaxDoNotSeal.dylib"
 fi
 
 # Check to make sure the dylib exists now, so we don't run the risk of
