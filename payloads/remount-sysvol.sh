@@ -190,7 +190,10 @@ else
 fi
 
 echo "Dropping into subshell. Run 'exit' when done."
-echo "Don't forget to run rebuild-kc.sh before you exit."
+echo "Don't forget to run:"
+echo \""$0"\" | sed -e 's@remount-sysvol@rebuild-kc@'
+echo "(Copy and paste it, including the quotation marks)
+echo "before you exit."
 pushd "$VOLUME/System/Library/Extensions" > /dev/null
 $NEXTSHELL
 popd > /dev/null
