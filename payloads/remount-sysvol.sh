@@ -189,10 +189,11 @@ else
     NEXTSHELL=$SHELL
 fi
 
+export REBUILD_KC=`echo "$0" | sed -e 's@remount-sysvol@rebuild-kc@'`
 echo "Dropping into subshell. Run 'exit' when done."
-echo "Don't forget to run:"
-echo \""$0"\" | sed -e 's@remount-sysvol@rebuild-kc@'
-echo "(Copy and paste it, including the quotation marks)
+echo "Don't forget to run either" '"$REBUILD_KC"' "(including quotation marks)"
+echo "or:" \""$REBUILD_KC"\"
+echo "(Copy and paste it, including the quotation marks)"
 echo "before you exit."
 pushd "$VOLUME/System/Library/Extensions" > /dev/null
 $NEXTSHELL
