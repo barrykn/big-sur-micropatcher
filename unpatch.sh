@@ -59,7 +59,7 @@ then
     mv "$VOLUME/System/Library/CoreServices/PlatformSupport.plist.inactive" \
        "$VOLUME/System/Library/CoreServices/PlatformSupport.plist"
 else
-    echo 'Boot-time compatibility check not present; continuing.'
+    echo 'Boot-time compatibility check patch not present; continuing.'
 fi
 
 echo
