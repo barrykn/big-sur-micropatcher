@@ -13,6 +13,7 @@ handleCopyPermissionsFailure() {
     then
         echo 'cp failed. Probably a permissions error. This is not expected, but'
         echo 'patcher will attempt workaround by trying again as root.'
+        echo
         exec sudo "$0" "$@"
     else
         echo 'cp failed, even as root. This is unexpected.'
