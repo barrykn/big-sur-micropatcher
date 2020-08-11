@@ -35,6 +35,7 @@ checkDirAccess() {
 
 ### end function definitions ###
 
+
 echo $VERSION
 echo 'Thanks to jackluke, ASentientBot, highvoltage12v, testheit, and'
 echo 'ParrotGeek for their hard work to get Big Sur running on unsupported'
@@ -114,20 +115,23 @@ then
     echo 'Checking read access to necessary directories...'
     if ! checkDirAccess
     then
-        echo 'Access check failed. Resetting Transparency, Consent, and Control (TCC)'
-        echo 'permissions for Terminal and retrying.'
+        echo 'Access check failed.'
         tccutil reset All com.apple.Terminal
+        echo 'Retrying access check...'
         if ! checkDirAccess
         then
+            echo
             echo 'Access check failed again. Giving up.'
-            echo 'Next time, please give Terminal permissions to access removable drives,'
-            echo 'as well as the location where this patcher is stored (for example, Downloads.)'
+            echo 'Next time, please give Terminal permission to access removable drives,'
+            echo 'as well as the location where this patcher is stored (for example, Downloads).'
             exit 1
         else
             echo 'Access check succeeded on second attempt.'
+            echo
         fi
     else
         echo 'Access check succeeded.'
+        echo
     fi
 fi
 
