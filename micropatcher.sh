@@ -4,6 +4,10 @@ VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 ### begin function definitions ###
 
+# Handle permissions failure that happened during a copy (cp). This has
+# usually been due to the user needing root permissions for some reason.
+# (It used to be possible to hit this code path for other reasons, but
+# I believe I have fixed that now.)
 handleCopyPermissionsFailure() {
     if [ $UID != 0 ]
     then
@@ -15,6 +19,17 @@ handleCopyPermissionsFailure() {
         echo 'Patcher cannot continue.'
         exit 1
     fi
+}
+
+# Check that we can access the directory that ocntains this script, as well
+# as the root directory of the installer USB. Access to both of these
+# directories is vital, and Catalina's TCC controls for Terminal are
+# capable of blocking both. Therefore we must check access to both
+# directories before proceeding.
+checkDirAccess() {
+    # List the two directories, but direct both stdout and stderr to
+    # /dev/null. We are only interested in the return code.
+    ls "$VOLUME" . &> /dev/null
 }
 
 ### end function definitions ###
@@ -85,6 +100,34 @@ then
     echo
     echo "Patcher cannot continue and will now exit."
     exit 1
+fi
+
+# Check to make sure we can access both our own directory and the root
+# directory of the USB stick. Terminal's TCC permissions in Catalina can
+# prevent access to either of those two directories. However, only do this
+# check on Catalina or higher. (I can add an "else" block later to handle
+# Mojave and earlier, but Catalina is responsible for every single bug
+# report I've received due to this script lacking necessary read permissions.)
+if [ `uname -r | sed -e 's@\..*@@'` -ge 19 ]
+then
+    echo 'Checking read access to necessary directories...'
+    if ! checkDirAccess
+    then
+        echo 'Access check failed. Resetting Transparency, Consent, and Control (TCC)'
+        echo 'permissions for Terminal and retrying.'
+        tccutil reset All com.apple.Terminal
+        if ! checkDirAccess
+        then
+            echo 'Access check failed again. Giving up.'
+            echo 'Next time, please give Terminal permissions to access removable drives,'
+            echo 'as well as the location where this patcher is stored (for example, Downloads.)'
+            exit 1
+        else
+            echo 'Access check succeeded on second attempt.'
+        fi
+    else
+        echo 'Access check succeeded.'
+    fi
 fi
 
 if [ -e "$VOLUME/Patch-Version.txt" ]
