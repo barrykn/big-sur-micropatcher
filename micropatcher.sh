@@ -4,7 +4,7 @@ VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 ### begin function definitions ###
 
-handlePermissionsFailure() {
+handleCopyPermissionsFailure() {
     if [ $UID != 0 ]
     then
         echo 'cp failed. Probably a permissions error. This is not expected, but'
@@ -104,7 +104,7 @@ echo 'Patching com.apple.Boot.plist...'
 # use cat as a permissions-preserving Unix trick, just to be extra cautious.
 if [ ! -e "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" ]
 then
-    cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" || handlePermissionsFailure
+    cp "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist" "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist.original" || handleCopyPermissionsFailure
 fi
 cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
 
