@@ -15,3 +15,4 @@ defaults write com.apple.dock springboard-page-duration -float 0
 defaults write com.apple.finder DisableAllAnimations -bool true
 defaults write com.apple.Mail DisableSendAnimations -bool true
 defaults write com.apple.Mail DisableReplyAnimations -bool true
+defaults write NSGlobalDomain NSWindowResizeTime .001
