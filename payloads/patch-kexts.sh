@@ -386,18 +386,6 @@ kmutilErrorCheck
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
 
-# If $VOLUME = "/" at this point in the script, then we are running in a
-# live installation and the system volume is not booted from a snapshot.
-# Otherwise, assume snapshot booting is configured and use bless to create
-# a new snapshot. (This behavior can be refined in a future release...)
-if [ "$VOLUME" != "/" ]
-then
-    echo 'Creating new root snapshot.'
-    bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
-else
-    echo 'Booted directly from volume, so skipping snapshot creation.'
-fi
-
 # Try to unmount the underlying volume if it was mounted by this script.
 # (Otherwise, trying to run this script again without rebooting causes
 # errors when this script tries to mount the underlying volume a second
