@@ -13,9 +13,9 @@ mkdir -p EFI/boot
 cp *.efi EFI/boot
 
 cp -r EFI EFI-verboseboot
-cp setvars-x86_64.efi EFI/boot/bootx64.efi
-cp setvars-ia32.efi EFI/boot/bootia32.efi
-cp setvars.efi EFI/boot/boot.efi
-cp setvars-verboseboot-x86_64.efi EFI-verboseboot/boot/bootx64.efi
-cp setvars-verboseboot-ia32.efi EFI-verboseboot/boot/bootia32.efi
-cp setvars-verboseboot.efi EFI-verboseboot/boot/boot.efi
+mv setvars-x86_64.efi EFI/boot/bootx64.efi
+mv setvars-ia32.efi EFI/boot/bootia32.efi
+mv setvars.efi EFI/boot/boot.efi
+mv setvars-verboseboot-x86_64.efi EFI-verboseboot/boot/bootx64.efi
+mv setvars-verboseboot-ia32.efi EFI-verboseboot/boot/bootia32.efi
+mv setvars-verboseboot.efi EFI-verboseboot/boot/boot.efi
