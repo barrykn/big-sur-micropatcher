@@ -1,10 +1,11 @@
 # Based on the sample Makefile from Roderick W. Smith's EFI Hello World
 # example:
 # https://www.rodsbooks.com/efi-programming/
+# (although it has diverged considerably since)
+
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
-OBJS            = main.o
-TARGET          = setvars.efi
+TARGET          = setvars.efi setvars-verboseboot.efi
 
 EFIINC          = /usr/include/efi
 EFIINCS         = -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
@@ -32,19 +33,16 @@ LDFLAGS         = -nostdlib -znocombreloc -T $(EFI_LDS) -shared \
 
 all: $(TARGET)
 
-%.so: $(OBJS)
-	ld $(LDFLAGS) $(OBJS) -o $@ -lefi -lgnuefi
+%.so: %.o
+	ld $(LDFLAGS) $^ -o $@ -lefi -lgnuefi
 
 %.efi: %.so
 	objcopy -j .text -j .sdata -j .data -j .dynamic \
 		-j .dynsym  -j .rel -j .rela -j .reloc \
 		--target=efi-app-$(ARCH) $^ $@
-	cp -f $@ `echo $@ | sed -e "s/.efi/-$(ARCH).efi/"`
+	mv -f $@ `echo $@ | sed -e "s/.efi/-$(ARCH).efi/"`
 
-.PHONY: clean fat
+.PHONY: clobber
 
-clean:
-	rm -f $(TARGET) $(OBJS) hello.so
-
-fat:
-	grub-glue-efi -3 `echo $(TARGET) | sed -e "s/.efi/-ia32.efi/"` -6 `echo $(TARGET) | sed -e "s/.efi/-x86_64.efi/"` -o $(TARGET)
+clobber:
+	rm -rf *.o *.so *.efi EFI EFI-verboseboot
