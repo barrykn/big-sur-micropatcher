@@ -13,6 +13,10 @@
 # both variants, and maybe it'll help someone out there who is really
 # determined to run Big Sur on a 2007 iMac with an upgraded CPU or whatever,
 # so I may as well do it.
+#
+# For anyone else who wants to build this, if the i386/ia32 make command
+# causes problems, make sure that the gcc-multilib package is installed
+# (in addition to gnu-efi).
 
 set -e
 
