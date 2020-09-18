@@ -2,6 +2,9 @@
 # example:
 # https://www.rodsbooks.com/efi-programming/
 # (although it has diverged considerably since)
+# 
+# Use the build-all.sh shell script, in the same directory as this Makefile,
+# to build for both x64 and ia32.
 
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
