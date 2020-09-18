@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>Kernel Flags</key>
-	<string>root-dmg=file:///BaseSystem/BaseSystem.dmg -no_compat_check amfi_get_out_of_my_way=1</string>
+	<string>root-dmg=file:///BaseSystem/BaseSystem.dmg amfi_get_out_of_my_way=1</string>
 </dict>
 </plist>
