@@ -163,6 +163,17 @@ then
 fi
 cat payloads/com.apple.Boot.plist > "$VOLUME/Library/Preferences/SystemConfiguration/com.apple.Boot.plist"
 
+# Add the trampoline.
+echo 'Installing trampoline...'
+TEMPAPP="$VOLUME/tmp.app"
+mv -f "$APPPATH" "$TEMPAPP"
+cp -r payloads/trampoline.app "$APPPATH"
+mv -f "$TEMPAPP" "$APPPATH/Contents/MacOS/InstallAssistant.app"
+cp "$APPPATH/Contents/MacOS/InstallAssistant.app/Contents/Resources/InstallAssistant.icns" "$APPPATH/Contents/Resources/InstallAssistant.icns"
+cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_plain"
+cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_springboard"
+touch "$APPPATH"
+
 # Copy the shell scripts into place so that they may be used once the
 # USB stick is booted.
 echo 'Adding shell scripts...'

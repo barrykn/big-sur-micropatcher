@@ -85,6 +85,12 @@ else
 fi
 
 echo
+echo 'Removing trampoline.'
+TEMPAPP="$VOLUME/tmp.app"
+mv -f "$APPPATH/Contents/MacOS/InstallAssistant.app" "$TEMPAPP"
+rm -rf "$APPPATH"
+mv -f "$TEMPAPP" "$APPPATH"
+
 echo 'Removing kexts, shell scripts, and patcher version info.'
 # For v0.0.9 and earlier
 rm -rf "$VOLUME"/*.kext
