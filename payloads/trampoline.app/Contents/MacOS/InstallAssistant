@@ -9,11 +9,12 @@ then
     # Make sure there isn't already a dylib being inserted. That way
     # insert-hax.sh will still work (for manually specifying whether
     # volume sealing happens).
-    launchctl getenv DYLD_INSERT_LIBRARIES > /tmp/diagnostic1
+
+    #launchctl getenv DYLD_INSERT_LIBRARIES > /tmp/trampolineDiagnostic
 
     [ -z `launchctl getenv DYLD_INSERT_LIBRARIES` ] && launchctl setenv DYLD_INSERT_LIBRARIES '/Volumes/Image Volume/HaxDoNotSeal.dylib'
 
-    launchctl getenv DYLD_INSERT_LIBRARIES > /tmp/diagnostic2
+    #launchctl getenv DYLD_INSERT_LIBRARIES >> /tmp/trampolineDiagnostic
 fi
 
 exec "$dn/InstallAssistant.app/Contents/MacOS/$me" "$@"
