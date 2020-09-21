@@ -62,12 +62,12 @@ then
         if [ -d "/Volumes/$x/$x.app" ]
         then
             VOLUME="/Volumes/$x"
-            APPNAME="$VOLUME/$x.app"
+            APPPATH="$VOLUME/$x.app"
             break
         fi
     done
 
-    if [ ! -d "$APPNAME" ]
+    if [ ! -d "$APPPATH" ]
     then
         echo "Failed to locate Big Sur recovery USB stick."
         echo Remember to create it using createinstallmedia, and do not rename it.
@@ -80,8 +80,8 @@ then
 else
     VOLUME="$1"
     # The use of `echo` here is to force globbing.
-    APPNAME=`echo -n "$VOLUME"/Install\ macOS*.app`
-    if [ ! -d "$APPNAME" ]
+    APPPATH=`echo -n "$VOLUME"/Install\ macOS*.app`
+    if [ ! -d "$APPPATH" ]
     then
         echo "Failed to locate Big Sur recovery USB stick for patching."
         echo "Make sure you specified the correct volume. You may also try"
