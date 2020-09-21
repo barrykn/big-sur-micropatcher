@@ -57,11 +57,13 @@ fi
 if [ -z "$1" ]
 then
     VOLUME='/Volumes/Install macOS Big Sur Beta'
-    if [ ! -d "$VOLUME/Install macOS Big Sur Beta.app" ]
+    APPNAME="$VOLUME/Install macOS Big Sur Beta.app"
+    if [ ! -d "$APPNAME" ]
     then
         # Check for beta 1 before giving up
         VOLUME='/Volumes/Install macOS Beta'
-        if [ ! -d "$VOLUME/Install macOS Beta.app" ]
+        APPNAME="$VOLUME/Install macOS Beta.app"
+        if [ ! -d "$APPNAME" ]
         then
             echo "Failed to locate Big Sur recovery USB stick."
             echo Remember to create it using createinstallmedia, and do not rename it.
@@ -74,7 +76,8 @@ then
     fi
 else
     VOLUME="$1"
-    if [ ! -d "$VOLUME/Install macOS"*.app ]
+    APPNAME="$VOLUME/Install macOS"*.app
+    if [ ! -d "$APPNAME" ]
     then
         echo "Failed to locate Big Sur recovery USB stick for patching."
         echo "Make sure you specified the correct volume. You may also try"
