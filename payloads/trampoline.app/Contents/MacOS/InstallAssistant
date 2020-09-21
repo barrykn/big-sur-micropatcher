@@ -1,0 +1,7 @@
+#!/bin/sh
+# no basename/dirname in recovery
+me="$(echo "$0" | sed 's@.*/@@')"
+dn="$(echo "$0" | sed 's@Contents/MacOS/InstallAssistant.*$@Contents/MacOS@')"
+# run installer normally if not root
+[ $UID = 0 ] && ( nvram boot-args=-no_compat_check; launchctl setenv DYLD_INSERT_LIBRARIES "$dn/../Resources/Hax.dylib" )
+exec "$dn/InstallAssistant.app/Contents/MacOS/$me" "$@"
