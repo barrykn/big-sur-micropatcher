@@ -215,6 +215,6 @@ kmutilErrorCheck
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
 
-bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot
+bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot --setBoot
 
 echo 'Uninstalled patch kexts successfully.'
