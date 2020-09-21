@@ -2,6 +2,18 @@
 # no basename/dirname in recovery
 me="$(echo "$0" | sed 's@.*/@@')"
 dn="$(echo "$0" | sed 's@Contents/MacOS/InstallAssistant.*$@Contents/MacOS@')"
+
 # run installer normally if not root
-[ $UID = 0 ] && ( nvram boot-args=-no_compat_check; launchctl setenv DYLD_INSERT_LIBRARIES "$dn/../Resources/Hax.dylib" )
+if [ $UID = 0 ]
+then
+    # Make sure there isn't already a dylib being inserted. That way
+    # insert-hax.sh will still work (for manually specifying whether
+    # volume sealing happens).
+    launchctl getenv DYLD_INSERT_LIBRARIES > /tmp/diagnostic1
+
+    [ -z `launchctl getenv DYLD_INSERT_LIBRARIES` ] && launchctl setenv DYLD_INSERT_LIBRARIES '/Volumes/Image Volume/HaxDoNotSeal.dylib'
+
+    launchctl getenv DYLD_INSERT_LIBRARIES > /tmp/diagnostic2
+fi
+
 exec "$dn/InstallAssistant.app/Contents/MacOS/$me" "$@"
