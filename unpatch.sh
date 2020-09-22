@@ -1,12 +1,4 @@
 #!/bin/bash
-VERSIONNUM="0.2.0pre"
-VERSION="BarryKN Big Sur Micropatcher Unpatcher v$VERSIONNUM"
-
-echo $VERSION
-# Add a blank line of output to make things easier on the eyes.
-echo
-
-# Add disclaimer
 echo "It's really best to recreate the USB stick using createinstallmedia,"
 echo "but this takes much less time and is useful for patcher development."
 echo
