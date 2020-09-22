@@ -176,8 +176,4 @@ echo "Unmounting EFI volume (if this fails, just eject in Finder afterward)."
 umount /Volumes/EFI || diskutil unmount /Volumes/EFI
 
 echo
-echo 'Syncing.'
-sync
-
-echo
 echo 'install-setvars finished.'
