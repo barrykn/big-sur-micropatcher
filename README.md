@@ -14,15 +14,10 @@ In addition, thanks to Ben Sova, MachInit, johncaling40, and Travis Parker for t
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
-- v0.2.0 (this release): (fill this in after testing is finished)
-- v0.0.20-v0.1.0: Tested with public beta 1 (20A5343j) and developer beta 4 (20A5343i). Almost certainly also works with developer beta 3. Code to support developer beta 1 and 2 is still present; it may or may not work anymore, but I may go back and test it later.
-- v0.0.19: Inadequately tested with developer beta 4 (20A5343i). I missed a compatibility problem. Almost certainly works with developer beta 3. Code to support developer beta 1 and 2 is still present; it may or may not work anymore, but I may go back and test it later.
-- v0.0.18: Tested with developer beta 3 (20A5323l). Should also work with developer beta 2. Code to support developer beta 1 is still present, but it may or may not work anymore.
-- v0.0.17: Tested with developer beta 2 (20A4300b) and 3 (20A5323l), but should be compatible with developer beta 1 as well.
-- v0.0.16: Tested with developer beta 3 (20A5323l), but should be compatible with developer beta 1 and 2 as well.
-- v0.0.10-v0.0.15: Tested with developer beta 2 (20A4300b), but should be compatible with developer beta 1 and 3 as well.
-- v0.0.9: Tested with developer beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with developer beta 3 as well.
-- v0.0.1-v0.0.8: Only compatible with developer beta 1 (20A4299v). Not compatible with beta 2 and later.
+- v0.2.0 (this release): Tested with beta 1 (20A4299v) and beta 6 (20A5364e). Should also work with beta 2-5.
+- v0.0.10-v0.1.0: Tested to varying degrees with beta 2 (20A4300b), 3 (20A5323l), and 4 (20A5343i). (For details, check the README or release notes for previous patcher releases.) Partially compatible with beta 5 (20A5354i) and 6 (20A5364e) as well.
+- v0.0.9: Tested with beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with beta 3 (20A5323l) as well.
+- v0.0.1-v0.0.8: Only compatible with beta 1 (20A4299v). Not compatible with beta 2 and later.
 
 ## Compatibility of various Mac models:
 Note that this information is incomplete and may not be 100% correct yet, but I'll add more information over time and fix any errors as I learn about them.
