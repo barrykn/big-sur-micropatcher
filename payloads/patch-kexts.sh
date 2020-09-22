@@ -95,7 +95,7 @@ then
     INSTALL_LEGACY_USB="YES"
     INSTALL_BCM5701="YES"
     echo 'Installing IO80211Family, AppleHDA, HD3000, and LegacyUSBInjector to:'
-elif [ "x$OPT" = "x--all" ]
+elif [ "x$OPT" = "x--2010" ]
 then
     INSTALL_WIFI="YES"
     INSTALL_HDA="YES"
