@@ -144,8 +144,11 @@ then
     echo "The volume $VOLUME"
     echo "appears to be on partition 1 of the USB stick, therefore the stick is"
     echo "incorrectly partitioned (possibly MBR instead of GPT?)."
-    echo "Please refer to the micropatcher README or other documentation for more"
-    echo "information."
+    echo
+    echo 'Please use Disk Utility to erase the USB stick as "Mac OS Extended'
+    echo '(Journaled)" format on "GUID Partition Map" scheme and start over with'
+    echo '"createinstallmedia". Or for other methods, please refer to the micropatcher'
+    echo "README for more information."
     echo
     echo "install-setvars cannot continue."
     exit 1
@@ -156,8 +159,11 @@ if [ ! -d "/Volumes/EFI" ]
 then
     echo "Partition 1 of the USB stick does not appear to be an EFI partition, or"
     echo "mounting of the partition somehow failed."
-    echo "Please refer to the micropatcher README or other documentation for more"
-    echo "information."
+    echo
+    echo 'Please use Disk Utility to erase the USB stick as "Mac OS Extended'
+    echo '(Journaled)" format on "GUID Partition Map" scheme and start over with'
+    echo '"createinstallmedia". Or for other methods, please refer to the micropatcher'
+    echo "README for more information."
     echo
     echo "install-setvars cannot continue."
 fi
