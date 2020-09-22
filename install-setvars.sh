@@ -137,7 +137,7 @@ fi
 
 DEVICE=`echo -n $MOUNTEDPARTITION | sed -e 's/s[0-9]*$//'`
 PARTITION=`echo -n $MOUNTEDPARTITION | sed -e 's/^.*disk[0-9]*s//'`
-echo $DEVICE $PARTITION
+echo "$VOLUME found on device $MOUNTEDPARTITION"
 
 if [ "x$PARTITION" = "x1" ]
 then
@@ -163,6 +163,7 @@ then
 fi
 
 # Now do the actual installation
+echo "Installing setvars EFI utility."
 rm -rf /Volumes/EFI/EFI
 if [ "x$VERBOSEBOOT" = "xYES" ]
 then
@@ -171,6 +172,7 @@ else
     cp -r setvars/EFI /Volumes/EFI/EFI
 fi
 
+echo "Unmounting EFI volume (if this fails, just eject in Finder afterward)."
 umount /Volumes/EFI || diskutil unmount /Volumes/EFI
 
 echo
