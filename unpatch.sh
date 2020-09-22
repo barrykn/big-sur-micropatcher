@@ -85,11 +85,16 @@ else
 fi
 
 echo
-echo 'Removing trampoline.'
-TEMPAPP="$VOLUME/tmp.app"
-mv -f "$APPPATH/Contents/MacOS/InstallAssistant.app" "$TEMPAPP"
-rm -rf "$APPPATH"
-mv -f "$TEMPAPP" "$APPPATH"
+if [ -d "$APPPATH/Contents/MacOS/InstallAssistant.app" ]
+then
+    echo 'Removing trampoline.'
+    TEMPAPP="$VOLUME/tmp.app"
+    mv -f "$APPPATH/Contents/MacOS/InstallAssistant.app" "$TEMPAPP"
+    rm -rf "$APPPATH"
+    mv -f "$TEMPAPP" "$APPPATH"
+else
+    echo 'Looked for trampoline (v0.2.0+) but trampoline is not present. Continuing...'
+fi
 
 echo 'Removing kexts, shell scripts, and patcher version info.'
 # For v0.0.9 and earlier
