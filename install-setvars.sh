@@ -130,7 +130,7 @@ MOUNTEDPARTITION=`mount | fgrep "$VOLUME" | awk '{print $1}'`
 if [ -z "$MOUNTEDPARTITION" ]
 then
     echo Failed to find the partition that
-    echo
+    echo "$VOLUME"
     echo is mounted from. install-setvars cannot proceed.
     exit 1
 fi
