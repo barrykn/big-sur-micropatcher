@@ -162,6 +162,8 @@ then
     echo "install-setvars cannot continue."
 fi
 
+# Now do the actual installation
+rm -rf /Volumes/EFI/EFI
 if [ "x$VERBOSEBOOT" = "xYES" ]
 then
     cp -r setvars/EFI-verboseboot /Volumes/EFI/EFI
