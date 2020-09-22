@@ -6,6 +6,12 @@ dn="$(echo "$0" | sed 's@Contents/MacOS/InstallAssistant.*$@Contents/MacOS@')"
 # run installer normally if not root
 if [ $UID = 0 ]
 then
+    # Don't forget to change power management settings, since we're
+    # on an unsupported Mac and there's a good chance that the installer
+    # USB is missing the framebuffer driver we need for power management
+    # to work properly.
+    pmset -a displaysleep 0 sleep 0
+
     # Make sure there isn't already a dylib being inserted. That way
     # insert-hax.sh will still work (for manually specifying whether
     # volume sealing happens).
