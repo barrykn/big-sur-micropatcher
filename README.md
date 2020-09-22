@@ -15,7 +15,7 @@ This documentation is more thorough than for previous versions of this patcher, 
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
 - v0.2.0 (this release): Tested with beta 1 (20A4299v) and beta 6 (20A5364e). Should also work with beta 2-5.
-- v0.0.10-v0.1.0: Tested to varying degrees with beta 2 (20A4300b), 3 (20A5323l), and 4 (20A5343i). (For details, check the README or release notes for previous patcher releases.) Partially compatible with beta 5 (20A5354i) and 6 (20A5364e) as well.
+- v0.0.10-v0.1.0: Tested to varying degrees with beta 2 (20A4300b), 3 (20A5323l), and 4 (20A5343i). (For details, check the README or release notes for previous patcher releases.) Should also work with beta 1 (20A4299v). *Partially* compatible with beta 5 (20A5354i) and 6 (20A5364e) as well.
 - v0.0.9: Tested with beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with beta 3 (20A5323l) as well.
 - v0.0.1-v0.0.8: Only compatible with beta 1 (20A4299v). Not compatible with beta 2 and later.
 
