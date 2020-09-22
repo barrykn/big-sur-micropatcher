@@ -9,6 +9,8 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 - ParrotGeek for developing the LegacyUSBInjector kernel extension that allows USB to work on various pre-2011 Mac models, and for creating the "trampoline" that allows the installer to be patched at runtime without first running Terminal commands.
 - testheit for describing how to use a kmutil feature that I was previously unaware of; this turned out to be a good way to make LegacyUSBInjector function under Big Sur.
 
+In addition, thanks to Ben Sova, MachInit, johncaling40, and Travis Parker for their contributions to this patcher.
+
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
