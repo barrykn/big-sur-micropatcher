@@ -54,10 +54,9 @@ else
 
     if [ "x$MUSTEXIT" = "xYES" ]
     then
-        echo "Please boot from the patched Big Sur installer USB and run the"
-        echo "following command in Terminal to fix this:"
-        echo "/Volumes/Image\ Volume/set-vars.sh"
-        echo "(or boot from the installer USB and fix it yourself)"
+        echo
+        echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
+        echo "and try again."
         exit 1
     fi
 fi
