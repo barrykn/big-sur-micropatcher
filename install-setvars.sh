@@ -148,6 +148,7 @@ then
     echo "information."
     echo
     echo "install-setvars cannot continue."
+    exit 1
 fi
 
 diskutil mount ${DEVICE}s1
