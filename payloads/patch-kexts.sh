@@ -239,7 +239,9 @@ pushd "$VOLUME/System/Library/Extensions" > /dev/null
 
 if [ "x$INSTALL_WIFI" = "xYES" ]
 then
-    echo 'Installing highvoltage12v patched IO80211Family.kext'
+    #echo 'Installing highvoltage12v patched IO80211Family.kext'
+    #echo 'Installing patched IO80211Family.kext'
+    echo 'Installing Mojave IO80211Family.kext'
     if [ -d IO80211Family.kext.original ]
     then
         rm -rf IO80211Family.kext
@@ -247,7 +249,10 @@ then
         mv IO80211Family.kext IO80211Family.kext.original
     fi
 
-    unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v.kext.zip"
+    #unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
+    #unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
+    unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
+
     rm -rf __MACOSX
     chown -R 0:0 IO80211Family.kext
     chmod -R 755 IO80211Family.kext
