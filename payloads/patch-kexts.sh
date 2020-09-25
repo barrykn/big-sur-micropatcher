@@ -392,7 +392,7 @@ kmutilErrorCheck
 if [ "$VOLUME" != "/" ]
 then
     echo 'Creating new root snapshot.'
-    bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot --setBoot
+    bless --folder "$VOLUME"/System/Library/CoreServices --create-snapshot --setBoot
 else
     echo 'Booted directly from volume, so skipping snapshot creation.'
 fi
