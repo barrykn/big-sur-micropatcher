@@ -339,7 +339,7 @@ then
             mv AppleBCM5701Ethernet.kext AppleBCM5701Ethernet.kext.original
         fi
 
-        unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19G73.kext.zip"
+        unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19H2.kext.zip"
         chown -R 0:0 AppleBCM5701Ethernet.kext
         chmod -R 755 AppleBCM5701Ethernet.kext
 
