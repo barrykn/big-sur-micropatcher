@@ -268,7 +268,7 @@ then
         mv AppleHDA.kext AppleHDA.kext.original
     fi
 
-    unzip -q "$IMGVOL/kexts/AppleHDA-17G14019.kext.zip"
+    unzip -q "$IMGVOL/kexts/AppleHDA-17G14033.kext.zip"
     chown -R 0:0 AppleHDA.kext
     chmod -R 755 AppleHDA.kext
 fi
@@ -278,7 +278,7 @@ then
     echo 'Installing High Sierra Intel HD 3000 kexts'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
 
-    unzip -q "$IMGVOL/kexts/HD3000-17G14019.zip"
+    unzip -q "$IMGVOL/kexts/HD3000-17G14033.zip"
     chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
     chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
 fi
@@ -301,8 +301,8 @@ then
     echo 'Installing GeForce Tesla (9400M/320M) kexts'
     rm -rf *Tesla*
 
-    unzip -q "$IMGVOL/kexts/GeForceTesla-17G14019.zip"
-    unzip -q "$IMGVOL/kexts/NVDANV50HalTesla-17G14019.kext.zip"
+    unzip -q "$IMGVOL/kexts/GeForceTesla-17G14033.zip"
+    unzip -q "$IMGVOL/kexts/NVDANV50HalTesla-17G14033.kext.zip"
 
     unzip -q "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
     rm -rf __MACOSX
@@ -316,7 +316,7 @@ then
     echo 'Installing High Sierra nvenet.kext'
     pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
     rm -rf nvenet.kext
-    unzip -q "$IMGVOL/kexts/nvenet-17G14019.kext.zip"
+    unzip -q "$IMGVOL/kexts/nvenet-17G14033.kext.zip"
     chown -R 0:0 nvenet.kext
     chmod -R 755 nvenet.kext
     popd > /dev/null
