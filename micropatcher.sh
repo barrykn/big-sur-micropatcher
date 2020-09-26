@@ -168,6 +168,7 @@ echo 'Installing trampoline...'
 TEMPAPP="$VOLUME/tmp.app"
 mv -f "$APPPATH" "$TEMPAPP"
 cp -r payloads/trampoline.app "$APPPATH"
+mkdir "$APPPATH"/Contents/Resources
 mv -f "$TEMPAPP" "$APPPATH/Contents/MacOS/InstallAssistant.app"
 cp "$APPPATH/Contents/MacOS/InstallAssistant.app/Contents/Resources/InstallAssistant.icns" "$APPPATH/Contents/Resources/InstallAssistant.icns"
 cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_plain"
