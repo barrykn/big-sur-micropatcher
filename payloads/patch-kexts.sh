@@ -362,17 +362,22 @@ fi
 # the type of filesystem verification that is done by Apple's delta updaters.
 echo "Checking for KernelCollections backup..."
 pushd "$VOLUME/System/Library" > /dev/null
-BACKUP_FILE="KernelCollections-$SVPL_BUILD.tar"
+
+BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
+BACkUP_FILE="$BACKUP_FILE_BASE".lz4
+#BACkUP_FILE="$BACKUP_FILE_BASE".lzfse
+#BACkUP_FILE="$BACKUP_FILE_BASE".zst
+
 if [ -e "$BACKUP_FILE" ]
 then
     echo "Backup found, so not overwriting."
 else
     echo "Backup not found. Performing backup now. This may take a few minutes."
     echo "Backing up original KernelCollections to:"
-    echo "$VOLUME"/System/Library/"$BACKUP_FILE".lzfse
-    #echo "$VOLUME"/System/Library/"$BACKUP_FILE".zst
-    tar cv "KernelCollections" | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE".lzfse
-    #tar c "KernelCollections" | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE".zst
+    echo "$BACKUP_FILE"
+    tar cv "KernelCollections" | "$VOLUME/usr/bin/compression_tool" -encode -a lz4 > "$BACKUP_FILE"
+    #tar cv "KernelCollections" | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE"
+    #tar c "KernelCollections" | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE"
 fi
 popd > /dev/null
 
