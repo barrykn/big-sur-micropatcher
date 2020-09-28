@@ -374,7 +374,7 @@ then
 else
     echo "Backup not found. Performing backup now. This may take a few minutes."
     echo "Backing up original KernelCollections to:"
-    echo "$BACKUP_FILE"
+    echo `pwd`/"$BACKUP_FILE"
     tar cv "KernelCollections" | "$VOLUME/usr/bin/compression_tool" -encode -a lz4 > "$BACKUP_FILE"
     #tar cv "KernelCollections" | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE"
     #tar c "KernelCollections" | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE"
