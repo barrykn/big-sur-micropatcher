@@ -364,9 +364,9 @@ echo "Checking for KernelCollections backup..."
 pushd "$VOLUME/System/Library" > /dev/null
 
 BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
-BACkUP_FILE="$BACKUP_FILE_BASE".lz4
-#BACkUP_FILE="$BACKUP_FILE_BASE".lzfse
-#BACkUP_FILE="$BACKUP_FILE_BASE".zst
+BACKUP_FILE="$BACKUP_FILE_BASE".lz4
+#BACKUP_FILE="$BACKUP_FILE_BASE".lzfse
+#BACKUP_FILE="$BACKUP_FILE_BASE".zst
 
 if [ -e "$BACKUP_FILE" ]
 then
