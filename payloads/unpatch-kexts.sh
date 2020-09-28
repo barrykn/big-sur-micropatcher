@@ -185,14 +185,14 @@ popd
 # Instead of updating the kernel/kext collections, restore the backup
 # that was previously saved.
 
-pushd "$VOLUME/System/Library" > /dev/null
+pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
 
 BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
 BACKUP_FILE="$BACKUP_FILE_BASE".lz4
 #BACKUP_FILE_BASE="$BACKUP_FILE_BASE".lzfse
 #BACKUP_FILE_BASE="$BACKUP_FILE_BASE".zst
 
-rm -rf "KernelCollections"
+rm -f *.kc
 
 "$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE" | tar xpv
 #"$IMGVOL/zstd" --long -d -v < "$BACKUP_FILE" | tar xp
