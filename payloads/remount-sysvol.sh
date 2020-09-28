@@ -40,10 +40,9 @@ else
 
     if [ "x$MUSTEXIT" = "xYES" ]
     then
-        ecrr "Please boot from the patched Big Sur installer USB and run the"
-        ecrr "following command in Terminal to fix this:"
-        ecrr "/Volumes/Image\ Volume/set-vars.sh"
-        ecrr "(or boot from the installer USB and fix it yourself)"
+        echo
+        echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
+        echo "and try again."
         exit 1
     fi
 fi
