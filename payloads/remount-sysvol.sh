@@ -26,23 +26,13 @@ else
 
     # While we're at it, we need to check SIP & authenticated-root
     # (both need to be disabled)
-    if ! csrutil status | grep -q 'disabled.$'
+    if ! nvram csr-active-config | grep -q 'w%0[89]%00%000$'
     then
-        MUSTEXIT="YES"
-        >&2 csrutil status
-    fi
-
-    if ! csrutil authenticated-root status | grep -q 'disabled$'
-    then
-        MUSTEXIT="YES"
-        >&2 csrutil authenticated-root status
-    fi
-
-    if [ "x$MUSTEXIT" = "xYES" ]
-    then
-        echo
-        echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
-        echo "and try again."
+        ecrr csr-active-config appears to be set incorrectly:
+        >&2 nvram csr-active-config
+        ecrr
+        ecrr "To fix this, please boot the setvars EFI utility, then boot back into macOS"
+        ecrr "and try again."
         exit 1
     fi
 fi
