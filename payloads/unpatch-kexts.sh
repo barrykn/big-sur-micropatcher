@@ -182,6 +182,15 @@ mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabl
 
 popd
 
+# Instead of updating the kernel/kext collections, restore the backup
+# that was previously saved.
+
+pushd "$VOLUME/System/Library" > /dev/null
+BACKUP_FILE="KernelCollections-$SVPL_BUILD.tar"
+rm -rf "KernelCollections"
+"$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE".lzfse | tar xpv
+#"$IMGVOL/zst" --long -d -v < "$BACKUP_FILE".zst | tar xp
+popd > /dev/null
 
 # Update the kernel/kext collections.
 # kmutil *must* be invoked separately for boot and system KCs when
@@ -193,22 +202,22 @@ popd
 # "invalid argument" errors, and chrooting it eliminated those errors.
 # BTW, kmutil defaults to "--volume-root /" according to the manpage, so
 # it's probably redundant, but whatever.
-echo 'Using kmutil to rebuild boot collection...'
-chroot "$VOLUME" kmutil create -n boot \
-    --kernel /System/Library/Kernels/kernel \
-    --variant-suffix release --volume-root / \
-    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-kmutilErrorCheck
+#echo 'Using kmutil to rebuild boot collection...'
+#chroot "$VOLUME" kmutil create -n boot \
+#    --kernel /System/Library/Kernels/kernel \
+#    --variant-suffix release --volume-root / \
+#    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+#kmutilErrorCheck
 
 # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
 # and --system-path!
-echo 'Using kmutil to rebuild system collection...'
-chroot "$VOLUME" kmutil create -n sys \
-    --kernel /System/Library/Kernels/kernel \
-    --variant-suffix release --volume-root / \
-    --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
-    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-kmutilErrorCheck
+#echo 'Using kmutil to rebuild system collection...'
+#chroot "$VOLUME" kmutil create -n sys \
+#    --kernel /System/Library/Kernels/kernel \
+#    --variant-suffix release --volume-root / \
+#    --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
+#    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+#kmutilErrorCheck
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you

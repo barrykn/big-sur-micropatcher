@@ -357,6 +357,25 @@ then
     popd > /dev/null
 fi
 
+# Need to back up the original KernelCollections before we modify them.
+# This is necessary for unpatch-kexts.sh to be able to accomodate
+# the type of filesystem verification that is done by Apple's delta updaters.
+echo "Checking for KernelCollections backup..."
+pushd "$VOLUME/System/Library" > /dev/null
+BACKUP_FILE="KernelCollections-$SVPL_BUILD.tar"
+if [ -e "$BACKUP_FILE" ]
+then
+    echo "Backup found, so not overwriting."
+else
+    echo "Backup not found. Performing backup now. This may take a few minutes."
+    echo "Backing up original KernelCollections to:"
+    echo "$VOLUME"/System/Library/"$BACKUP_FILE".lzfse
+    #echo "$VOLUME"/System/Library/"$BACKUP_FILE".zst
+    tar cv "KernelCollections" | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE".lzfse
+    #tar c "KernelCollections" | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE".zst
+fi
+popd > /dev/null
+
 # Update the kernel/kext collections.
 # kmutil *must* be invoked separately for boot and system KCs when
 # LegacyUSBInjector is being used, or the injector gets left out, at least
