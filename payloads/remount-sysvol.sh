@@ -26,7 +26,7 @@ else
 
     # While we're at it, we need to check SIP & authenticated-root
     # (both need to be disabled)
-    if ! nvram csr-active-config | grep -q 'w%0[89]%00%000$'
+    if ! nvram csr-active-config | grep -q 'w%0[89]%00%00$'
     then
         ecrr csr-active-config appears to be set incorrectly:
         >&2 nvram csr-active-config
