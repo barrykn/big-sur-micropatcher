@@ -420,7 +420,10 @@ kmutilErrorCheck
 if [ "$VOLUME" != "/" ]
 then
     echo 'Creating new root snapshot.'
-    bless --folder "$VOLUME"/System/Library/CoreServices --create-snapshot --setBoot
+    # Get the volume label and supply it to bless, to work around the
+    # Big Sur bug where everything gets called "EFI Boot".
+    VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
+    bless --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
 else
     echo 'Booted directly from volume, so skipping snapshot creation.'
 fi
