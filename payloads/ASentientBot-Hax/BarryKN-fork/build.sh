@@ -7,7 +7,7 @@
 FLAGS="-dynamiclib -fmodules"
 export MACOSX_DEPLOYMENT_TARGET=10.9
 
-rm -f HaxDoNotSeal.dylib HaxSeal.dylib
+rm -f Hax*.dylib
 
 if [ "x$1" = "x--clean" ]
 then
@@ -16,4 +16,6 @@ fi
 
 clang $FLAGS -DDO_NOT_SEAL HaxLib.m -o HaxDoNotSeal.dylib
 clang $FLAGS -DSEAL HaxLib.m -o HaxSeal.dylib
-codesign -f -s - HaxDoNotSeal.dylib HaxSeal.dylib
+clang $FLAGS -DBYPASS_APFS_ROM_CHECK -DDO_NOT_SEAL HaxLib.m -o HaxDoNotSealNoAPFSROMCheck.dylib
+clang $FLAGS -DBYPASS_APFS_ROM_CHECK -DSEAL HaxLib.m -o HaxSealNoAPFSROMCheck.dylib
+codesign -f -s - Hax*.dylib

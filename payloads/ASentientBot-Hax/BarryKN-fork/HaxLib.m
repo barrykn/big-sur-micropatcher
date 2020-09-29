@@ -60,6 +60,7 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	trace(@"force compatible");
 	return true;
 }
+
 #if 0
 -(BOOL)fakeHasSufficientSpaceForMSUInstall:(id)thing1 error:(id)thing2
 {
@@ -67,6 +68,7 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	return true;
 }
 #endif
+
 #ifdef DO_NOT_SEAL
 -(BOOL)fakeDoNotSealSystem
 {
@@ -74,11 +76,15 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	return true;
 }
 #endif
+
+#ifdef BYPASS_APFS_ROM_CHECK
 +(BOOL)fakeAPFSSupportedByROM
 {
 	trace(@"APFS hack");
 	return true;
 }
+#endif
+
 @end
 
 @interface Inject:NSObject
@@ -89,15 +95,23 @@ void swizzle(Class realClass,Class fakeClass,SEL realSelector,SEL fakeSelector,B
 	trace(@"loaded");
 	
 	swizzle(NSClassFromString(@"BIBuildInformation"),FakeFunctions.class,@selector(isUpdateInstallable:),@selector(fakeIsUpdateInstallable:),true);
+
 #if 0
 	swizzle(NSClassFromString(@"OSISCustomizationController"),FakeFunctions.class,@selector(hasSufficientSpaceForMSUInstall:error:),@selector(fakeHasSufficientSpaceForMSUInstall:error:),true);
 #endif
+
 #ifdef DO_NOT_SEAL
 #warning Compiling with DO_NOT_SEAL
 	swizzle(NSClassFromString(@"OSISCustomizationController"),FakeFunctions.class,@selector(doNotSealSystem),@selector(fakeDoNotSealSystem),true);
 #else
 #warning Compiling without DO_NOT_SEAL
 #endif
+
+#ifdef BYPASS_APFS_ROM_CHECK
+#warning Compiling with BYPASS_APFS_ROM_CHECK
 	swizzle(NSClassFromString(@"OSISUtilities"),FakeFunctions.class,@selector(apfsSupportedByROM),@selector(fakeAPFSSupportedByROM),false);
+#else
+#warning Compiling without BYPASS_APFS_ROM_CHECK
+#endif
 }
 @end
