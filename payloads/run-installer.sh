@@ -12,7 +12,7 @@ BASE='/Volumes/Image Volume'
 # figures out the installer USB's name).
 for x in "Install macOS Big Sur" "Install macOS Big Sur Beta" "Install macOS Beta"
 do
-    if [ -d "/Volumes/$BASE/$x.app" ]
+    if [ -d "$BASE/$x.app" ]
     then
         APPNAME="$x.app"
         break
