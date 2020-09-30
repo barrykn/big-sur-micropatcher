@@ -151,7 +151,7 @@ case $PATCHMODE in
         ;;
 esac
 
-echo 'Installing kexts to:'
+# Now figure out what volume we're installing to.
 VOLUME="$1"
 
 if [ -z "$VOLUME" ]
@@ -169,6 +169,7 @@ then
     fi
 fi
 
+echo 'Installing kexts to:'
 echo "$VOLUME"
 echo
 
