@@ -63,7 +63,18 @@ fi
 # Check for command line options.
 while [[ $1 = --* ]]
 do
-    OPT="$1"
+    case $1 in
+        --create-snapshot | --create-snapshot=yes)
+            SNAPSHOT=YES
+            ;;
+        --no-create-snapshot | --create-snapshot=no)
+            SNAPSHOT=NO
+            ;;
+        *)
+            OPT="$1"
+            ;;
+    esac
+
     shift
 done
 
@@ -413,20 +424,37 @@ kmutilErrorCheck
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
 
+# First, check if there was a snapshot-related command line option.
+# If not, pick a default as follows:
+#
 # If $VOLUME = "/" at this point in the script, then we are running in a
 # live installation and the system volume is not booted from a snapshot.
 # Otherwise, assume snapshot booting is configured and use bless to create
-# a new snapshot. (This behavior can be refined in a future release...)
-if [ "$VOLUME" != "/" ]
+# a new snapshot.
+if [ -z "$SNAPSHOT" ]
 then
-    echo 'Creating new root snapshot.'
-    # Get the volume label and supply it to bless, to work around the
-    # Big Sur bug where everything gets called "EFI Boot".
-    VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
-    bless --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
+    if [ "$VOLUME" != "/" ]
+    then
+        SNAPSHOT=YES
+        CREATE_SNAPSHOT="--create-snapshot"
+        echo 'Creating new root snapshot.'
+    else
+        SNAPSHOT=NO
+        echo 'Booted directly from volume, so skipping snapshot creation.'
+    fi
+elif [ SNAPSHOT = YES ]
+    CREATE_SNAPSHOT="--create-snapshot"
+    echo 'Creating new root snapshot due to command line option.'
 else
-    echo 'Booted directly from volume, so skipping snapshot creation.'
+    echo 'Skipping creation of root snapshot due to command line option.'
 fi
+
+# Get the volume label and supply it to bless, to work around the
+# Big Sur bug where everything gets called "EFI Boot".
+VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
+
+# Now run bless
+bless --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" $CREATE_SNAPSHOT --setBoot
 
 # Try to unmount the underlying volume if it was mounted by this script.
 # (Otherwise, trying to run this script again without rebooting causes
