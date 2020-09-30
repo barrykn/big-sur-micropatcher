@@ -60,12 +60,12 @@ then
 fi
 
 
-# See if there's an option on the command line. If so, put it into OPT.
-if echo "$1" | grep -q '^--'
-then
+# Check for command line options.
+while [[ $1 = --* ]]
+do
     OPT="$1"
     shift
-fi
+done
 
 # Figure out which kexts we're installing and where we're installing
 # them to.
