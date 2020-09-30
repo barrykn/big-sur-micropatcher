@@ -64,10 +64,10 @@ fi
 while [[ $1 = --* ]]
 do
     case $1 in
-        --create-snapshot | --create-snapshot=yes)
+        --create-snapshot)
             SNAPSHOT=YES
             ;;
-        --no-create-snapshot | --create-snapshot=no)
+        --no-create-snapshot)
             SNAPSHOT=NO
             ;;
         *)
