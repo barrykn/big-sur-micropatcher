@@ -482,6 +482,7 @@ then
         echo 'Booted directly from volume, so skipping snapshot creation.'
     fi
 elif [ SNAPSHOT = YES ]
+then
     CREATE_SNAPSHOT="--create-snapshot"
     echo 'Creating new root snapshot due to command line option.'
 else
