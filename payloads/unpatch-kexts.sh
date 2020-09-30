@@ -208,6 +208,10 @@ popd > /dev/null
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
 
-bless --folder "$VOLUME"/System/Library/CoreServices --create-snapshot --setBoot
+# Get the volume label and supply it to bless, to work around the
+# Big Sur bug where everything gets called "EFI Boot".
+VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
+
+bless --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
 
 echo 'Uninstalled patch kexts successfully.'
