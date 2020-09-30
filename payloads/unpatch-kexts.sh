@@ -157,6 +157,35 @@ then
     exit 1
 fi
 
+# Instead of updating the kernel/kext collections (later), restore the backup
+# that was previously saved (now).
+
+pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
+
+BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
+BACKUP_FILE="$BACKUP_FILE_BASE".lz4
+#BACKUP_FILE_BASE="$BACKUP_FILE_BASE".lzfse
+#BACKUP_FILE_BASE="$BACKUP_FILE_BASE".zst
+
+if [ ! -e "$BACKUP_FILE" ]
+then
+    echo "Looked for KernelCollections backup at:"
+    echo "`pwd`"/"$BACKUP_FILE"
+    echo "but could not find it. unpatch-kexts.sh cannot continue."
+    exit 1
+fi
+
+rm -f *.kc
+
+"$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE" | tar xpv
+#"$IMGVOL/zstd" --long -d -v < "$BACKUP_FILE" | tar xp
+
+# Must remove the KernelCollections backup now, or the mere existence
+# of it causes filesystem verification to fail.
+rm -f "$BACKUP_FILE"
+
+popd > /dev/null
+
 # Now remove the new kexts and move the old ones back into place.
 # First in /System/Library/Extensions, then in
 # /S/L/E/IONetworkingFamily.kext/Contents/Plugins
@@ -181,27 +210,6 @@ echo 'Reactivating telemetry plugin'
 mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 
 popd
-
-# Instead of updating the kernel/kext collections, restore the backup
-# that was previously saved.
-
-pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
-
-BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
-BACKUP_FILE="$BACKUP_FILE_BASE".lz4
-#BACKUP_FILE_BASE="$BACKUP_FILE_BASE".lzfse
-#BACKUP_FILE_BASE="$BACKUP_FILE_BASE".zst
-
-rm -f *.kc
-
-"$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE" | tar xpv
-#"$IMGVOL/zstd" --long -d -v < "$BACKUP_FILE" | tar xp
-
-# Must remove the KernelCollections backup now, or the mere existence
-# of it causes filesystem verification to fail.
-rm -f "$BACKUP_FILE"
-
-popd > /dev/null
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
