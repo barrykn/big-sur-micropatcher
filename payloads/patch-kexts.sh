@@ -103,6 +103,8 @@ do
     shift
 done
 
+# If no mode option on command line, default to --2012 for now.
+# (Later I'll add automatic detection of Mac model.)
 if [ -z "$PATCHMODE" ]
 then
     echo "No patch mode specified on command line; defaulting to --2012."
