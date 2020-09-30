@@ -70,56 +70,86 @@ do
         --no-create-snapshot)
             SNAPSHOT=NO
             ;;
+        --no-wifi)
+            echo "Disabling WiFi patch (--no-wifi command line option)"
+            INSTALL_WIFI=NO
+            ;;
+        --2009)
+            echo "--2009 specified; using equivalent --2010 mode."
+            PATCHMODE=--2010
+            ;;
+        --2010)
+            echo "Using --2010 mode."
+            PATCHMODE=--2010
+            ;;
+        --2011)
+            echo "Using --2011 mode."
+            PATCHMODE=--2011
+            ;;
+        --2012)
+            echo "Using --2012 mode."
+            PATCHMODE=--2012
+            ;;
+        --2013)
+            echo "--2013 specified; using equivalent --2012 mode."
+            PATCHMODE=--2012
+            ;;
         *)
-            OPT="$1"
+            echo "Unknown command line option: $1"
+            exit 1
             ;;
     esac
 
     shift
 done
 
-# Figure out which kexts we're installing and where we're installing
-# them to.
-if [ "x$OPT" = "x--2011-no-wifi" ]
+if [ -z "$PATCHMODE" ]
 then
-    INSTALL_WIFI="NO"
-    INSTALL_HDA="YES"
-    INSTALL_HD3000="YES"
-    INSTALL_LEGACY_USB="YES"
-    INSTALL_BCM5701="YES"
-    echo 'Installing AppleHDA, HD3000, and LegacyUSBInjector to:'
-elif [ "x$OPT" = "x--2011" ]
-then
-    INSTALL_WIFI="YES"
-    INSTALL_HDA="YES"
-    INSTALL_HD3000="YES"
-    INSTALL_LEGACY_USB="YES"
-    INSTALL_BCM5701="YES"
-    echo 'Installing IO80211Family, AppleHDA, HD3000, and LegacyUSBInjector to:'
-elif [ "x$OPT" = "x--2010" ]
-then
-    INSTALL_WIFI="YES"
-    INSTALL_HDA="YES"
-    INSTALL_HD3000="YES"
-    INSTALL_LEGACY_USB="YES"
-    INSTALL_GFTESLA="YES"
-    INSTALL_NVENET="YES"
-    INSTALL_BCM5701="YES"
-    DEACTIVATE_TELEMETRY="YES"
-    echo 'Installing all kext patches to:'
-elif [ "x$OPT" = "x--hda" ]
-then
-    INSTALL_WIFI="YES"
-    INSTALL_HDA="YES"
-    INSTALL_HD3000="NO"
-    echo 'Installing IO80211Family and AppleHDA to:'
-else
-    INSTALL_WIFI="YES"
-    INSTALL_HDA="NO"
-    INSTALL_HD3000="NO"
-    echo 'Installing IO80211Family to:'
+    echo "No patch mode specified on command line; defaulting to --2012."
+    PATCHMODE=--2012
 fi
 
+# Figure out which kexts we're installing.
+# (There is some duplication of code below, but this will make it easier
+# to use different WiFi patches on different models later.)
+
+case $PATCHMODE in
+    --2010)
+        [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+        INSTALL_HDA="YES"
+        INSTALL_HD3000="YES"
+        INSTALL_LEGACY_USB="YES"
+        INSTALL_GFTESLA="YES"
+        INSTALL_NVENET="YES"
+        INSTALL_BCM5701="YES"
+        DEACTIVATE_TELEMETRY="YES"
+        ;;
+    --2011)
+        [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+        INSTALL_HDA="YES"
+        INSTALL_HD3000="YES"
+        INSTALL_LEGACY_USB="YES"
+        INSTALL_BCM5701="YES"
+        ;;
+    --2012)
+        [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+        if [ "$INSTALL_WIFI" = "NO" ]
+        then
+            echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
+            echo "Exiting."
+            exit 2
+        fi
+        ;;
+    *)
+        echo "patch-kexts.sh has encountered an internal error while attempting to"
+        echo "determine patch mode. This is a patcher bug."
+        echo
+        echo "patch-kexts.sh cannot continue."
+        exit 1
+        ;;
+esac
+
+echo 'Installing kexts to:'
 VOLUME="$1"
 
 if [ -z "$VOLUME" ]
