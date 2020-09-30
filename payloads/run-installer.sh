@@ -20,11 +20,8 @@ do
 done
 
 # Micropatcher v0.0.4 introduced a requirement for insert-hax.sh to be
-# run before this script. I believe the installer trampoline introduced
-# in v0.2.0 should now handle that automatically.
-#
-# I just realized, maybe it won't work out that way. I'll actually give
-# this code a try, then I'll see what's happening.
+# run before this script. However, the installer trampoline introduced in
+# v0.2.0 now handles this automatically.
 
 # Regarding the choice of InstallAssistant binary, there is also one at
 # /Volumes/(name of USB stick)/Contents/MacOS/InstallAssistant -- but if you
