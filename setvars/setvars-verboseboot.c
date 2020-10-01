@@ -9,7 +9,8 @@ EFI_STATUS EFIAPI efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTabl
     static const char bootArgs[] = "-v -no_compat_check";
 
     /* 'w' (0x77) disables SIP; 0x08 disables authenticated root */
-    static const char csrVal[4] = {'w', 0x08, 0x00, 0x00};
+    /* As of Big Sur beta 9 (or maybe beta 7), 0x7f not 0x77     */
+    static const char csrVal[4] = {0x7f, 0x08, 0x00, 0x00};
     
     /* 1-char array rather than just a char variable, so that I can
      * treat it the same way as the others when calling
