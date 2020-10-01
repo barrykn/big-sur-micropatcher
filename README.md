@@ -5,7 +5,7 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 
 - ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs, as well as for his patch to NVDAResmanTesla.kext which allows the GeForce Tesla (9400M/320M) framebuffer to work in Big Sur.
 - jackluke for figuring out how to patch the Recovery USB to bypass compatibility checks and AMFI enforcement in the absence of NVRAM boot-args settings.
-- highvoltage12v for the patched IO80211Family.kext used by previous versions of this patcher for 802.11n (Wi-Fi) support. (The highvoltage12v IO80211Family.kext is still available by commenting/uncommenting a couple lines of code in patch-kexts.sh around line 250 or so, and it is likely that a future patcher release will add a command line option to use it again.)
+- highvoltage12v for the patched IO80211Family.kext used by previous versions of this patcher for 802.11n (Wi-Fi) support. (The highvoltage12v IO80211Family.kext is still available by commenting/uncommenting a couple lines of code in patch-kexts.sh around line 250 or so, and a future patcher release will add a command line option to use it again.)
 - ParrotGeek for developing the LegacyUSBInjector kernel extension that allows USB to work on various pre-2011 Mac models, and for creating the "trampoline" that allows the installer to be patched at runtime without first running Terminal commands.
 - testheit for describing how to use a kmutil feature that I was previously unaware of; this turned out to be a good way to make LegacyUSBInjector function under Big Sur.
 
@@ -14,7 +14,9 @@ In addition, thanks to Ben Sova, MachInit, johncaling40, and Travis Parker for t
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
-- v0.2.0 (this release): Tested with beta 1 (20A4299v) and beta 6 (20A5364e). Should also work with beta 2-5.
+- v0.3.0 (this release): Tested with beta 6 (20A5364e) full installer, and delta updates from beta 6 to beta 8 (20A5374i) or beta 9 (20A5384c). Should also work with beta 1-5. Not yet tested with beta 9 full installer.
+- v0.2.1: Tested with beta 6 (20A5364e). Should also work with beta 1-5.
+- v0.2.0: Tested with beta 1 (20A4299v) and beta 6 (20A5364e). Should also work with beta 2-5.
 - v0.0.10-v0.1.0: Tested to varying degrees with beta 2 (20A4300b), 3 (20A5323l), and 4 (20A5343i). (For details, check the README or release notes for previous patcher releases.) Should also work with beta 1 (20A4299v). *Partially* compatible with beta 5 (20A5354i) and 6 (20A5364e) as well.
 - v0.0.9: Tested with beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with beta 3 (20A5323l) as well.
 - v0.0.1-v0.0.8: Only compatible with beta 1 (20A4299v). Not compatible with beta 2 and later.
