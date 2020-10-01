@@ -168,11 +168,17 @@ echo 'Installing trampoline...'
 TEMPAPP="$VOLUME/tmp.app"
 mv -f "$APPPATH" "$TEMPAPP"
 cp -r payloads/trampoline.app "$APPPATH"
-mkdir "$APPPATH"/Contents/Resources
 mv -f "$TEMPAPP" "$APPPATH/Contents/MacOS/InstallAssistant.app"
-cp "$APPPATH/Contents/MacOS/InstallAssistant.app/Contents/Resources/InstallAssistant.icns" "$APPPATH/Contents/Resources/InstallAssistant.icns"
 cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_plain"
 cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_springboard"
+pushd "$APPPATH/Contents" > /dev/null
+# next line is temporary -- I should be able to do this a cleaner way
+rm -f Info.plist PkgInfo
+for item in `cd MacOS/InstallAssistant.app/Contents;ls -1 | fgrep -v MacOS`
+do
+    ln -s MacOS/InstallAssistant.app/Contents/$item $item
+done
+popd > /dev/null
 touch "$APPPATH"
 
 # Copy the shell scripts into place so that they may be used once the
