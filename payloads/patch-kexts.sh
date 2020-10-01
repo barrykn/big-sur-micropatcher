@@ -64,40 +64,40 @@ fi
 while [[ $1 = --* ]]
 do
     case $1 in
-        --create-snapshot)
-            SNAPSHOT=YES
-            ;;
-        --no-create-snapshot)
-            SNAPSHOT=NO
-            ;;
-        --no-wifi)
-            echo "Disabling WiFi patch (--no-wifi command line option)"
-            INSTALL_WIFI=NO
-            ;;
-        --2009)
-            echo "--2009 specified; using equivalent --2010 mode."
-            PATCHMODE=--2010
-            ;;
-        --2010)
-            echo "Using --2010 mode."
-            PATCHMODE=--2010
-            ;;
-        --2011)
-            echo "Using --2011 mode."
-            PATCHMODE=--2011
-            ;;
-        --2012)
-            echo "Using --2012 mode."
-            PATCHMODE=--2012
-            ;;
-        --2013)
-            echo "--2013 specified; using equivalent --2012 mode."
-            PATCHMODE=--2012
-            ;;
-        *)
-            echo "Unknown command line option: $1"
-            exit 1
-            ;;
+    --create-snapshot)
+        SNAPSHOT=YES
+        ;;
+    --no-create-snapshot)
+        SNAPSHOT=NO
+        ;;
+    --no-wifi)
+        echo "Disabling WiFi patch (--no-wifi command line option)"
+        INSTALL_WIFI=NO
+        ;;
+    --2009)
+        echo "--2009 specified; using equivalent --2010 mode."
+        PATCHMODE=--2010
+        ;;
+    --2010)
+        echo "Using --2010 mode."
+        PATCHMODE=--2010
+        ;;
+    --2011)
+        echo "Using --2011 mode."
+        PATCHMODE=--2011
+        ;;
+    --2012)
+        echo "Using --2012 mode."
+        PATCHMODE=--2012
+        ;;
+    --2013)
+        echo "--2013 specified; using equivalent --2012 mode."
+        PATCHMODE=--2012
+        ;;
+    *)
+        echo "Unknown command line option: $1"
+        exit 1
+        ;;
     esac
 
     shift
