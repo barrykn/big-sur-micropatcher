@@ -145,7 +145,17 @@ fi
 # But as we're in the recovery environment, there's no need to check --
 # we'll just redisable these. If they're already disabled, then there's
 # no harm done.
-csrutil disable
+#
+# Actually, in October 2020 it's now apparent that we need to avoid doing
+# `csrutil disable` on betas that are too old (due to a SIP change
+# that happened in either beta 7 or beta 9). So avoid it on beta 1-6.
+case $SVPL_BUILD in
+20A4[0-9][0-9][0-9][a-z] | 20A53[0-6][0-9][a-z])
+    ;;
+*)
+    csrutil disable
+    ;;
+esac
 csrutil authenticated-root disable
 
 
