@@ -22,7 +22,7 @@ This documentation is more thorough than for previous versions of this patcher, 
 - v0.0.9: Tested with beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with beta 3 (20A5323l) as well.
 - v0.0.1-v0.0.8: Only compatible with beta 1 (20A4299v). Not compatible with beta 2 and later.
 
-## Compatibility of various Mac models:
+## Compatibility of various Mac models
 Note that this information is incomplete and may not be 100% correct yet, but I'll add more information over time and fix any errors as I learn about them.
 
 Mostly compatible Mac models:
@@ -50,7 +50,7 @@ Incompatible Mac models:
 Unknown status:
 - Macs which have a Penryn CPU but which do not officially support High Sierra: These include pre-2008 iMacs with upgraded CPUs, as well as most 2008 and many 2009 Mac models. All of these require "legacy USB" support, just like (for instance) 2010 white MacBooks. Once support for those MacBooks is improved in a future patcher release, perhaps support for some of these Macs will be worth revisiting.
 
-## Instructions for use:
+## Instructions for use
 
 1. Make sure you have a 16GB or larger USB stick to use for creating the installer.
 2. Obtain a copy of the macOS Big Sur Public Beta (or, if you are member of the Apple Developer Program, the Big Sur developer beta).
