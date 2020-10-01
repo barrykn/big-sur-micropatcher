@@ -200,12 +200,12 @@ popd > /dev/null
 # First in /System/Library/Extensions, then in
 # /S/L/E/IONetworkingFamily.kext/Contents/Plugins
 # (then go back up to /System/Library/Extensions)
-pushd "$VOLUME/System/Library/Extensions"
+pushd "$VOLUME/System/Library/Extensions" > /dev/null
 restoreOriginals
 
-pushd IONetworkingFamily.kext/Contents/Plugins
+pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
 restoreOriginals
-popd
+popd > /dev/null
 
 # And remove kexts which did not overwrite newer versions.
 echo 'Removing kexts for Intel HD 3000 graphics support'
@@ -219,7 +219,7 @@ rm -rf *Tesla*
 echo 'Reactivating telemetry plugin'
 mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 
-popd
+popd > /dev/null
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
