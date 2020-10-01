@@ -1,6 +1,6 @@
 #!/bin/sh
 # This script builds the setvars EFI code for both 64-bit and 32-bit.
-# I (Barry) used GNU EFI on Debian 10.5 on x86_64 for compiling, although
+# I (Barry) used GNU EFI on Debian 10.6 on x86_64 for compiling, although
 # I imagine GNU EFI running on other recent Linux distributions should work
 # too.
 # 
