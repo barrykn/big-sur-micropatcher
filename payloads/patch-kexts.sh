@@ -408,7 +408,7 @@ fi
 if [ "x$INSTALL_BCM5701" = "xYES" ]
 then
     case $SVPL_BUILD in
-    20A4*)
+    20A4[0-9][0-9][0-9][a-z])
         # skip this on Big Sur dev beta 1 and 2
         ;;
     *)
