@@ -40,7 +40,7 @@ else
 
     # While we're at it, we need to check SIP & authenticated-root
     # (both need to be disabled)
-    if ! nvram csr-active-config | grep -q 'w%0[89]%00%00$'
+    if ! nvram csr-active-config | grep -q '%7f%0[89]%00%00$'
     then
         echo csr-active-config appears to be set incorrectly:
         nvram csr-active-config
