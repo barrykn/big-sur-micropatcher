@@ -116,39 +116,39 @@ fi
 # to use different WiFi patches on different models later.)
 
 case $PATCHMODE in
-    --2010)
-        [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
-        INSTALL_HDA="YES"
-        INSTALL_HD3000="YES"
-        INSTALL_LEGACY_USB="YES"
-        INSTALL_GFTESLA="YES"
-        INSTALL_NVENET="YES"
-        INSTALL_BCM5701="YES"
-        DEACTIVATE_TELEMETRY="YES"
-        ;;
-    --2011)
-        [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
-        INSTALL_HDA="YES"
-        INSTALL_HD3000="YES"
-        INSTALL_LEGACY_USB="YES"
-        INSTALL_BCM5701="YES"
-        ;;
-    --2012)
-        [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
-        if [ "$INSTALL_WIFI" = "NO" ]
-        then
-            echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
-            echo "Exiting."
-            exit 2
-        fi
-        ;;
-    *)
-        echo "patch-kexts.sh has encountered an internal error while attempting to"
-        echo "determine patch mode. This is a patcher bug."
-        echo
-        echo "patch-kexts.sh cannot continue."
-        exit 1
-        ;;
+--2010)
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+    INSTALL_HDA="YES"
+    INSTALL_HD3000="YES"
+    INSTALL_LEGACY_USB="YES"
+    INSTALL_GFTESLA="YES"
+    INSTALL_NVENET="YES"
+    INSTALL_BCM5701="YES"
+    DEACTIVATE_TELEMETRY="YES"
+    ;;
+--2011)
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+    INSTALL_HDA="YES"
+    INSTALL_HD3000="YES"
+    INSTALL_LEGACY_USB="YES"
+    INSTALL_BCM5701="YES"
+    ;;
+--2012)
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+    if [ "$INSTALL_WIFI" = "NO" ]
+    then
+        echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
+        echo "Exiting."
+        exit 2
+    fi
+    ;;
+*)
+    echo "patch-kexts.sh has encountered an internal error while attempting to"
+    echo "determine patch mode. This is a patcher bug."
+    echo
+    echo "patch-kexts.sh cannot continue."
+    exit 1
+    ;;
 esac
 
 # Now figure out what volume we're installing to.
