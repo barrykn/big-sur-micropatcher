@@ -147,7 +147,7 @@ then
      echo "USB stick has already been patched. Running unpatch.sh to remove the"
      echo "existing patches before continuing."
      echo
-     if ./unpatch.sh "$VOLUME"
+     if ./unpatch.sh --no-sync "$VOLUME"
      then
          echo 'Patcher is now continuing.'
      else

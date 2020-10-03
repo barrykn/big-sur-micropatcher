@@ -3,6 +3,13 @@ echo 'Unpatcher starting. If this fails, try recreating the installer USB using'
 echo 'createinstallmedia.'
 echo
 
+# Check for --no-sync option
+if [ "x$1" = "x--no-sync" ]
+then
+    SKIP_SYNC="YES"
+    shift
+fi
+
 # Allow the user to drag-and-drop the USB stick in Terminal, to specify the
 # path to the USB stick in question. (Otherwise it will try hardcoded paths
 # for a presumed Big Sur Golden Master/public release, beta 2-or-later,
@@ -101,9 +108,12 @@ echo 'Remvoing Hax dylibs...'
 rm -f "$VOLUME"/Hax*.dylib
 rm -rf "$VOLUME"/Hax*.app
 
-echo
-echo 'Syncing.'
-sync
+if [ "x$SKIP_SYNC" != "xYES" ]
+then
+    echo
+    echo 'Syncing.'
+    sync
+fi
 
 echo
 echo 'Unpatcher finished.'
