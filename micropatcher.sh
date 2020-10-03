@@ -176,11 +176,9 @@ mv -f "$TEMPAPP" "$APPPATH/Contents/MacOS/InstallAssistant.app"
 cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_plain"
 cp "$APPPATH/Contents/MacOS/InstallAssistant" "$APPPATH/Contents/MacOS/InstallAssistant_springboard"
 pushd "$APPPATH/Contents" > /dev/null
-# next line is temporary -- I should be able to do this a cleaner way
-rm -f Info.plist PkgInfo
 for item in `cd MacOS/InstallAssistant.app/Contents;ls -1 | fgrep -v MacOS`
 do
-    ln -s MacOS/InstallAssistant.app/Contents/$item $item
+    ln -s MacOS/InstallAssistant.app/Contents/$item .
 done
 popd > /dev/null
 touch "$APPPATH"
