@@ -14,7 +14,7 @@ In addition, thanks to Ben Sova, MachInit, johncaling40, and Travis Parker for t
 This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could easily lose your data, expect bugs and crashes, Big Sur is still under development (as is this patcher), etc.
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
-- v0.3.1-v0.3.2 (this release): Tested with beta 9 (20A5384c). Should be compatible with all previous betas as well.
+- v0.3.1-v0.3.2a (this release): Tested with beta 9 (20A5384c). Should be compatible with all previous betas as well.
 - v0.3.0: Tested with beta 6 (20A5364e) full installer, and delta updates from beta 6 to beta 8 (20A5374i) or beta 9 (20A5384c). Should also work with beta 1-5. Incompatible with beta 9 full installer.
 - v0.2.1: Tested with beta 6 (20A5364e). Should also work with beta 1-5. Incompatible with beta 9 (20A5384c) full installer.
 - v0.2.0: Tested with beta 1 (20A4299v) and beta 6 (20A5364e). Should also work with beta 2-5. Incompatible with beta 9 (20A5384c) full installer.
