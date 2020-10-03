@@ -95,12 +95,14 @@ else
     echo 'Looked for trampoline (v0.2.0+) but trampoline is not present. Continuing...'
 fi
 
-echo 'Removing kexts, shell scripts, and patcher version info.'
+echo 'Removing kexts, shell scripts, patcher version info, etc.'
 # For v0.0.9 and earlier
 rm -rf "$VOLUME"/*.kext
 # For v0.0.10 and later
 rm -rf "$VOLUME"/kexts
 rm -f "$VOLUME"/*.kext.zip "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
+# For v0.3.3 and later
+rm -f "$VOLUME"/kmutil*
 
 # Now that the patcher is going to add the dylib itself, go ahead and
 # remove that too.
