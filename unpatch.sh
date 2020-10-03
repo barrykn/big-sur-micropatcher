@@ -1,6 +1,6 @@
 #!/bin/bash
-echo "It's really best to recreate the USB stick using createinstallmedia,"
-echo "but this takes much less time and is useful for patcher development."
+echo 'Unpatcher starting. If this fails, try recreating the installer USB using'
+echo 'createinstallmedia.'
 echo
 
 # Allow the user to drag-and-drop the USB stick in Terminal, to specify the

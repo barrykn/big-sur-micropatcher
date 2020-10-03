@@ -144,12 +144,16 @@ fi
 
 if [ -e "$VOLUME/Patch-Version.txt" ]
 then
-    echo "Cannot patch a USB stick which has already been patched."
-    echo "Ideally run createinstallmedia again, or at least run unpatch.sh"
-    echo "first."
-    echo
-    echo "Patcher cannot continue and will now exit."
-    exit 1
+     echo "USB stick has already been patched. Running unpatch.sh to remove the"
+     echo "existing patches before continuing."
+     echo
+     if ./unpatch.sh "$VOLUME"
+     then
+         echo 'Patcher is now continuing.'
+     else
+         echo 'Unpatcher failed. Patcher cannot continue.'
+         exit 1
+     fi
 fi
 
 
