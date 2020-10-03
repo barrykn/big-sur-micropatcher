@@ -74,6 +74,10 @@ do
         echo "Disabling WiFi patch (--no-wifi command line option)"
         INSTALL_WIFI=NO
         ;;
+    --i[mM]ac)
+        echo "Enabling 2011 iMac patch (--iMac command line option)"
+        INSTALL_IMAC=YES
+        ;;
     --2009)
         echo "--2009 specified; using equivalent --2010 mode."
         PATCHMODE=--2010
@@ -429,6 +433,102 @@ then
         popd > /dev/null
         ;;
     esac
+fi
+
+#
+# it is important to have this part after installing the stock HD3000* because
+# in case we will fine a new Polaris based AMD card installed we have to use
+# a patched version of the AppleIntelSNBGraphicsFB.kext which will be replaced
+# NOW
+#
+# added a METAL check, in case we find no metal enabled card we will not
+# install these patches at all
+#
+if [ "x$INSTALL_IMAC" = "xYES" ]
+then
+
+    CARD=`system_profiler SPDisplaysDataType | grep Vendor | awk '{print $2}'`
+    #echo $CARD
+    # Values: NVIDIA, AMD
+
+    METAL=`system_profiler SPDisplaysDataType | grep Metal | awk '{print $2}'`
+    #echo $METAL
+    # Values: Supported
+
+    if [ "x$METAL"=="xSupported" ]
+    then
+        # install the iMacFamily extensions
+        echo "Installing highvoltage12v patched iMac-2011-family.kext"
+
+        if [ -d AppleGraphicsControl.kext.original ]
+        then
+            rm -rf AppleGraphicsControl.kext
+        else
+            mv AppleGraphicsControl.kext AppleGraphicsControl.kext.original
+        fi
+
+        if [ -d AppleMCCSControl.kext.original ]
+        then
+            rm -rf AppleMCCSControl.kext
+        else
+            mv AppleMCCSControl.kext AppleMCCSControl.kext.original
+        fi
+
+        if [ -d AppleBacklight.kext.original ]
+        then
+            rm -rf AppleBacklight.kext
+        else
+            mv AppleBacklight.kext AppleBacklight.kext.original
+        fi
+
+        unzip -q "$IMGVOL/kexts/iMac2011Family-highvoltage12v.zip"
+        rm -rf __MACOSX
+
+        chown -R 0:0 AppleGraphicsControl.kext
+        chmod -R 755 AppleGraphicsControl.kext
+
+        chown -R 0:0 AppleMCCSControl.kext
+        chmod -R 755 AppleMCCSControl.kext
+
+        chown -R 0:0 AppleBacklight*
+        chmod -R 755 AppleBacklight*
+
+        chown -R 0:0 WhateverGreen* Lilu*
+        chmod -R 755 WhateverGreen* Lilu*
+
+
+        if [ "x$CARD" == "xAMD" ]
+        then
+            echo $CARD "Polaris Card found"
+            echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
+            # rename AppleIntelSNBGraphicsFB-AMD.kext
+            mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
+            chown -R 0:0 AppleIntelSNBGraphicsFB.kext
+            chmod -R 755 AppleIntelSNBGraphicsFB.kext
+            #
+            # probably delete the AppleBacklightFixup
+            # and
+            # copy back the AppleBacklight.kext.original to AppleBacklight.kext
+            #
+            echo "Using Big Sur AppleBacklight.kext"
+            if [ -d AppleBacklight.kext.original ]
+            then
+                mv AppleBacklight.kext.original AppleBacklight.kext
+            fi
+            if [ -d AppleBacklightFixup.kext ]
+            then
+                rm -rf  AppleBacklightFixup.kext
+            fi
+        else [ "x$CARD" == "xNVIDIA" ]
+            echo $CARD "Kepler based graphics adapter found"
+            echo "Using stock NVIDIA compatible version of AppleIntelSNBGraphicsFB.kext"
+            # remove AMD version, the correct version has been installed before
+            rm -rf AppleIntelSNBGraphicsFB-AMD.kext
+        fi
+    else
+        echo "No metal supported video card found in this system!"
+        # do not install the iMacFamily at all.
+    fi
 fi
 
 popd > /dev/null
