@@ -28,12 +28,27 @@ fi
 # For this script, root permissions are vital.
 [ $UID = 0 ] || exec sudo "$0" "$@"
 
-if [ "x$1" = "x-v" -o "x$1" = "x--verbose" ]
-then
-    VERBOSEBOOT="YES"
-    echo 'Verbose boot option enabled.'
+while [[ $1 = -* ]]
+do
+    case $1 in
+    -v | --verbose)
+        VERBOSEBOOT="YES"
+        #echo 'Verbose boot option enabled.'
+        ;;
+    -e | --enable*)
+        SIPARV="YES"
+        ;;
+    -d | --disable*)
+        SIPARV="NO"
+        ;;
+    *)
+        echo "Unknown command line option: $1"
+        exit 1
+        ;;
+    esac
+
     shift
-fi
+done
 
 # Allow the user to drag-and-drop the USB stick in Terminal, to specify the
 # path to the USB stick in question. (Otherwise it will try hardcoded paths
@@ -174,8 +189,20 @@ echo "Installing setvars EFI utility."
 rm -rf /Volumes/EFI/EFI
 if [ "x$VERBOSEBOOT" = "xYES" ]
 then
-    cp -r setvars/EFI-verboseboot /Volumes/EFI/EFI
+    if [ "x$SIPARV" = "xYES" ]
+    then
+        echo 'Verbose boot enabled, SIP/ARV enabled'
+        cp -r setvars/EFI-enablesiparv-vb /Volumes/EFI/EFI
+    else
+        echo 'Verbose boot enabled, SIP/ARV disabled'
+        cp -r setvars/EFI-verboseboot /Volumes/EFI/EFI
+    fi
+elif [ "x$SIPARV" = "xYES" ]
+then
+    echo 'Verbose boot disabled, SIP/ARV enabled'
+    cp -r setvars/EFI-enablesiparv /Volumes/EFI/EFI
 else
+    echo 'Verbose boot disabled, SIP/ARV disabled'
     cp -r setvars/EFI /Volumes/EFI/EFI
 fi
 
