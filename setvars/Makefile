@@ -8,7 +8,7 @@
 
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
-TARGET          = setvars.efi setvars-verboseboot.efi
+TARGET          = setvars.efi setvars-verboseboot.efi setvars-enablesiparv.efi setvars-enablesiparv-vb.efi
 
 EFIINC          = /usr/include/efi
 EFIINCS         = -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
