@@ -35,8 +35,8 @@ else
     if [ "x$FORCE" != "xYES" ]
     then
         CSRVAL="`nvram csr-active-config|sed -e 's/^.*	//'`"
-        case CSRVAL in
-        "w%0[89f]*" | "%[7f]f%0[89f]*")
+        case $CSRVAL in
+        w%0[89f]* | %[7f]f%0[89f]*)
             ;;
         *)
             ecrr csr-active-config appears to be set incorrectly:
