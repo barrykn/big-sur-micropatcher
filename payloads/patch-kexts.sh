@@ -37,18 +37,6 @@ else
         # if-then block which will catch it and do the right thing
         IMGVOL="/Volumes/Install macOS Beta"
     fi
-
-    # While we're at it, we need to check SIP & authenticated-root
-    # (both need to be disabled)
-    if ! nvram csr-active-config | grep -q '%7f%0[89]%00%00$'
-    then
-        echo csr-active-config appears to be set incorrectly:
-        nvram csr-active-config
-        echo
-        echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
-        echo "and try again."
-        exit 1
-    fi
 fi
 
 # Now that $IMGVOL has hopefully been corrected, check again.
@@ -78,6 +66,9 @@ do
         echo "Enabling 2011 iMac patch (--iMac command line option)"
         INSTALL_IMAC=YES
         ;;
+    --force)
+        FORCE=YES
+        ;;
     --2009)
         echo "--2009 specified; using equivalent --2010 mode."
         PATCHMODE=--2010
@@ -106,6 +97,29 @@ do
 
     shift
 done
+
+if [ "x$RECOVERY" = "xNO" ]
+then
+    # Outside the recovery environment, we need to check SIP &
+    # authenticated-root (both need to be disabled)
+    if [ "x$FORCE" != "xYES" ]
+    then
+        CSRVAL=`nvram csr-active-config|sed -e 's/^.*	//'`
+        case CSRVAL in
+        "w%0[89f]*" | "%[7f]f%0[89f]*")
+            ;;
+        *)
+            echo csr-active-config appears to be set incorrectly:
+            nvram csr-active-config
+            echo
+            echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
+            echo "and try again. Or if you believe you are seeing this message in error, try the"
+            echo "`--force` command line option."
+            exit 1
+            ;;
+        esac
+    fi
+fi
 
 # If no mode option on command line, default to --2012 for now.
 # (Later I'll add automatic detection of Mac model.)
