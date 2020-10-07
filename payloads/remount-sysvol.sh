@@ -157,10 +157,11 @@ fi
 #echo export WASSNAPSHOT=\""$WASSNAPSHOT"\"\;
 #echo export VOLUME=\""$VOLUME"\"\;
 
-export RECOVERY WASSNAPSHOT VOLUME
+export RECOVERY WASSNAPSHOT VOLUME SVPL_BUILD
 echo RECOVERY=\""$RECOVERY"\"\;
 echo WASSNAPSHOT=\""$WASSNAPSHOT"\"\;
 echo VOLUME=\""$VOLUME"\"\;
+echo SVPL_BUILD=\""$SVPL_BUILD"\"\;
 echo
 
 if [ -z "$SHELL" ]
