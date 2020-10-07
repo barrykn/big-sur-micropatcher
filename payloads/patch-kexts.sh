@@ -62,6 +62,18 @@ do
         echo "Disabling WiFi patch (--no-wifi command line option)"
         INSTALL_WIFI=NO
         ;;
+    --wifi=hv12v-old)
+        echo "Using old highvoltage12v WiFi patch to override default."
+        INSTALL_WIFI="hv12v-old"
+        ;;
+    --wifi=hv12v-new)
+        echo "Using new highvoltage12v WiFi patch to override default."
+        INSTALL_WIFI="hv12v-new"
+        ;;
+    --wifi=barrykn1)
+        echo "Using barrykn1 WiFi patch to override default."
+        INSTALL_WIFI="barrykn1"
+        ;;
     --i[mM]ac)
         echo "Enabling 2011 iMac patch (--iMac command line option)"
         INSTALL_IMAC=YES
@@ -135,7 +147,7 @@ fi
 
 case $PATCHMODE in
 --2010)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="barrykn1"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
@@ -145,15 +157,15 @@ case $PATCHMODE in
     DEACTIVATE_TELEMETRY="YES"
     ;;
 --2011)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="barrykn1"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
     INSTALL_BCM5701="YES"
     ;;
 --2012)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="YES"
-    if [ "$INSTALL_WIFI" = "NO" ]
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="barrykn1"
+    if [ "x$INSTALL_WIFI" = "xNO" ]
     then
         echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
         echo "Exiting."
@@ -329,9 +341,9 @@ popd > /dev/null
 # replacement.
 pushd "$VOLUME/System/Library/Extensions" > /dev/null
 
-if [ "x$INSTALL_WIFI" = "xYES" ]
+if [ "x$INSTALL_WIFI" != "xNO" ]
 then
-    echo 'Installing patched IO80211Family.kext'
+    echo 'Beginning patched IO80211Family.kext installation'
     if [ -d IO80211Family.kext.original ]
     then
         rm -rf IO80211Family.kext
@@ -339,22 +351,33 @@ then
         mv IO80211Family.kext IO80211Family.kext.original
     fi
 
-    # Uncomment this line for the old highvoltage12v patch
-    #unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
-
-    # Uncomment this line for the new highvoltage12v patch
-    #unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
-
-    # Comment out the next *4* lines if uncommenting either of the above
-    # lines for highvoltage12v.
-    unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
-    pushd IO80211Family.kext/Contents/Plugins > /dev/null
-    unzip -q "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
-    popd > /dev/null
+    case $INSTALL_WIFI in
+    hv12v-old)
+        echo 'Installing old highvoltage12v WiFi patch'
+        unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
+        ;;
+    hv12v-new)
+        echo 'Installing new highvoltage12v WiFi patch'
+        unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
+        ;;
+    barrykn1)
+        echo 'Installing barrykn1 WiFi patch'
+        unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
+        pushd IO80211Family.kext/Contents/Plugins > /dev/null
+        unzip -q "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
+        popd > /dev/null
+        ;;
+    *)
+        echo 'patch-kexts.sh encountered an internal error while installing the WiFi patch.'
+        echo 'This is a patcher bug. patch-kexts.sh cannot continue.'
+        exit 1
+        ;;
+    esac
 
     # The next line is really only here for the highvoltage12v zip
     # files, but it does no harm in other cases.
     rm -rf __MACOSX
+
     chown -R 0:0 IO80211Family.kext
     chmod -R 755 IO80211Family.kext
 fi
