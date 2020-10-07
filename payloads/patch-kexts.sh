@@ -104,7 +104,7 @@ then
     # authenticated-root (both need to be disabled)
     if [ "x$FORCE" != "xYES" ]
     then
-        CSRVAL=`nvram csr-active-config|sed -e 's/^.*	//'`
+        CSRVAL="`nvram csr-active-config|sed -e 's/^.*	//'`"
         case CSRVAL in
         "w%0[89f]*" | "%[7f]f%0[89f]*")
             ;;
