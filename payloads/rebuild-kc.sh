@@ -31,6 +31,39 @@ kmutilErrorCheck() {
 checkVar VOLUME
 checkVar WASSNAPSHOT
 checkVar RECOVERY
+# Maybe I should rename SVPL_BUILD at some point. It's the macOS
+# build number, as detected by remount-sysvol.sh.
+checkVar SVPL_BUILD
+
+# Need to back up the original KernelCollections before we modify them.
+# This is necessary for unpatch-kexts.sh to be able to accomodate
+# the type of filesystem verification that is done by Apple's delta updaters.
+#
+# (But also need to check if there's already a backup. If there's already
+# a backup, don't do it again. It would be dangerous to overwrite a
+# backup that already exists -- the existence of the backup means
+# the KernelCollections have already been modified!
+echo "Checking for KernelCollections backup..."
+pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
+
+BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
+BACKUP_FILE="$BACKUP_FILE_BASE".lz4
+#BACKUP_FILE="$BACKUP_FILE_BASE".lzfse
+#BACKUP_FILE="$BACKUP_FILE_BASE".zst
+
+if [ -e "$BACKUP_FILE" ]
+then
+    echo "Backup found, so not overwriting."
+else
+    echo "Backup not found. Performing backup now. This may take a few minutes."
+    echo "Backing up original KernelCollections to:"
+    echo `pwd`/"$BACKUP_FILE"
+    tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode -a lz4 > "$BACKUP_FILE"
+    #tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE"
+    #tar c *.kc | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE"
+fi
+popd > /dev/null
+
 
 # Prepare $BUNDLE_PATH variable for rebuilding the boot kc, if
 # LegacyUSBInjector was installed.
