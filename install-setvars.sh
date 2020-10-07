@@ -184,6 +184,29 @@ then
     exit 1
 fi
 
+# Before proceeding with the actual installation, see if we were provided
+# a command line option for SIP/ARV, and if not, make a decision based
+# on what Mac model this is.
+if [ -z "$SIPARV" ]
+then
+    MACMODEL=`sysctl -n hw.model`
+    echo "Detected Mac model is:" $MACMODEL
+    case $MACMODEL in
+    "iMac14,1" | "iMac14,2" | "iMac14,3")
+        echo "Late 2013 iMac detected, so enabling SIP/ARV."
+        echo "(Use -d option to disable SIP/ARV if necessary.)"
+        SIPARV="YES"
+        ;;
+    *)
+        echo "This Mac is not a Late 2013 iMac, so disabling SIP/ARV."
+        echo "(Use -e option to enable SIP/ARV if necessary.)"
+        SIPARV="NO"
+        ;;
+    esac
+
+    echo
+fi
+
 # Now do the actual installation
 echo "Installing setvars EFI utility."
 rm -rf /Volumes/EFI/EFI
