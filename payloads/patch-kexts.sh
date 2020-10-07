@@ -126,7 +126,7 @@ then
             echo
             echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
             echo "and try again. Or if you believe you are seeing this message in error, try the"
-            echo "`--force` command line option."
+            echo '`--force` command line option.'
             exit 1
             ;;
         esac

@@ -43,9 +43,8 @@ else
             >&2 nvram csr-active-config
             ecrr
             ecrr "To fix this, please boot the setvars EFI utility, then boot back into macOS"
-            ecrr "and try again."
             ecrr "and try again. Or if you believe you are seeing this message in error, try the"
-            ecrr "`--force` command line option."
+            ecrr '`--force` command line option.'
             exit 1
             ;;
         esac
