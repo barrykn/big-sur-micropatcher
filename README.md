@@ -65,6 +65,8 @@ Upgrading from a Catalina installation which has been patched using dosdude's ma
 
 Time Machine backups must be restored by first performing a fresh Big Sur installation and then doing the Time Machine restore from the Setup Assistant. Attempting to do the restore from the installer USB fails. I do not yet know if this is inherent to Big Sur, inherent to the patching process, or a bug in this patcher.
 
+If you encounter "com.apple.DiskManagement.disenter error 49168" during installation, try rebooting and see if the installation process continues, or try erasing the volume and starting installation over. This appears to be an error that also happens sometimes on supported Macs. If all else fails, a possible workaround is to try formatting the volume as Mac OS Extended instead of APFS in step 8 or 11; it will still be converted to APFS during the installation process, but this may perturb the installation process enough to avoid the error.
+
 ## Instructions for use
 
 1. Make sure you have a 16GB or larger USB stick to use for creating the installer.
