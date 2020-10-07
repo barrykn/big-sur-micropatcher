@@ -132,7 +132,10 @@ then
     ecrr 'Mounted device is an actual volume, not a snapshot. Proceeding.'
 else
     WASSNAPSHOT="YES"
-    VOLUME=`mktemp -d`
+    #VOLUME=`mktemp -d`
+    # Use the same mountpoint as Apple's own updaters. This is probably
+    # more user-friendly than something randomly generated with mktemp.
+    VOLUME=/System/Volumes/Update/mnt1
     ecrr "Mounted device is a snapshot. Will now mount underlying volume"
     ecrr "from device $POPSLICE at temporary mountpoint:"
     ecrr "$VOLUME"
