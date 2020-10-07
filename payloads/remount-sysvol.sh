@@ -17,6 +17,12 @@ ecrr() {
 # as root.
 [ $UID = 0 ] || exec sudo --preserve-env=SHELL "$0" "$@"
 
+if [ "x$1" = "x--force" ]
+then
+    FORCE=YES
+    shift
+fi
+
 IMGVOL="/Volumes/Image Volume"
 if [ -d "$IMGVOL" ]
 then
@@ -24,16 +30,25 @@ then
 else
     RECOVERY="NO"
 
-    # While we're at it, we need to check SIP & authenticated-root
-    # (both need to be disabled)
-    if ! nvram csr-active-config | grep -q 'w%0[89]%00%00$'
+    # Outside the recovery environment, we need to check SIP &
+    # authenticated-root (both need to be disabled)
+    if [ "x$FORCE" != "xYES" ]
     then
-        ecrr csr-active-config appears to be set incorrectly:
-        >&2 nvram csr-active-config
-        ecrr
-        ecrr "To fix this, please boot the setvars EFI utility, then boot back into macOS"
-        ecrr "and try again."
-        exit 1
+        CSRVAL="`nvram csr-active-config|sed -e 's/^.*	//'`"
+        case CSRVAL in
+        "w%0[89f]*" | "%[7f]f%0[89f]*")
+            ;;
+        *)
+            ecrr csr-active-config appears to be set incorrectly:
+            >&2 nvram csr-active-config
+            ecrr
+            ecrr "To fix this, please boot the setvars EFI utility, then boot back into macOS"
+            ecrr "and try again."
+            ecrr "and try again. Or if you believe you are seeing this message in error, try the"
+            ecrr "`--force` command line option."
+            exit 1
+            ;;
+        esac
     fi
 fi
 
