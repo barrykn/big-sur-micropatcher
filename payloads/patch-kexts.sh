@@ -76,9 +76,9 @@ do
         echo "Using new highvoltage12v WiFi patch to override default."
         INSTALL_WIFI="hv12v-new"
         ;;
-    --wifi=barrykn1)
-        echo "Using barrykn1 WiFi patch to override default."
-        INSTALL_WIFI="barrykn1"
+    --wifi=mojave-hybrid)
+        echo "Using mojave-hybrid WiFi patch to override default."
+        INSTALL_WIFI="mojave-hybrid"
         ;;
     --i[mM]ac)
         echo "Enabling 2011 iMac patch (--iMac command line option)"
@@ -153,7 +153,7 @@ fi
 
 case $PATCHMODE in
 --2010)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="barrykn1"
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="mojave-hybrid"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
@@ -163,14 +163,14 @@ case $PATCHMODE in
     DEACTIVATE_TELEMETRY="YES"
     ;;
 --2011)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="barrykn1"
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="mojave-hybrid"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
     INSTALL_BCM5701="YES"
     ;;
 --2012)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="barrykn1"
+    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="mojave-hybrid"
     if [ "x$INSTALL_WIFI" = "xNO" ]
     then
         echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
@@ -369,8 +369,8 @@ then
         echo 'Installing new highvoltage12v WiFi patch'
         unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
         ;;
-    barrykn1)
-        echo 'Installing barrykn1 WiFi patch'
+    mojave-hybrid)
+        echo 'Installing mojave-hybrid WiFi patch'
         unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
         pushd IO80211Family.kext/Contents/Plugins > /dev/null
         unzip -q "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
