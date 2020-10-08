@@ -1,3 +1,4 @@
+#!/bin/sh
 defaults delete -g NSAutomaticWindowAnimationsEnabled
 defaults delete -g NSScrollAnimationEnabled
 defaults delete -g NSWindowResizeTime
