@@ -547,10 +547,8 @@ then
         then
             echo $CARD "Polaris Card found"
             echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
-            if [ -d AppleIntelSNBGraphicsFB.kext ]
-            then
-                rm -rf  AppleIntelSNBGraphicsFB.kext
-            fi
+            # delete stock High Sierra version
+            rm -rf AppleIntelSNBGraphicsFB.kext
             # rename AppleIntelSNBGraphicsFB-AMD.kext
             mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
             chown -R 0:0 AppleIntelSNBGraphicsFB.kext
@@ -565,10 +563,13 @@ then
             then
                 mv AppleBacklight.kext.original AppleBacklight.kext
             fi
-            if [ -d AppleBacklightFixup.kext ]
-            then
-                rm -rf  AppleBacklightFixup.kext
-            fi
+            #
+            # cleaning up Nvidia related files
+            # AppleBacklightFixup: Nvidia only
+            # Whatevergreen: injected with OpenCore
+            # Lilu: injected with OpenCore
+            #
+            rm -rf AppleBacklightFixup.kext WhateverGreen.kext Lilu.kext
         else [ "x$CARD" == "xNVIDIA" ]
             echo $CARD "Kepler based graphics adapter found"
             echo "Using stock NVIDIA compatible version of AppleIntelSNBGraphicsFB.kext"
