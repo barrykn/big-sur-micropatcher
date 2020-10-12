@@ -547,6 +547,10 @@ then
         then
             echo $CARD "Polaris Card found"
             echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
+            if [ -d AppleIntelSNBGraphicsFB.kext ]
+            then
+                rm -rf  AppleIntelSNBGraphicsFB.kext
+            fi
             # rename AppleIntelSNBGraphicsFB-AMD.kext
             mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
             chown -R 0:0 AppleIntelSNBGraphicsFB.kext
