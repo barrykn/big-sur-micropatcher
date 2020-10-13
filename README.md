@@ -26,9 +26,9 @@ This documentation is more thorough than for previous versions of this patcher, 
 Note that this information is incomplete and may not be 100% correct yet, but I'll add more information over time and fix any errors as I learn about them.
 
 Also, note that on 2011 and earlier Macs, "no graphics acceleration" is a tremendous, almost exponential, slowdown. A simple benchmark, simply minimizing a Safari window, gives the following results (all of these are 13" MacBooks):
-Late 2012 MacBook Pro: <1 second
-Early 2011 MacBook Pro: 14 seconds
-Mid 2009 MacBook: 25 seconds
+- Late 2012 MacBook Pro: <1 second
+- Early 2011 MacBook Pro: 14 seconds
+- Mid 2009 MacBook: 25 seconds
 
 Mostly compatible Mac models:
 - If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://www.apple.com/macos/big-sur-preview/) (search the page for "See if") first, to make sure that you actually need this patcher.
