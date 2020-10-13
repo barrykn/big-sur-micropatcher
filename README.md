@@ -28,7 +28,7 @@ Note that this information is incomplete and may not be 100% correct yet, but I'
 Also, note that on 2011 and earlier Macs, "no graphics acceleration" is a tremendous, almost exponential, slowdown. For instance, consider a simple benchmark, simply minimizing a Safari window:
 - Late 2012 13" MacBook Pro: <1 second
 - Early 2011 13" MacBook Pro: 14 seconds
-- Mid 2009 13" MacBook: 25 seconds
+- Late 2009 13" MacBook: 25 seconds
 
 Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so most users do not need to urgently upgrade to Big Sur.
 
@@ -55,7 +55,7 @@ Incompatible Mac models:
 - Any Macs with a pre-Penryn CPU. Basically, this means the original MacBook Air as well as all 2006/2007 Macs (except for iMacs with upgraded CPUs).
 
 Currently not supported by this patcher, but future support may be possible:
-- Macs which have a Penryn CPU but which do not officially support High Sierra: These include pre-2008 iMacs with upgraded CPUs, as well as most 2008 and many 2009 Mac models. All of these require "legacy USB" support, just like (for instance) 2010 white MacBooks. Once support for those MacBooks is improved in a future patcher release, perhaps support for some of these Macs will be worth revisiting.
+- Macs which have a Penryn CPU but which do not officially support High Sierra: These include pre-2008 iMacs with upgraded CPUs, as well as all 2008 and most 2009 Mac models (any 2009 models not listed above). All of these require "legacy USB" support, just like (for instance) 2010 white MacBooks. Once support for those MacBooks is improved in a future patcher release, perhaps support for some of these Macs will be worth revisiting.
 - Without a Metal GPU upgrade (certainly possible on 2008 Mac Pros, not sure about the iMacs, not possible on the MacBooks and Mac Minis), these are expected to be unusably slow.
 
 ## Other important information to know before upgrading or installing
