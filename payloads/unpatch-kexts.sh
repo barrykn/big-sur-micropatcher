@@ -233,6 +233,6 @@ rm -f "$VOLUME/usr/bin/kmutil.old"
 # Big Sur bug where everything gets called "EFI Boot".
 VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
 
-bless --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
+"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
 
 echo 'Uninstalled patch kexts successfully.'
