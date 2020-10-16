@@ -103,9 +103,9 @@ rm -rf "$VOLUME"/kexts
 rm -f "$VOLUME"/*.kext.zip "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 # For v0.3.3 and later
 rm -f "$VOLUME"/kmutil*
+# For v0.4.2 and later
+rm -f "$VOLUME"/bless*
 
-# Now that the patcher is going to add the dylib itself, go ahead and
-# remove that too.
 echo 'Remvoing Hax dylibs...'
 rm -f "$VOLUME"/Hax*.dylib
 rm -rf "$VOLUME"/Hax*.app

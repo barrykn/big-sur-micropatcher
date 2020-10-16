@@ -186,15 +186,15 @@ touch "$APPPATH"
 # Copy the shell scripts into place so that they may be used once the
 # USB stick is booted.
 echo 'Copying various files...'
-cp -f payloads/*.sh "$VOLUME"
-cp -f payloads/kmutil* "$VOLUME"
+cp -f payloads/*.sh payloads/kmutil* payloads/bless* "$VOLUME"
 
 # Copy Hax dylibs into place
 echo "Adding Hax dylibs..."
 cp -f payloads/ASentientBot-Hax/BarryKN-fork/Hax*.dylib "$VOLUME"
 
 # Let's play it safe and ensure the shell scripts, dylibs, etc. are executable.
-chmod u+x "$VOLUME"/*.sh "$VOLUME"/Hax*.dylib "$VOLUME"/kmutil*
+chmod u+x "$VOLUME"/*.sh "$VOLUME"/Hax*.dylib
+cmmod u+x "$VOLUME"/kmutil* "$VOLUME"/bless*
 
 echo 'Adding kexts...'
 cp -rf payloads/kexts "$VOLUME"
