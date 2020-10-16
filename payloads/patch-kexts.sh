@@ -561,6 +561,7 @@ then
             echo "Using Big Sur AppleBacklight.kext"
             if [ -d AppleBacklight.kext.original ]
             then
+                rm -rf AppleBacklight.kext
                 mv AppleBacklight.kext.original AppleBacklight.kext
             fi
             #
