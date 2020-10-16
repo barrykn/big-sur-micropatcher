@@ -29,7 +29,10 @@ else
     RECOVERY="NO"
     # Not in the recovery environment, so we need a different path to the
     # patched USB.
-    if [ -d "/Volumes/Install macOS Big Sur Beta" ]
+    if [ -d "/Volumes/Install macOS Big Sur" ]
+    then
+        IMGVOL="/Volumes/Install macOS Big Sur"
+    elif [ -d "/Volumes/Install macOS Big Sur Beta" ]
     then
         IMGVOL="/Volumes/Install macOS Big Sur Beta"
     else
