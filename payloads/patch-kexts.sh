@@ -595,7 +595,7 @@ fi
 # Get ready to use kmutil
 if [ "x$OLD_KMUTIL" = "xYES" ]
 then
-    cp -f "$IMGVOL/kmutil.beta8full" "$VOLUME/usr/bin/kmutil.old"
+    cp -f "$IMGVOL/kmutil.beta8re" "$VOLUME/usr/bin/kmutil.old"
     KMUTIL=kmutil.old
 else
     KMUTIL=kmutil
