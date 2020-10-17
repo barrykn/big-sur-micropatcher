@@ -26,7 +26,7 @@ This documentation is more thorough than for previous versions of this patcher, 
 ## Compatibility of various Mac models
 Note that this information is incomplete and may not be 100% correct yet, but I'll add more information over time and fix any errors as I learn about them.
 
-Also, note that on 2011 and earlier Macs, "no graphics acceleration" is a tremendous, almost exponential, slowdown. For instance, consider a simple benchmark, simply minimizing a Safari window:
+Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except for Mac Pros and iMacs with upgraded GPUs), "no graphics acceleration" is a tremendous, almost exponential, slowdown. For instance, consider a simple benchmark, simply minimizing a Safari window:
 - Late 2012 13" MacBook Pro: <1 second
 - Early 2011 13" MacBook Pro: 14 seconds
 - Late 2009 13" MacBook: 25 seconds
