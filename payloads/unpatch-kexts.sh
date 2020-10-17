@@ -231,8 +231,9 @@ rm -f "$VOLUME/usr/bin/kmutil.old"
 
 # Get the volume label and supply it to bless, to work around the
 # Big Sur bug where everything gets called "EFI Boot".
-VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
+#VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
 
-"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
+#"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
+"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --create-snapshot --setBoot
 
 echo 'Uninstalled patch kexts successfully.'
