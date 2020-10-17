@@ -160,6 +160,7 @@ case $PATCHMODE in
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
+    OLD_KMUTIL=YES
     INSTALL_GFTESLA="YES"
     INSTALL_NVENET="YES"
     INSTALL_BCM5701="YES"
@@ -170,6 +171,7 @@ case $PATCHMODE in
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
+    OLD_KMUTIL=YES
     INSTALL_BCM5701="YES"
     ;;
 --2012)
@@ -599,7 +601,7 @@ fi
 # Get ready to use kmutil
 if [ "x$OLD_KMUTIL" = "xYES" ]
 then
-    cp -f "$IMGVOL/kmutil.beta8re" "$VOLUME/usr/bin/kmutil.old"
+    cp -f "$IMGVOL/kmutil.beta3re" "$VOLUME/usr/bin/kmutil.old"
     KMUTIL=kmutil.old
 else
     KMUTIL=kmutil
