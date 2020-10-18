@@ -194,7 +194,7 @@ cp -f payloads/ASentientBot-Hax/BarryKN-fork/Hax*.dylib "$VOLUME"
 
 # Let's play it safe and ensure the shell scripts, dylibs, etc. are executable.
 chmod u+x "$VOLUME"/*.sh "$VOLUME"/Hax*.dylib
-cmmod u+x "$VOLUME"/kmutil* "$VOLUME"/bless*
+chmod u+x "$VOLUME"/kmutil* "$VOLUME"/bless*
 
 echo 'Adding kexts...'
 cp -rf payloads/kexts "$VOLUME"
