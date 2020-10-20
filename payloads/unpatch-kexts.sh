@@ -216,6 +216,10 @@ echo 'Removing nvenet'
 rm -rf IONetworkingFamily.kext/Contents/Plugins/nvenet.kext
 echo 'Removing GeForceTesla.kext and related kexts'
 rm -rf *Tesla*
+echo 'Removing @vit9696 Whatevergreen.kext and Lilu.kext'
+rm -rf Whatevergreen.kext Lilu.kext
+echo 'Removing iMac BacklightFixup'
+rm -rf BacklightFixup.kext
 echo 'Reactivating telemetry plugin'
 mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 
