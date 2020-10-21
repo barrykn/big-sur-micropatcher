@@ -142,12 +142,81 @@ then
     fi
 fi
 
-# If no mode option on command line, default to --2012 for now.
-# (Later I'll add automatic detection of Mac model.)
+# Check if patch mode was specified on command line, and if not, detect
+# the Mac model and use that to choose.
 if [ -z "$PATCHMODE" ]
 then
-    echo "No patch mode specified on command line; defaulting to --2012."
-    PATCHMODE=--2012
+    echo "No patch mode specified on command line. Detecting Mac model..."
+    echo "(Use --2010, --2011, or --2012 command line option to override.)"
+    MODEL=`sysctl -n hw.model`
+    echo "Detected model: $MODEL"
+    case $MODEL in
+    # Macs which are incompatible because of pre-Penryn CPUs.
+    # This script is highly unlikely to ever execute on these, but I have
+    # some uncertainty about how the default case should behave, so I want
+    # to catch darn near everything in a non-default case if possible.
+    iMac,1|Power*|RackMac*|[0-9][0-9][0-9])
+        echo "Big Sur cannot run on PowerPC Macs."
+        exit 1
+        ;;
+    MacBookPro1,?|MacBook1,1|Macmini1,1)
+        echo "Big Sur cannot run on 32-bit Macs."
+        exit 1
+        ;;
+    MacBook[23],1|Macmini2,1|MacPro[12],1|MacBookAir1,1|MacBookPro[23],?|Xserve1,?)
+        echo "This Mac has a very old Intel Core 2 CPU which cannot run Big Sur."
+        exit 1
+        ;;
+    MacBookPro6,?|iMac11,?)
+        echo "This Mac has a 1st gen Intel Core CPU which cannot boot Big Sur."
+        exit 1
+        ;;
+    # Macs which are not supported by Apple but supported by this patcher.
+    # This currently errs on the side of blindly assuming the Mac will work.
+    # (i.e. it doesn't warn about a socketed pre-Penryn CPU needing
+    # replacement, or about USB problems which have not been fixed yet)
+    MacBook[4-7],?|Macmini[34],1|MacBookAir[23],?|MacBookPro[457],?|MacPro3,1)
+        # I may need to separate this into different patch modes later,
+        # but this will do for now.
+        echo "Detected a 2008-2010 Mac. Using --2010 patch mode."
+        PATCHMODE=--2010
+        ;;
+    iMac[0-9],?|iMac10,?)
+        echo "Detected a 2006-2009 iMac. Using --2010 patch mode."
+        PATCHMODE=--2010
+        ;;
+    Macmini5,?|MacBookAir4,?|MacBookPro8,?|iMac12,?)
+        # iMac12,? should get a separate case later, so it can show a message
+        # about the --iMac option for Metal GPU support.
+        echo "Detected a 2011 Mac. Using --2011 patch mode."
+        PATCHMODE=--2011
+        ;;
+    Macmini6,?|MacBookAir5,?|MacBookPro9,?|MacBookPro10,?|iMac13,?)
+        echo "Detected a 2012-2013 Mac. Using --2012 patch mode."
+        PATCHMODE=--2012
+        ;;
+    MacPro[45],1)
+        echo "Detected a 2009-2012 Mac Pro. Using --2012 patch mode."
+        PATCHMODE=--2012
+        ;;
+    iMac14,[123])
+        echo "Detected a Late 2013 iMac. patch-kexts.sh is not necessary on this model."
+        exit 1
+        ;;
+    # Macs which are supported by Apple and which do not need this patcher.
+    # These patterns will potentially match new Mac models which do not
+    # exist yet.
+    iMac14,4|iMac1[5-9],?|iMac[2-9][0-9],?|iMacPro*|MacPro[6-9],?|Macmini[7-9],?|MacBook[89],1|MacBook[1-9][0-9],?|MacBookAir[6-9],?|MacBookAir[1-9][0-9],?|MacBookPro1[1-9],?)
+        echo "This Mac is supported by Big Sur and does not need this patch."
+        exit 1
+        ;;
+    # Default case. Ideally, this code will never execute.
+    *)
+        echo "Unknown Mac model. This may be a patcher bug, or a recent Mac model which is"
+        echo "already supported by Big Sur and does not need this patch."
+        exit 1
+        ;;
+    esac
 fi
 
 # Figure out which kexts we're installing.
