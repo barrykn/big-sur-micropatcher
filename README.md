@@ -5,7 +5,7 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 
 - ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs, as well as for his patch to NVDAResmanTesla.kext which allows the GeForce Tesla (9400M/320M) framebuffer to work in Big Sur.
 - jackluke for figuring out how to patch the Recovery USB to bypass compatibility checks and AMFI enforcement in the absence of NVRAM boot-args settings.
-- highvoltage12v for developing the first 802.11n Wi-Fi patches for Big Sur. While these patches are no longer used by default, they are still available through the `--wifi=hv12v-old` and `--wifi=hv12v-new` options for `patch-kexts.sh`.
+- highvoltage12v for developing the first 802.11n Wi-Fi patches for Big Sur (no longer used by default, but still available through the `--wifi=hv12v-old` and `--wifi=hv12v-new` options for `patch-kexts.sh`), as well as patches used for Metal GPU support on 2011 iMacs.
 - ParrotGeek for developing the LegacyUSBInjector kernel extension that allows USB to work on various pre-2011 Mac models, and for creating the "trampoline" that allows the installer to be patched at runtime without first running Terminal commands.
 - testheit for describing how to use a kmutil feature that I was previously unaware of. This turned out to be a good way to make LegacyUSBInjector function under Big Sur, and more generally and more importantly, it was absolutely essential for improving overall patcher reliability.
 
