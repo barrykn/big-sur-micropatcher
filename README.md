@@ -1,4 +1,4 @@
-# big-sur-micropatcher (Version 0.4.3pre)
+# big-sur-micropatcher (Version 0.4.3)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigmac) by StarPlayrX is another patcher worth considering. For 2008 Mac Pros (MacPro3,1) in particular, Big Mac is clearly a better option than this patcher (at least for now).
