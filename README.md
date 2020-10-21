@@ -1,6 +1,8 @@
 # big-sur-micropatcher (Version 0.4.3pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
+By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigmac) by StarPlayrX is another patcher worth considering. For 2008 Mac Pros (MacPro3,1) in particular, at this time I recommend using Big Mac instead of this patcher.
+
 Thanks to the following people for their hard work to get Big Sur running on unsupported Macs:
 
 - ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs, as well as for his patch to NVDAResmanTesla.kext which allows the GeForce Tesla (9400M/320M) framebuffer to work in Big Sur.
