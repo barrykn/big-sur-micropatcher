@@ -32,8 +32,8 @@ Note that this information is incomplete and may not be 100% correct yet, but I'
 
 Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except for Mac Pros and iMacs with upgraded GPUs), "no graphics acceleration" is a tremendous, almost exponential, slowdown. For instance, consider a simple benchmark, simply minimizing a Safari window:
 - Late 2012 13" MacBook Pro: <1 second
-- Early 2011 13" MacBook Pro: 14 seconds
-- Late 2009 13" MacBook: 25 seconds
+- Early 2011 13" MacBook Pro: 13 seconds
+- Late 2009 13" MacBook: 23 seconds
 
 Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so most users do not need to urgently upgrade to Big Sur.
 
