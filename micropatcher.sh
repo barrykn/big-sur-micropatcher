@@ -70,7 +70,7 @@ then
     if [ ! -d "$APPPATH" ]
     then
         echo "Failed to locate Big Sur recovery USB stick."
-        echo Remember to create it using createinstallmedia, and do not rename it.
+        echo "Remember to create it using createinstallmedia, and do not rename it."
         echo "If all else fails, try specifying the path to the USB stick"
         echo "as a command line parameter to this script."
         echo
