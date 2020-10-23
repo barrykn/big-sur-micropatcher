@@ -485,7 +485,10 @@ then
     echo 'Installing High Sierra Intel HD 3000 kexts'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
 
-    unzip -q "$IMGVOL/kexts/HD3000-17G14033.zip"
+    unzip -q "$IMGVOL/kexts/AppleIntelHD3000Graphics.kext-17G14033.zip"
+    unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGA.plugin-17G14033.zip"
+    unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGLDriver.bundle-17G14033.zip"
+    unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB.kext-17G14033.zip"
     chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
     chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
 fi
