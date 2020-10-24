@@ -127,6 +127,13 @@ if [ "$VOLUME" != "/" ]
 then
     echo 'Creating new root snapshot.'
     bless --folder "$VOLUME"/System/Library/CoreServices --create-snapshot
+    if [ $? -ne 0 ]
+    then
+        echo
+        echo 'bless failed. See above output for more information.'
+        echo 'rebuild-kc.sh cannot continue.'
+        exit 1
+    fi
 else
     echo 'Booted directly from volume, so skipping snapshot creation.'
 fi
