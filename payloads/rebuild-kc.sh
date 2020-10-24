@@ -133,7 +133,7 @@ fi
 if [ "$VOLUME" != "/" ]
 then
     echo 'Creating new root snapshot.'
-    bless --folder "$VOLUME"/System/Library/CoreServices --create-snapshot
+    bless --folder "$VOLUME"/System/Library/CoreServices --create-snapshot --bootefi
     if [ $? -ne 0 ]
     then
         echo
