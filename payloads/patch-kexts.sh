@@ -744,6 +744,13 @@ fi
 # Now run bless
 #"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" $CREATE_SNAPSHOT --setBoot
 "$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices $CREATE_SNAPSHOT --setBoot
+if [ $? -ne 0 ]
+then
+    echo
+    echo 'bless failed. See above output for more information.'
+    echo 'patch-kexts.sh cannot continue.'
+    exit 1
+fi
 
 # Try to unmount the underlying volume if it was mounted by this script.
 # (Otherwise, trying to run this script again without rebooting causes
