@@ -118,6 +118,13 @@ kmutilErrorCheck
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
+if [ $? -ne 0 ]
+then
+    echo
+    echo 'kcditto failed. See above output for more information.'
+    echo 'patch-kexts.sh cannot continue.'
+    exit 1
+fi
 
 # If $VOLUME = "/" at this point in the script, then we are running in a
 # live installation and the system volume is not booted from a snapshot.
