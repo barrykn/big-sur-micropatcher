@@ -166,10 +166,20 @@ then
     fi
 fi
 
-# Check if a WiFi option was specified on the command line, and if not,
-# detect whether there's an 802.11ac card and use that to make our
-# decision.
-if [[ "x$PATCHMODE" != "x-u" && -z "$INSTALL_WIFI" ]]
+# Check if --2010 patch mode was specified on command line without a
+# WiFi option in addition. If so, go ahead and use mojave-hybrid.
+# (This is a situation where patch-kexts.sh is probably being used to
+# patch a Big Sur installation for another older Mac, and it's very clearly
+# best to err on the side of including the WiFi patch in this case.)
+#
+# Otherwise, if we're not unpatching and there is no WiFi option, go
+# ahead and autodetect whether the WiFi patch is necessary.
+if [[ "x$PATCHMODE" = "x--2010" && -z "$INSTALL_WIFI" ]]
+then
+    echo '--2010 patch mode was specified on command line without a WiFi option, so'
+    echo 'using mojave-hybrid WiFi patch.'
+    INSTALL_WIFI=mojave-hybrid
+elif [[ "x$PATCHMODE" != "x-u" && -z "$INSTALL_WIFI" ]]
 then
     echo "No WiFi option specified on command line, so checking for 802.11ac..."
 
