@@ -473,6 +473,18 @@ then
         tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode -a lz4 > "$BACKUP_FILE"
         #tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE"
         #tar c *.kc | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE"
+
+        # Check for errors. Print an error message *and clean up* if necessary.
+        if [ $? -ne 0 ]
+        then
+            echo "tar or compression_tool failed. See above output for more information."
+
+            echo "Attempting to remove incomplete backup..."
+            rm -f "$BACKUP_FILE"
+
+            echo "patch-kexts.sh cannot continue."
+            exit 1
+        fi
     fi
     popd > /dev/null
 
