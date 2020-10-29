@@ -29,6 +29,12 @@ restoreOriginals() {
     fi
 }
 
+# Fix permissions on the specified kexts.
+fixPerms() {
+    chown -R 0:0 "$@"
+    chmod -R 755 "$@"
+}
+
 ### end function definitions ###
 
 # Make sure this script is running as root, otherwise use sudo to try again
