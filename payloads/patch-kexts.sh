@@ -1,8 +1,6 @@
 #!/bin/bash
 
 ### begin function definitions ###
-# There's only one function for now, but there will probably be more
-# in the future.
 
 # Check for errors, and handle any errors appropriately, after any kmutil
 # invocation.
@@ -12,6 +10,22 @@ kmutilErrorCheck() {
         echo 'kmutil failed. See above output for more information.'
         echo 'patch-kexts.sh cannot continue.'
         exit 1
+    fi
+}
+
+# In the current directory, check for kexts which have been renamed from
+# *.kext to *.kext.original, then remove the new versions and rename the
+# old versions back into place.
+restoreOriginals() {
+    if [ -n "`ls -1d *.original`" ]
+    then
+        for x in *.original
+        do
+            BASENAME=`echo $x|sed -e 's@.original@@'`
+            echo 'Unpatching' $BASENAME
+            rm -rf "$BASENAME"
+            mv "$x" "$BASENAME"
+        done
     fi
 }
 
@@ -52,7 +66,7 @@ fi
 
 
 # Check for command line options.
-while [[ $1 = --* ]]
+while [[ $1 = -* ]]
 do
     case $1 in
     --create-snapshot)
@@ -67,8 +81,12 @@ do
         echo "Using old kmutil (beta 7/8 version)."
         OLD_KMUTIL=YES
         ;;
+    --un*|-u)
+        echo "Uninstalling kexts (-u command line option)."
+        PATCHMODE="-u"
+        ;;
     --no-wifi)
-        echo "Disabling WiFi patch (--no-wifi command line option)"
+        echo "Disabling WiFi patch (--no-wifi command line option)."
         INSTALL_WIFI=NO
         ;;
     --wifi=hv12v-old)
@@ -84,7 +102,7 @@ do
         INSTALL_WIFI="mojave-hybrid"
         ;;
     --i[mM]ac)
-        echo "Enabling 2011 iMac patch (--iMac command line option)"
+        echo "Enabling 2011 iMac patch (--iMac command line option)."
         INSTALL_IMAC=YES
         ;;
     --force)
@@ -145,6 +163,10 @@ fi
 # Check if a WiFi option was specified on the command line, and if not,
 # detect whether there's an 802.11ac card and use that to make our
 # decision.
+#
+# Ideally we should skip this if we're uninstalling, but doing the
+# check anyway is harmless (aside from performance), so that
+# can wait.
 if [ -z "$INSTALL_WIFI" ]
 then
     echo "No WiFi option specified on command line, so checking for 802.11ac..."
@@ -268,6 +290,10 @@ case $PATCHMODE in
         exit 2
     fi
     ;;
+-u)
+    # Don't need to do anything in this case-statement. Some upcoming
+    # if-statements will handle it.
+    ;;
 *)
     echo "patch-kexts.sh has encountered an internal error while attempting to"
     echo "determine patch mode. This is a patcher bug."
@@ -295,7 +321,12 @@ then
     fi
 fi
 
-echo 'Installing kexts to:'
+if [ "x$PATCHMODE" != "x-u" ]
+then
+    echo 'Installing kexts to:'
+else
+    echo 'Uninstalling patched kexts on volume:'
+fi
 echo "$VOLUME"
 echo
 
@@ -406,11 +437,12 @@ then
     fi
 fi
 
-if true
+if [ "x$PATCHMODE" != "x-u" ]
 then
     # Need to back up the original KernelCollections before we modify them.
     # This is necessary for unpatch-kexts.sh to be able to accomodate
-    # the type of filesystem verification that is done by Apple's delta updaters.
+    # the type of filesystem verification that is done by Apple's delta
+    # updaters.
     #
     # (But also need to check if there's already a backup. If there's already
     # a backup, don't do it again. It would be dangerous to overwrite a
@@ -714,8 +746,8 @@ then
         --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
     kmutilErrorCheck
 
-    # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
-    # and --system-path!
+    # When creating SystemKernelExtensions.kc, kmutil requires *both*
+    # --both-path and --system-path!
     echo 'Using kmutil to rebuild system collection...'
     chroot "$VOLUME" $KMUTIL create -n sys \
         --kernel /System/Library/Kernels/kernel \
@@ -723,6 +755,67 @@ then
         --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
         --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
     kmutilErrorCheck
+else
+    # Instead of updating the kernel/kext collections (later), restore the backup
+    # that was previously saved (now).
+
+    pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
+
+    BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
+    BACKUP_FILE="$BACKUP_FILE_BASE".lz4
+    #BACKUP_FILE_BASE="$BACKUP_FILE_BASE".lzfse
+    #BACKUP_FILE_BASE="$BACKUP_FILE_BASE".zst
+
+    if [ ! -e "$BACKUP_FILE" ]
+    then
+        echo "Looked for KernelCollections backup at:"
+        echo "`pwd`"/"$BACKUP_FILE"
+        echo "but could not find it. unpatch-kexts.sh cannot continue."
+        exit 1
+    fi
+
+    rm -f *.kc
+
+    "$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE" | tar xpv
+    #"$IMGVOL/zstd" --long -d -v < "$BACKUP_FILE" | tar xp
+
+    # Must remove the KernelCollections backup now, or the mere existence
+    # of it causes filesystem verification to fail.
+    rm -f "$BACKUP_FILE"
+
+    popd > /dev/null
+
+    # Now remove the new kexts and move the old ones back into place.
+    # First in /System/Library/Extensions, then in
+    # /S/L/E/IONetworkingFamily.kext/Contents/Plugins
+    # (then go back up to /System/Library/Extensions)
+    pushd "$VOLUME/System/Library/Extensions" > /dev/null
+    restoreOriginals
+
+    pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
+    restoreOriginals
+    popd > /dev/null
+
+    # And remove kexts which did not overwrite newer versions.
+    echo 'Removing kexts for Intel HD 3000 graphics support'
+    rm -rf AppleIntelHD3000* AppleIntelSNB*
+    echo 'Removing LegacyUSBInjector'
+    rm -rf LegacyUSBInjector.kext
+    echo 'Removing nvenet'
+    rm -rf IONetworkingFamily.kext/Contents/Plugins/nvenet.kext
+    echo 'Removing GeForceTesla.kext and related kexts'
+    rm -rf *Tesla*
+    echo 'Removing @vit9696 Whatevergreen.kext and Lilu.kext'
+    rm -rf Whatevergreen.kext Lilu.kext
+    echo 'Removing iMac AppleBacklightFixup'
+    rm -rf AppleBacklightFixup.kext
+    echo 'Reactivating telemetry plugin'
+    mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
+
+    popd > /dev/null
+
+    # Also, remove kmutil.old (if it exists, it was intalled by patch-kexts.sh)
+    rm -f "$VOLUME/usr/bin/kmutil.old"
 fi
 
 # The way you control kcditto's *destination* is by choosing which volume
@@ -784,4 +877,9 @@ then
     umount "$VOLUME" || diskutil unmount "$VOLUME"
 fi
 
-echo 'Installed patch kexts successfully.'
+if [ "x$PATCHMODE" != "x-u" ]
+then
+    echo 'Installed patch kexts successfully.'
+else
+    echo 'Uninstalled patch kexts successfully.'
+fi
