@@ -774,6 +774,8 @@ else
         exit 1
     fi
 
+    echo "Restoring KernelCollections backup from:"
+    echo "`pwd`"/"$BACKUP_FILE"
     rm -f *.kc
 
     "$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE" | tar xpv
