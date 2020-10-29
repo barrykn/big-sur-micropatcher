@@ -202,10 +202,12 @@ then
         echo "Detected a 2006-2009 iMac. Using --2010 patch mode."
         PATCHMODE=--2010
         ;;
-    Macmini5,?|MacBookAir4,?|MacBookPro8,?|iMac12,?)
-        # iMac12,? should get a separate case later, so it can show a message
-        # about the --iMac option for Metal GPU support.
+    Macmini5,?|MacBookAir4,?|MacBookPro8,?)
         echo "Detected a 2011 Mac. Using --2011 patch mode."
+        PATCHMODE=--2011
+        ;;
+    iMac12,?)
+        echo "Detected a 2011 iMac. Using --2011 patch mode."
         PATCHMODE=--2011
         ;;
     Macmini6,?|MacBookAir5,?|MacBookPro9,?|MacBookPro10,?|iMac13,?)
