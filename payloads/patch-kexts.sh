@@ -2,13 +2,13 @@
 
 ### begin function definitions ###
 
-# Check for errors, and handle any errors appropriately, after any kmutil
-# invocation.
-kmutilErrorCheck() {
+# Check for errors, and handle any errors appropriately, after a command
+# invocation. Takes the name of the command as its only parameter.
+errorCheck() {
     if [ $? -ne 0 ]
     then
-        echo 'kmutil failed. See above output for more information.'
-        echo 'patch-kexts.sh cannot continue.'
+        echo "$1 failed. See above output for more information."
+        echo "patch-kexts.sh cannot continue."
         exit 1
     fi
 }
@@ -744,7 +744,7 @@ then
         --kernel /System/Library/Kernels/kernel \
         --variant-suffix release --volume-root / $BUNDLE_PATH \
         --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-    kmutilErrorCheck
+    errorCheck kmutil
 
     # When creating SystemKernelExtensions.kc, kmutil requires *both*
     # --both-path and --system-path!
@@ -754,7 +754,7 @@ then
         --variant-suffix release --volume-root / \
         --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
         --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-    kmutilErrorCheck
+    errorCheck kmutil
 else
     # Instead of updating the kernel/kext collections (later), restore the backup
     # that was previously saved (now).
@@ -822,13 +822,7 @@ fi
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
-if [ $? -ne 0 ]
-then
-    echo
-    echo 'kcditto failed. See above output for more information.'
-    echo 'patch-kexts.sh cannot continue.'
-    exit 1
-fi
+errorCheck kcditto
 
 # First, check if there was a snapshot-related command line option.
 # If not, pick a default as follows:
@@ -858,13 +852,7 @@ fi
 
 # Now run bless
 bless --folder "$VOLUME"/System/Library/CoreServices --bootefi $CREATE_SNAPSHOT --setBoot
-if [ $? -ne 0 ]
-then
-    echo
-    echo 'bless failed. See above output for more information.'
-    echo 'patch-kexts.sh cannot continue.'
-    exit 1
-fi
+errorCheck bless
 
 # Try to unmount the underlying volume if it was mounted by this script.
 # (Otherwise, trying to run this script again without rebooting causes
