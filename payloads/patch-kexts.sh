@@ -163,11 +163,7 @@ fi
 # Check if a WiFi option was specified on the command line, and if not,
 # detect whether there's an 802.11ac card and use that to make our
 # decision.
-#
-# Ideally we should skip this if we're uninstalling, but doing the
-# check anyway is harmless (aside from performance), so that
-# can wait.
-if [ -z "$INSTALL_WIFI" ]
+if [[ "x$PATCHMODE" != "x-u" && -z "$INSTALL_WIFI" ]]
 then
     echo "No WiFi option specified on command line, so checking for 802.11ac..."
 
