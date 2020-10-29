@@ -225,7 +225,7 @@ mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabl
 
 popd > /dev/null
 
-# Also, remove kmutil.old (if it exists, it was intalled by patch-kexts.sh)
+# Also, remove kmutil.old (if it exists, it was installed by patch-kexts.sh)
 rm -f "$VOLUME/usr/bin/kmutil.old"
 
 # The way you control kcditto's *destination* is by choosing which volume
