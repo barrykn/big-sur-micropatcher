@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSIONNUM=0.4.5pre
+VERSIONNUM=0.5.0pre
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 ### begin function definitions ###
