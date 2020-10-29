@@ -146,10 +146,10 @@ fi
 
 echo "Updating BaseSystem. This may take a while."
 pushd "$VOLUME"
-mv -f BaseSystem BaseSystem.original
-mkdir BaseSystem
+#mv -f BaseSystem BaseSystem.original
+#mkdir BaseSystem
 cd BaseSystem
-unzip -j "$UPDATEZIP" AssetData/Restore/BaseSystem.\*
+#unzip -j "$UPDATEZIP" AssetData/Restore/BaseSystem.\*
 
 echo
 echo "Copying update zip onto USB stick. This may take a long while."
