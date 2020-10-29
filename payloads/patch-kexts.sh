@@ -780,6 +780,7 @@ else
 
     "$VOLUME/usr/bin/compression_tool" -decode < "$BACKUP_FILE" | tar xpv
     #"$IMGVOL/zstd" --long -d -v < "$BACKUP_FILE" | tar xp
+    errorCheck tar
 
     # Must remove the KernelCollections backup now, or the mere existence
     # of it causes filesystem verification to fail.
