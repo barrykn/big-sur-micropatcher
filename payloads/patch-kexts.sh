@@ -687,43 +687,43 @@ then
         mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.disabled
         popd > /dev/null
     fi
+
+    # Get ready to use kmutil
+    if [ "x$OLD_KMUTIL" = "xYES" ]
+    then
+        cp -f "$IMGVOL/kmutil.beta3re" "$VOLUME/usr/bin/kmutil.old"
+        KMUTIL=kmutil.old
+    else
+        KMUTIL=kmutil
+    fi
+
+    # Update the kernel/kext collections.
+    # kmutil *must* be invoked separately for boot and system KCs when
+    # LegacyUSBInjector is being used, or the injector gets left out, at least
+    # as of Big Sur beta 2. So, we'll always do it that way (even without
+    # LegacyUSBInjector, it shouldn't do any harm).
+    #
+    # I suspect it's not supposed to require the chroot, but I was getting weird
+    # "invalid argument" errors, and chrooting it eliminated those errors.
+    # BTW, kmutil defaults to "--volume-root /" according to the manpage, so
+    # it's probably redundant, but whatever.
+    echo 'Using kmutil to rebuild boot collection...'
+    chroot "$VOLUME" $KMUTIL create -n boot \
+        --kernel /System/Library/Kernels/kernel \
+        --variant-suffix release --volume-root / $BUNDLE_PATH \
+        --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+    kmutilErrorCheck
+
+    # When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
+    # and --system-path!
+    echo 'Using kmutil to rebuild system collection...'
+    chroot "$VOLUME" $KMUTIL create -n sys \
+        --kernel /System/Library/Kernels/kernel \
+        --variant-suffix release --volume-root / \
+        --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
+        --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
+    kmutilErrorCheck
 fi
-
-# Get ready to use kmutil
-if [ "x$OLD_KMUTIL" = "xYES" ]
-then
-    cp -f "$IMGVOL/kmutil.beta3re" "$VOLUME/usr/bin/kmutil.old"
-    KMUTIL=kmutil.old
-else
-    KMUTIL=kmutil
-fi
-
-# Update the kernel/kext collections.
-# kmutil *must* be invoked separately for boot and system KCs when
-# LegacyUSBInjector is being used, or the injector gets left out, at least
-# as of Big Sur beta 2. So, we'll always do it that way (even without
-# LegacyUSBInjector, it shouldn't do any harm).
-#
-# I suspect it's not supposed to require the chroot, but I was getting weird
-# "invalid argument" errors, and chrooting it eliminated those errors.
-# BTW, kmutil defaults to "--volume-root /" according to the manpage, so
-# it's probably redundant, but whatever.
-echo 'Using kmutil to rebuild boot collection...'
-chroot "$VOLUME" $KMUTIL create -n boot \
-    --kernel /System/Library/Kernels/kernel \
-    --variant-suffix release --volume-root / $BUNDLE_PATH \
-    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-kmutilErrorCheck
-
-# When creating SystemKernelExtensions.kc, kmutil requires *both* --boot-path
-# and --system-path!
-echo 'Using kmutil to rebuild system collection...'
-chroot "$VOLUME" $KMUTIL create -n sys \
-    --kernel /System/Library/Kernels/kernel \
-    --variant-suffix release --volume-root / \
-    --system-path /System/Library/KernelCollections/SystemKernelExtensions.kc \
-    --boot-path /System/Library/KernelCollections/BootKernelExtensions.kc
-kmutilErrorCheck
 
 # The way you control kcditto's *destination* is by choosing which volume
 # you run it *from*. I'm serious. Read the kcditto manpage carefully if you
