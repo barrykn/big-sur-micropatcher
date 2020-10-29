@@ -758,13 +758,8 @@ else
     echo 'Skipping creation of root snapshot due to command line option.'
 fi
 
-# Get the volume label and supply it to bless, to work around the
-# Big Sur bug where everything gets called "EFI Boot".
-#VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
-
 # Now run bless
-#"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" $CREATE_SNAPSHOT --setBoot
-"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices $CREATE_SNAPSHOT --setBoot
+bless --folder "$VOLUME"/System/Library/CoreServices --bootefi $CREATE_SNAPSHOT --setBoot
 if [ $? -ne 0 ]
 then
     echo
