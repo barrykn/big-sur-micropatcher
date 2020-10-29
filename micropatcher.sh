@@ -185,20 +185,18 @@ touch "$APPPATH"
 
 # Copy the shell scripts into place so that they may be used once the
 # USB stick is booted.
-echo 'Copying various files...'
-cp -f payloads/*.sh payloads/kmutil* payloads/bless* "$VOLUME"
-cp -f payloads/patch.19h2 "$VOLUME"
+echo 'Copying shell scripts...'
+cp -f payloads/*.sh "$VOLUME"
 
 # Copy Hax dylibs into place
 echo "Adding Hax dylibs..."
 cp -f payloads/ASentientBot-Hax/BarryKN-fork/Hax*.dylib "$VOLUME"
 
-# Let's play it safe and ensure the shell scripts, dylibs, etc. are executable.
-chmod u+x "$VOLUME"/*.sh "$VOLUME"/Hax*.dylib
-chmod u+x "$VOLUME"/kmutil* "$VOLUME"/bless* "$VOLUME"/patch.19h2
+echo 'Adding kexts and other binaries...'
+cp -rf payloads/kexts payloads/bin "$VOLUME"
 
-echo 'Adding kexts...'
-cp -rf payloads/kexts "$VOLUME"
+# Let's play it safe and ensure the shell scripts, dylibs, etc. are executable.
+chmod -R u+x "$VOLUME"/*.sh "$VOLUME"/Hax*.dylib "$VOLUME"/bin
 
 # Save a file onto the USB stick that says what patcher & version was used,
 # so it can be identified later (e.g. for troubleshooting purposes).
