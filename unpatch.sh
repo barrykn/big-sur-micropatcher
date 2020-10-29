@@ -105,8 +105,10 @@ rm -rf "$VOLUME"/kexts
 rm -f "$VOLUME"/kmutil*
 # For v0.4.2 and later
 rm -f "$VOLUME"/bless*
-# For v0.4.5 and later
+# For v0.4.5pre
 rm -f "$VOLUME"/patch.*
+# For v0.4.5 and later
+rm -rf "$VOLUME"/bin
 # For all versions
 rm -f "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 
