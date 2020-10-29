@@ -406,6 +406,8 @@ then
     fi
 fi
 
+if true
+then
     # Need to back up the original KernelCollections before we modify them.
     # This is necessary for unpatch-kexts.sh to be able to accomodate
     # the type of filesystem verification that is done by Apple's delta updaters.
@@ -685,6 +687,7 @@ fi
         mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.disabled
         popd > /dev/null
     fi
+fi
 
 # Get ready to use kmutil
 if [ "x$OLD_KMUTIL" = "xYES" ]
