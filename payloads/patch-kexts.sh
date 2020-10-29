@@ -510,8 +510,7 @@ then
         # files, but it does no harm in other cases.
         rm -rf __MACOSX
 
-        chown -R 0:0 IO80211Family.kext
-        chmod -R 755 IO80211Family.kext
+        fixPerms IO80211Family.kext
     fi
 
     if [ "x$INSTALL_HDA" = "xYES" ]
@@ -525,8 +524,7 @@ then
         fi
 
         unzip -q "$IMGVOL/kexts/AppleHDA-17G14033.kext.zip"
-        chown -R 0:0 AppleHDA.kext
-        chmod -R 755 AppleHDA.kext
+        fixPerms AppleHDA.kext
     fi
 
     if [ "x$INSTALL_HD3000" = "xYES" ]
@@ -538,8 +536,7 @@ then
         unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGA.plugin-17G14033.zip"
         unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGLDriver.bundle-17G14033.zip"
         unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB.kext-17G14033.zip"
-        chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
-        chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
+        fixPerms AppleIntelHD3000* AppleIntelSNB*
     fi
 
     if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
@@ -548,8 +545,7 @@ then
         rm -rf LegacyUSBInjector.kext
 
         unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
-        chown -R 0:0 LegacyUSBInjector.kext
-        chmod -R 755 LegacyUSBInjector.kext
+        fixPerms LegacyUSBInjector.kext
 
         # parameter for kmutil later on
         BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
@@ -566,8 +562,7 @@ then
         unzip -q "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
         rm -rf __MACOSX
 
-        chown -R 0:0 *Tesla*
-        chmod -R 755 *Tesla*
+        fixPerms *Tesla*
     fi
 
     if [ "x$INSTALL_NVENET" = "xYES" ]
@@ -576,8 +571,7 @@ then
         pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
         rm -rf nvenet.kext
         unzip -q "$IMGVOL/kexts/nvenet-17G14033.kext.zip"
-        chown -R 0:0 nvenet.kext
-        chmod -R 755 nvenet.kext
+        fixPerms nvenet.kext
         popd > /dev/null
     fi
 
@@ -599,8 +593,7 @@ then
             fi
 
             unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19H2.kext.zip"
-            chown -R 0:0 AppleBCM5701Ethernet.kext
-            chmod -R 755 AppleBCM5701Ethernet.kext
+            fixPerms AppleBCM5701Ethernet.kext
 
             popd > /dev/null
             ;;
