@@ -142,6 +142,23 @@ then
     fi
 fi
 
+# Check if a WiFi option was specified on the command line, and if not,
+# detect whether there's an 802.11ac card and use that to make our
+# decision.
+if [ -z "$INSTALL_WIFI" ]
+then
+    echo "No WiFi option specified on command line, so checking for 802.11ac..."
+
+    if [ -z "`ioreg -l | fgrep 802.11 | fgrep ac`" ]
+    then
+        echo "No 802.11ac WiFi card detected, so installing mojave-hybrid WiFi patch."
+        INSTALL_WIFI=mojave-hybrid
+    else
+        echo "Found 802.11ac WiFi card, so not installing a WiFi patch."
+        INSTALL_WIFI=no
+    fi
+fi
+
 # Check if patch mode was specified on command line, and if not, detect
 # the Mac model and use that to choose.
 if [ -z "$PATCHMODE" ]
@@ -225,7 +242,6 @@ fi
 
 case $PATCHMODE in
 --2010)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="mojave-hybrid"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
@@ -236,7 +252,6 @@ case $PATCHMODE in
     DEACTIVATE_TELEMETRY="YES"
     ;;
 --2011)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="mojave-hybrid"
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
     INSTALL_LEGACY_USB="YES"
@@ -244,7 +259,6 @@ case $PATCHMODE in
     INSTALL_BCM5701="YES"
     ;;
 --2012)
-    [ -z "$INSTALL_WIFI" ] && INSTALL_WIFI="mojave-hybrid"
     if [ "x$INSTALL_WIFI" = "xNO" ]
     then
         echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
