@@ -98,13 +98,17 @@ fi
 echo 'Removing kexts, shell scripts, patcher version info, etc.'
 # For v0.0.9 and earlier
 rm -rf "$VOLUME"/*.kext
+rm -f "$VOLUME"/*.kext.zip
 # For v0.0.10 and later
 rm -rf "$VOLUME"/kexts
-rm -f "$VOLUME"/*.kext.zip "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 # For v0.3.3 and later
 rm -f "$VOLUME"/kmutil*
 # For v0.4.2 and later
 rm -f "$VOLUME"/bless*
+# For v0.4.5 and later
+rm -f "$VOLUME"/patch.*
+# For all versions
+rm -f "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
 
 echo 'Remvoing Hax dylibs...'
 rm -f "$VOLUME"/Hax*.dylib
