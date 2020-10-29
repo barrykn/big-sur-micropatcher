@@ -257,9 +257,6 @@ then
 fi
 
 # Figure out which kexts we're installing.
-# (There is some duplication of code below, but this will make it easier
-# to use different WiFi patches on different models later.)
-
 case $PATCHMODE in
 --2010)
     INSTALL_HDA="YES"
