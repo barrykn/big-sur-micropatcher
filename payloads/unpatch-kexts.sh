@@ -233,11 +233,6 @@ rm -f "$VOLUME/usr/bin/kmutil.old"
 # don't believe me!
 "$VOLUME/usr/sbin/kcditto"
 
-# Get the volume label and supply it to bless, to work around the
-# Big Sur bug where everything gets called "EFI Boot".
-#VOLLABEL=`diskutil info -plist "$VOLUME" | fgrep -A1 '<key>VolumeName</key>'|tail -1|sed -e 's+^.*<string>++' -e 's+</string>$++'`
-
-#"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --label "$VOLLABEL" --create-snapshot --setBoot
-"$IMGVOL"/bless.beta9re --folder "$VOLUME"/System/Library/CoreServices --create-snapshot --setBoot
+bless --folder "$VOLUME"/System/Library/CoreServices --bootefi --create-snapshot --setBoot
 
 echo 'Uninstalled patch kexts successfully.'
