@@ -35,3 +35,6 @@ INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 # installer fails to reboot.
 "$INSTALLERNAME" $* &
 
+# Try hiding output from the installer binary...
+#2>/dev/null >/dev/null "$INSTALLERNAME" $* &
+
