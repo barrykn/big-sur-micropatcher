@@ -406,285 +406,285 @@ then
     fi
 fi
 
-# Need to back up the original KernelCollections before we modify them.
-# This is necessary for unpatch-kexts.sh to be able to accomodate
-# the type of filesystem verification that is done by Apple's delta updaters.
-#
-# (But also need to check if there's already a backup. If there's already
-# a backup, don't do it again. It would be dangerous to overwrite a
-# backup that already exists -- the existence of the backup means
-# the KernelCollections have already been modified!
-echo "Checking for KernelCollections backup..."
-pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
-
-BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
-BACKUP_FILE="$BACKUP_FILE_BASE".lz4
-#BACKUP_FILE="$BACKUP_FILE_BASE".lzfse
-#BACKUP_FILE="$BACKUP_FILE_BASE".zst
-
-if [ -e "$BACKUP_FILE" ]
-then
-    echo "Backup found, so not overwriting."
-else
-    echo "Backup not found. Performing backup now. This may take a few minutes."
-    echo "Backing up original KernelCollections to:"
-    echo `pwd`/"$BACKUP_FILE"
-    tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode -a lz4 > "$BACKUP_FILE"
-    #tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE"
-    #tar c *.kc | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE"
-fi
-popd > /dev/null
-
-# For each kext:
-# Move the old kext out of the way, or delete if needed. Then unzip the
-# replacement.
-pushd "$VOLUME/System/Library/Extensions" > /dev/null
-
-if [ "x$INSTALL_WIFI" != "xNO" ]
-then
-    echo 'Beginning patched IO80211Family.kext installation'
-    if [ -d IO80211Family.kext.original ]
+    # Need to back up the original KernelCollections before we modify them.
+    # This is necessary for unpatch-kexts.sh to be able to accomodate
+    # the type of filesystem verification that is done by Apple's delta updaters.
+    #
+    # (But also need to check if there's already a backup. If there's already
+    # a backup, don't do it again. It would be dangerous to overwrite a
+    # backup that already exists -- the existence of the backup means
+    # the KernelCollections have already been modified!
+    echo "Checking for KernelCollections backup..."
+    pushd "$VOLUME/System/Library/KernelCollections" > /dev/null
+    
+    BACKUP_FILE_BASE="KernelCollections-$SVPL_BUILD.tar"
+    BACKUP_FILE="$BACKUP_FILE_BASE".lz4
+    #BACKUP_FILE="$BACKUP_FILE_BASE".lzfse
+    #BACKUP_FILE="$BACKUP_FILE_BASE".zst
+    
+    if [ -e "$BACKUP_FILE" ]
     then
-        rm -rf IO80211Family.kext
+        echo "Backup found, so not overwriting."
     else
-        mv IO80211Family.kext IO80211Family.kext.original
+        echo "Backup not found. Performing backup now. This may take a few minutes."
+        echo "Backing up original KernelCollections to:"
+        echo `pwd`/"$BACKUP_FILE"
+        tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode -a lz4 > "$BACKUP_FILE"
+        #tar cv *.kc | "$VOLUME/usr/bin/compression_tool" -encode > "$BACKUP_FILE"
+        #tar c *.kc | "$IMGVOL/zstd" --long --adapt=min=0,max=19 -T0 -v > "$BACKUP_FILE"
     fi
-
-    case $INSTALL_WIFI in
-    hv12v-old)
-        echo 'Installing old highvoltage12v WiFi patch'
-        unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
-        ;;
-    hv12v-new)
-        echo 'Installing new highvoltage12v WiFi patch'
-        unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
-        ;;
-    mojave-hybrid)
-        echo 'Installing mojave-hybrid WiFi patch'
-        unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
-        pushd IO80211Family.kext/Contents/Plugins > /dev/null
-        unzip -q "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
-        popd > /dev/null
-        ;;
-    *)
-        echo 'patch-kexts.sh encountered an internal error while installing the WiFi patch.'
-        echo 'This is a patcher bug. patch-kexts.sh cannot continue.'
-        exit 1
-        ;;
-    esac
-
-    # The next line is really only here for the highvoltage12v zip
-    # files, but it does no harm in other cases.
-    rm -rf __MACOSX
-
-    chown -R 0:0 IO80211Family.kext
-    chmod -R 755 IO80211Family.kext
-fi
-
-if [ "x$INSTALL_HDA" = "xYES" ]
-then
-    echo 'Installing High Sierra AppleHDA.kext'
-    if [ -d AppleHDA.kext.original ]
-    then
-        rm -rf AppleHDA.kext
-    else
-        mv AppleHDA.kext AppleHDA.kext.original
-    fi
-
-    unzip -q "$IMGVOL/kexts/AppleHDA-17G14033.kext.zip"
-    chown -R 0:0 AppleHDA.kext
-    chmod -R 755 AppleHDA.kext
-fi
-
-if [ "x$INSTALL_HD3000" = "xYES" ]
-then
-    echo 'Installing High Sierra Intel HD 3000 kexts'
-    rm -rf AppleIntelHD3000* AppleIntelSNB*
-
-    unzip -q "$IMGVOL/kexts/AppleIntelHD3000Graphics.kext-17G14033.zip"
-    unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGA.plugin-17G14033.zip"
-    unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGLDriver.bundle-17G14033.zip"
-    unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB.kext-17G14033.zip"
-    chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
-    chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
-fi
-
-if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
-then
-    echo 'Installing LegacyUSBInjector.kext'
-    rm -rf LegacyUSBInjector.kext
-
-    unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
-    chown -R 0:0 LegacyUSBInjector.kext
-    chmod -R 755 LegacyUSBInjector.kext
-
-    # parameter for kmutil later on
-    BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
-fi
-
-if [ "x$INSTALL_GFTESLA" = "xYES" ]
-then
-    echo 'Installing GeForce Tesla (9400M/320M) kexts'
-    rm -rf *Tesla*
-
-    unzip -q "$IMGVOL/kexts/GeForceTesla-17G14033.zip"
-    unzip -q "$IMGVOL/kexts/NVDANV50HalTesla-17G14033.kext.zip"
-
-    unzip -q "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
-    rm -rf __MACOSX
-
-    chown -R 0:0 *Tesla*
-    chmod -R 755 *Tesla*
-fi
-
-if [ "x$INSTALL_NVENET" = "xYES" ]
-then
-    echo 'Installing High Sierra nvenet.kext'
-    pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
-    rm -rf nvenet.kext
-    unzip -q "$IMGVOL/kexts/nvenet-17G14033.kext.zip"
-    chown -R 0:0 nvenet.kext
-    chmod -R 755 nvenet.kext
     popd > /dev/null
-fi
-
-if [ "x$INSTALL_BCM5701" = "xYES" ]
-then
-    case $SVPL_BUILD in
-    20A4[0-9][0-9][0-9][a-z])
-        # skip this on Big Sur dev beta 1 and 2
-        ;;
-    *)
-        echo 'Installing Catalina AppleBCM5701Ethernet.kext'
-        pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
-
-        if [ -d AppleBCM5701Ethernet.kext.original ]
-        then
-            rm -rf AppleBCM5701Ethernet.kext
-        else
-            mv AppleBCM5701Ethernet.kext AppleBCM5701Ethernet.kext.original
-        fi
-
-        unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19H2.kext.zip"
-        chown -R 0:0 AppleBCM5701Ethernet.kext
-        chmod -R 755 AppleBCM5701Ethernet.kext
-
-        popd > /dev/null
-        ;;
-    esac
-fi
-
-#
-# it is important to have this part after installing the stock HD3000* because
-# in case we will fine a new Polaris based AMD card installed we have to use
-# a patched version of the AppleIntelSNBGraphicsFB.kext which will be replaced
-# NOW
-#
-# added a METAL check, in case we find no metal enabled card we will not
-# install these patches at all
-#
-if [ "x$INSTALL_IMAC" = "xYES" ]
-then
-
-    CARD=`system_profiler SPDisplaysDataType | grep Vendor | awk '{print $2}'`
-    #echo $CARD
-    # Values: NVIDIA, AMD
-
-    METAL=`system_profiler SPDisplaysDataType | grep Metal | awk '{print $2}'`
-    #echo $METAL
-    # Values: Supported
-
-    if [ "x$METAL"=="xSupported" ]
+    
+    # For each kext:
+    # Move the old kext out of the way, or delete if needed. Then unzip the
+    # replacement.
+    pushd "$VOLUME/System/Library/Extensions" > /dev/null
+    
+    if [ "x$INSTALL_WIFI" != "xNO" ]
     then
-        # install the iMacFamily extensions
-        echo "Installing highvoltage12v patched iMac-2011-family.kext"
-
-        if [ -d AppleGraphicsControl.kext.original ]
+        echo 'Beginning patched IO80211Family.kext installation'
+        if [ -d IO80211Family.kext.original ]
         then
-            rm -rf AppleGraphicsControl.kext
+            rm -rf IO80211Family.kext
         else
-            mv AppleGraphicsControl.kext AppleGraphicsControl.kext.original
+            mv IO80211Family.kext IO80211Family.kext.original
         fi
-
-        if [ -d AppleMCCSControl.kext.original ]
-        then
-            rm -rf AppleMCCSControl.kext
-        else
-            mv AppleMCCSControl.kext AppleMCCSControl.kext.original
-        fi
-
-        if [ -d AppleBacklight.kext.original ]
-        then
-            rm -rf AppleBacklight.kext
-        else
-            mv AppleBacklight.kext AppleBacklight.kext.original
-        fi
-
-        unzip -q "$IMGVOL/kexts/iMac2011Family-highvoltage12v.zip"
+    
+        case $INSTALL_WIFI in
+        hv12v-old)
+            echo 'Installing old highvoltage12v WiFi patch'
+            unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
+            ;;
+        hv12v-new)
+            echo 'Installing new highvoltage12v WiFi patch'
+            unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
+            ;;
+        mojave-hybrid)
+            echo 'Installing mojave-hybrid WiFi patch'
+            unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
+            pushd IO80211Family.kext/Contents/Plugins > /dev/null
+            unzip -q "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
+            popd > /dev/null
+            ;;
+        *)
+            echo 'patch-kexts.sh encountered an internal error while installing the WiFi patch.'
+            echo 'This is a patcher bug. patch-kexts.sh cannot continue.'
+            exit 1
+            ;;
+        esac
+    
+        # The next line is really only here for the highvoltage12v zip
+        # files, but it does no harm in other cases.
         rm -rf __MACOSX
-
-        chown -R 0:0 AppleGraphicsControl.kext
-        chmod -R 755 AppleGraphicsControl.kext
-
-        chown -R 0:0 AppleMCCSControl.kext
-        chmod -R 755 AppleMCCSControl.kext
-
-        chown -R 0:0 AppleBacklight*
-        chmod -R 755 AppleBacklight*
-
-        chown -R 0:0 WhateverGreen* Lilu*
-        chmod -R 755 WhateverGreen* Lilu*
-
-
-        if [ "x$CARD" == "xAMD" ]
+    
+        chown -R 0:0 IO80211Family.kext
+        chmod -R 755 IO80211Family.kext
+    fi
+    
+    if [ "x$INSTALL_HDA" = "xYES" ]
+    then
+        echo 'Installing High Sierra AppleHDA.kext'
+        if [ -d AppleHDA.kext.original ]
         then
-            echo $CARD "Polaris Card found"
-            echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
-            # delete stock High Sierra version
-            rm -rf AppleIntelSNBGraphicsFB.kext
-            # rename AppleIntelSNBGraphicsFB-AMD.kext
-            mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
-            chown -R 0:0 AppleIntelSNBGraphicsFB.kext
-            chmod -R 755 AppleIntelSNBGraphicsFB.kext
-            #
-            # probably delete the AppleBacklightFixup
-            # and
-            # copy back the AppleBacklight.kext.original to AppleBacklight.kext
-            #
-            echo "Using Big Sur AppleBacklight.kext"
+            rm -rf AppleHDA.kext
+        else
+            mv AppleHDA.kext AppleHDA.kext.original
+        fi
+    
+        unzip -q "$IMGVOL/kexts/AppleHDA-17G14033.kext.zip"
+        chown -R 0:0 AppleHDA.kext
+        chmod -R 755 AppleHDA.kext
+    fi
+    
+    if [ "x$INSTALL_HD3000" = "xYES" ]
+    then
+        echo 'Installing High Sierra Intel HD 3000 kexts'
+        rm -rf AppleIntelHD3000* AppleIntelSNB*
+    
+        unzip -q "$IMGVOL/kexts/AppleIntelHD3000Graphics.kext-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGA.plugin-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGLDriver.bundle-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB.kext-17G14033.zip"
+        chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
+        chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
+    fi
+    
+    if [ "x$INSTALL_LEGACY_USB" = "xYES" ]
+    then
+        echo 'Installing LegacyUSBInjector.kext'
+        rm -rf LegacyUSBInjector.kext
+    
+        unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
+        chown -R 0:0 LegacyUSBInjector.kext
+        chmod -R 755 LegacyUSBInjector.kext
+    
+        # parameter for kmutil later on
+        BUNDLE_PATH="--bundle-path /System/Library/Extensions/LegacyUSBInjector.kext"
+    fi
+    
+    if [ "x$INSTALL_GFTESLA" = "xYES" ]
+    then
+        echo 'Installing GeForce Tesla (9400M/320M) kexts'
+        rm -rf *Tesla*
+    
+        unzip -q "$IMGVOL/kexts/GeForceTesla-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/NVDANV50HalTesla-17G14033.kext.zip"
+    
+        unzip -q "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
+        rm -rf __MACOSX
+    
+        chown -R 0:0 *Tesla*
+        chmod -R 755 *Tesla*
+    fi
+    
+    if [ "x$INSTALL_NVENET" = "xYES" ]
+    then
+        echo 'Installing High Sierra nvenet.kext'
+        pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
+        rm -rf nvenet.kext
+        unzip -q "$IMGVOL/kexts/nvenet-17G14033.kext.zip"
+        chown -R 0:0 nvenet.kext
+        chmod -R 755 nvenet.kext
+        popd > /dev/null
+    fi
+    
+    if [ "x$INSTALL_BCM5701" = "xYES" ]
+    then
+        case $SVPL_BUILD in
+        20A4[0-9][0-9][0-9][a-z])
+            # skip this on Big Sur dev beta 1 and 2
+            ;;
+        *)
+            echo 'Installing Catalina AppleBCM5701Ethernet.kext'
+            pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
+    
+            if [ -d AppleBCM5701Ethernet.kext.original ]
+            then
+                rm -rf AppleBCM5701Ethernet.kext
+            else
+                mv AppleBCM5701Ethernet.kext AppleBCM5701Ethernet.kext.original
+            fi
+    
+            unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19H2.kext.zip"
+            chown -R 0:0 AppleBCM5701Ethernet.kext
+            chmod -R 755 AppleBCM5701Ethernet.kext
+    
+            popd > /dev/null
+            ;;
+        esac
+    fi
+    
+    #
+    # it is important to have this part after installing the stock HD3000* because
+    # in case we will fine a new Polaris based AMD card installed we have to use
+    # a patched version of the AppleIntelSNBGraphicsFB.kext which will be replaced
+    # NOW
+    #
+    # added a METAL check, in case we find no metal enabled card we will not
+    # install these patches at all
+    #
+    if [ "x$INSTALL_IMAC" = "xYES" ]
+    then
+    
+        CARD=`system_profiler SPDisplaysDataType | grep Vendor | awk '{print $2}'`
+        #echo $CARD
+        # Values: NVIDIA, AMD
+    
+        METAL=`system_profiler SPDisplaysDataType | grep Metal | awk '{print $2}'`
+        #echo $METAL
+        # Values: Supported
+    
+        if [ "x$METAL"=="xSupported" ]
+        then
+            # install the iMacFamily extensions
+            echo "Installing highvoltage12v patched iMac-2011-family.kext"
+    
+            if [ -d AppleGraphicsControl.kext.original ]
+            then
+                rm -rf AppleGraphicsControl.kext
+            else
+                mv AppleGraphicsControl.kext AppleGraphicsControl.kext.original
+            fi
+    
+            if [ -d AppleMCCSControl.kext.original ]
+            then
+                rm -rf AppleMCCSControl.kext
+            else
+                mv AppleMCCSControl.kext AppleMCCSControl.kext.original
+            fi
+    
             if [ -d AppleBacklight.kext.original ]
             then
                 rm -rf AppleBacklight.kext
-                mv AppleBacklight.kext.original AppleBacklight.kext
+            else
+                mv AppleBacklight.kext AppleBacklight.kext.original
             fi
-            #
-            # cleaning up Nvidia related files
-            # AppleBacklightFixup: Nvidia only
-            # Whatevergreen: injected with OpenCore
-            # Lilu: injected with OpenCore
-            #
-            rm -rf AppleBacklightFixup.kext WhateverGreen.kext Lilu.kext
-        else [ "x$CARD" == "xNVIDIA" ]
-            echo $CARD "Kepler based graphics adapter found"
-            echo "Using stock NVIDIA compatible version of AppleIntelSNBGraphicsFB.kext"
-            # remove AMD version, the correct version has been installed before
-            rm -rf AppleIntelSNBGraphicsFB-AMD.kext
+    
+            unzip -q "$IMGVOL/kexts/iMac2011Family-highvoltage12v.zip"
+            rm -rf __MACOSX
+    
+            chown -R 0:0 AppleGraphicsControl.kext
+            chmod -R 755 AppleGraphicsControl.kext
+    
+            chown -R 0:0 AppleMCCSControl.kext
+            chmod -R 755 AppleMCCSControl.kext
+    
+            chown -R 0:0 AppleBacklight*
+            chmod -R 755 AppleBacklight*
+    
+            chown -R 0:0 WhateverGreen* Lilu*
+            chmod -R 755 WhateverGreen* Lilu*
+    
+    
+            if [ "x$CARD" == "xAMD" ]
+            then
+                echo $CARD "Polaris Card found"
+                echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
+                # delete stock High Sierra version
+                rm -rf AppleIntelSNBGraphicsFB.kext
+                # rename AppleIntelSNBGraphicsFB-AMD.kext
+                mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
+                chown -R 0:0 AppleIntelSNBGraphicsFB.kext
+                chmod -R 755 AppleIntelSNBGraphicsFB.kext
+                #
+                # probably delete the AppleBacklightFixup
+                # and
+                # copy back the AppleBacklight.kext.original to AppleBacklight.kext
+                #
+                echo "Using Big Sur AppleBacklight.kext"
+                if [ -d AppleBacklight.kext.original ]
+                then
+                    rm -rf AppleBacklight.kext
+                    mv AppleBacklight.kext.original AppleBacklight.kext
+                fi
+                #
+                # cleaning up Nvidia related files
+                # AppleBacklightFixup: Nvidia only
+                # Whatevergreen: injected with OpenCore
+                # Lilu: injected with OpenCore
+                #
+                rm -rf AppleBacklightFixup.kext WhateverGreen.kext Lilu.kext
+            else [ "x$CARD" == "xNVIDIA" ]
+                echo $CARD "Kepler based graphics adapter found"
+                echo "Using stock NVIDIA compatible version of AppleIntelSNBGraphicsFB.kext"
+                # remove AMD version, the correct version has been installed before
+                rm -rf AppleIntelSNBGraphicsFB-AMD.kext
+            fi
+        else
+            echo "No metal supported video card found in this system!"
+            # do not install the iMacFamily at all.
         fi
-    else
-        echo "No metal supported video card found in this system!"
-        # do not install the iMacFamily at all.
     fi
-fi
-
-popd > /dev/null
-
-if [ "x$DEACTIVATE_TELEMETRY" = "xYES" ]
-then
-    echo 'Deactivating com.apple.telemetry.plugin'
-    pushd "$VOLUME/System/Library/UserEventPlugins" > /dev/null
-    mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.disabled
+    
     popd > /dev/null
-fi
+    
+    if [ "x$DEACTIVATE_TELEMETRY" = "xYES" ]
+    then
+        echo 'Deactivating com.apple.telemetry.plugin'
+        pushd "$VOLUME/System/Library/UserEventPlugins" > /dev/null
+        mv -f com.apple.telemetry.plugin com.apple.telemetry.plugin.disabled
+        popd > /dev/null
+    fi
 
 # Get ready to use kmutil
 if [ "x$OLD_KMUTIL" = "xYES" ]
