@@ -10,6 +10,7 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 - highvoltage12v for developing the first 802.11n Wi-Fi patches for Big Sur (no longer used by default, but still available through the `--wifi=hv12v-old` and `--wifi=hv12v-new` options for `patch-kexts.sh`), as well as patches used for Metal GPU support on 2011 iMacs.
 - ParrotGeek for developing the LegacyUSBInjector kernel extension that allows USB to work on various pre-2011 Mac models, and for creating the "trampoline" that allows the installer to be patched at runtime without first running Terminal commands.
 - testheit for describing how to use a kmutil feature that I was previously unaware of. This turned out to be a good way to make LegacyUSBInjector function under Big Sur, and more generally and more importantly, it was absolutely essential for improving overall patcher reliability.
+- Ausdauersportler for integrating patches for iMac Metal GPU support.
 
 In addition, thanks to Ben Sova, MachInit, johncaling40, and Travis Parker for their contributions to this patcher.
 
