@@ -1,4 +1,4 @@
-# big-sur-micropatcher (Version 0.5.0)
+# big-sur-micropatcher (Version 0.5.0a-pre)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigmac) by StarPlayrX is another patcher worth considering. For 2008 Mac Pros (MacPro3,1) in particular, Big Mac is clearly a better option than this patcher (at least for now).
@@ -19,7 +19,8 @@ This documentation is more thorough than for previous versions of this patcher, 
 I repeat, do a Time Machine backup *before* upgrading!! Big Sur changes how Time Machine backups are done, and I have heard that it is not possible to use previous versions of macOS to recover data from Big Sur's Time Machine backups. (I have created Time Machine backups with Big Sur, and I have restored them using Big Sur, but I have not yet tried to access Big Sur Time Machine backups using previous macOS releases.)
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
-- v0.4.2-v0.5.0 (this release): Tested with beta 10 (20A5395g). Almost certainly compatible with beta 9 (20A5384c) as well. Compatibility with previous betas is unknown. Compatible with 11.0.1 beta 1 (20B5012d) for fresh installs; upgrades generally work but there are some reports of problems on 2011 Macs (especially MacBook Pros). A future patcher release will likely fix the upgrade problems.
+- v0.5.0/v0.5.0a: (I'll update this once I finish testing 20B28.)
+- v0.4.2-v0.4.4: Tested with beta 10 (20A5395g). Almost certainly compatible with beta 9 (20A5384c) as well. Compatibility with previous betas is unknown. Compatible with 11.0.1 beta 1 (20B5012d) for fresh installs; upgrades generally work but there are some reports of problems on 2011 Macs (especially MacBook Pros). A future patcher release will likely fix the upgrade problems.
 - v0.3.1-v0.4.1: Tested with beta 9 (20A5384c). Should be compatible with all previous betas as well. However, beta 9 fixes so many bugs that I strongly recommend against using any earlier betas.
 - v0.3.0: Tested with beta 6 (20A5364e) full installer, and delta updates from beta 6 to beta 8 (20A5374i) or beta 9 (20A5384c). Should also work with beta 1-5. Incompatible with beta 9 full installer.
 - v0.2.1: Tested with beta 6 (20A5364e). Should also work with beta 1-5. Incompatible with beta 9 (20A5384c) full installer.
@@ -39,7 +40,7 @@ Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except
 Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so most users do not need to urgently upgrade to Big Sur.
 
 Mostly compatible Mac models:
-- If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://www.apple.com/macos/big-sur-preview/) (search the page for "See if") first, to make sure that you actually need this patcher.
+- If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://www.apple.com/macos/big-sur/) (search the page for "See if") first, to make sure that you actually need this patcher.
 - By the way, with the exception of Mac Pros, all of the Macs in this section officially support Catalina. This section is basically "Macs without official Big Sur support but with Metal support", with the exception of pre-2012 iMacs that have upgraded GPUs. (In fact, a 2011 iMac with upgraded GPU is almost equivalent to this category. Earlier iMacs may have compatibility problems caused by other components; see below.)
 - Late 2013 iMac: Everything should work (and, after step 14, you're finished -- no need for step 15 and later). Note that there have been some reports of very poor performance with Fusion Drives on this model when running Big Sur, which may be why Apple does not support Big Sur on this model.
 - 2010/2012 Mac Pro: I have received positive feedback about this patcher, but I do not know which features work perfectly and which don't. If I had to guess which features might be problematic, I would guess sleep and Wi-Fi. patch-kexts.sh (step 15) should fix Wi-Fi, but I don't know what effect it might have on sleep. (You should upgrade the graphics card, as you would for official compatibility with macOS Mojave.)
