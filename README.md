@@ -14,7 +14,7 @@ Thanks to the following people for their hard work to get Big Sur running on uns
 
 In addition, thanks to Ben Sova, MachInit, johncaling40, and Travis Parker for their contributions to this patcher.
 
-This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could lose all your data (it's your responsibility to do a Time Machine backup *first*!), expect bugs and crashes, and Big Sur is still under development (as is this patcher).
+This documentation is more thorough than for previous versions of this patcher, but it may still be incomplete. Remember that you *do this at your own risk*, you could lose all your data (it's your responsibility to do a Time Machine backup *first*!), expect bugs and crashes, and this patcher is still under development.
 
 I repeat, do a Time Machine backup *before* upgrading!! Big Sur changes how Time Machine backups are done, and I have heard that it is not possible to use previous versions of macOS to recover data from Big Sur's Time Machine backups. (I have created Time Machine backups with Big Sur, and I have restored them using Big Sur, but I have not yet tried to access Big Sur Time Machine backups using previous macOS releases.)
 
