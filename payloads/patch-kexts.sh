@@ -521,6 +521,8 @@ then
             ;;
         *)
             echo 'patch-kexts.sh encountered an internal error while installing the WiFi patch.'
+            echo "Invalid value for INSTALL_WIFI variable:"
+            echo "INSTALL_WIFI=$INSTALL_WIFI"
             echo 'This is a patcher bug. patch-kexts.sh cannot continue.'
             exit 1
             ;;
