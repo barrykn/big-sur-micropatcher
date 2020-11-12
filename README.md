@@ -18,16 +18,13 @@ This documentation is more thorough than for previous versions of this patcher, 
 
 I repeat, do a Time Machine backup *before* upgrading!! Big Sur changes how Time Machine backups are done, and I have heard that it is not possible to use previous versions of macOS to recover data from Big Sur's Time Machine backups. (I have created Time Machine backups with Big Sur, and I have restored them using Big Sur, but I have not yet tried to access Big Sur Time Machine backups using previous macOS releases.)
 
+Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so you can continue using Mojave or Catalina for now. If you are currently running High Sierra, it probably makes more sense to upgrade to Mojave (or maybe Catalina) for now, rather than Big Sur. This patcher definitely needs more time to mature, and considering that Big Sur is the first x.0 release of macOS in roughly 20 years, it would also be a good idea to give Apple more time to fix bugs in Big Sur.
+
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
-- v0.5.0/v0.5.0a: (I'll update this once I finish testing 20B28.)
+- v0.5.1: Tested with 11.0.1 Release Candidate 2 (20B28), for fresh installs. Upgrades should also work on 2012 and newer Macs (and 2009-2012 Mac Pros), but with 11.0.1 beta (20B5012d) there were reports of problems with upgrades on 2011 Macs. A future patcher release will likely fix the upgrade problems, if they have not arleady been fixed with changes in Big Sur itself.
+- v0.5.0: Tested with 11.0 beta 10 (20A5395g) and 11.0.1 Release Candidate 2 (20B28), for fresh installs. Upgrades should also work on 2012 and newer Macs (and 2009-2012 Mac Pros), but with 11.0.1 beta (20B5012d) there were reports of problems with upgrades on 2011 Macs. A future patcher release will likely fix the upgrade problems, if they have not arleady been fixed with changes in Big Sur itself.
 - v0.4.2-v0.4.4: Tested with beta 10 (20A5395g). Almost certainly compatible with beta 9 (20A5384c) as well. Compatibility with previous betas is unknown. Compatible with 11.0.1 beta 1 (20B5012d) for fresh installs; upgrades generally work but there are some reports of problems on 2011 Macs (especially MacBook Pros). A future patcher release will likely fix the upgrade problems.
-- v0.3.1-v0.4.1: Tested with beta 9 (20A5384c). Should be compatible with all previous betas as well. However, beta 9 fixes so many bugs that I strongly recommend against using any earlier betas.
-- v0.3.0: Tested with beta 6 (20A5364e) full installer, and delta updates from beta 6 to beta 8 (20A5374i) or beta 9 (20A5384c). Should also work with beta 1-5. Incompatible with beta 9 full installer.
-- v0.2.1: Tested with beta 6 (20A5364e). Should also work with beta 1-5. Incompatible with beta 9 (20A5384c) full installer.
-- v0.2.0: Tested with beta 1 (20A4299v) and beta 6 (20A5364e). Should also work with beta 2-5. Incompatible with beta 9 (20A5384c) full installer.
-- v0.0.10-v0.1.0: Tested to varying degrees with beta 2 (20A4300b), 3 (20A5323l), and 4 (20A5343i). (For details, check the README or release notes for previous patcher releases.) Should also work with beta 1 (20A4299v). *Partially* compatible with beta 5 (20A5354i) and 6 (20A5364e) as well. May also be partially compatibile with beta 9 (20A5384c) but this is untested.
-- v0.0.9: Tested with beta 1 (20A4299v) and 2 (20A4300b), but should be compatible with beta 3 (20A5323l) as well.
-- v0.0.1-v0.0.8: Only compatible with beta 1 (20A4299v). Not compatible with beta 2 and later.
+- For earlier releases of this patcher, check the README for v0.5.0 or earlier. Patcher releases before v0.4.2 will definitely have compatibility problems with Big Sur 11.0.1 Release Candidate 2 or later, including the final Big Sur release.
 
 ## Compatibility of various Mac models
 Note that this information is incomplete and may not be 100% correct yet, but I'll add more information over time and fix any errors as I learn about them.
@@ -36,8 +33,6 @@ Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except
 - Late 2012 13" MacBook Pro: <1 second
 - Early 2011 13" MacBook Pro: 13 seconds
 - Late 2009 13" MacBook: 23 seconds
-
-Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so most users do not need to urgently upgrade to Big Sur.
 
 Mostly compatible Mac models:
 - If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://www.apple.com/macos/big-sur/) (search the page for "See if") first, to make sure that you actually need this patcher.
