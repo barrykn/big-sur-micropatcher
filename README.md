@@ -81,7 +81,7 @@ If you encounter "com.apple.DiskManagement.disenter error 49168" during installa
 ## Instructions for use
 
 1. Make sure you have a 16GB or larger USB stick to use for creating the installer.
-2. Obtain a copy of the macOS Big Sur Public Beta (or, if you are member of the Apple Developer Program, the Big Sur developer beta).
+2. Obtain a copy of macOS Big Sur.
 3. Download a copy of this patcher. If you are viewing this on GitHub, and you probably are, then click the green "Code" button then "Download ZIP".
 4. Use Disk Utility to erase the USB stick using "Mac OS Extended (Journaled)" format and "GUID Partition Map" scheme. (You may need to choose "Show All Devices" before Disk Utility will allow you to do this.) In order for this patcher to run optimally, the USB stick must use GUID Partition Map and not Master Boot Record. (This is a new requirement as of micropatcher v0.2.0.) Note that the volume name does not particularly matter, since it will be renamed by `createinstallmedia` in the next step. (If this USB stick already contains a patched Big Sur installer created using micropatcher v0.2.0 or later, and you are re-creating it with a newer version of the micropatcher or a newer version of Big Sur, you may skip this step.) 
 5. Use [`createinstallmedia`](https://support.apple.com/en-us/HT201372) as usual to create a bootable USB stick with the installer and recovery environment, as you would on a supported Mac. (This patcher is easier to use if the installer USB stick is not renamed after `createinstallmedia` is used, but it can still work if the USB stick has been renamed.)
