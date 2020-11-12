@@ -190,7 +190,7 @@ then
         INSTALL_WIFI=mojave-hybrid
     else
         echo "Found 802.11ac WiFi card, so not installing a WiFi patch."
-        INSTALL_WIFI=no
+        INSTALL_WIFI=NO
     fi
 fi
 
