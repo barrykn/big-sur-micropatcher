@@ -242,14 +242,14 @@ then
         PATCHMODE=--2011
         ;;
     iMac11,?)
-        echo "Detected a late 2009 or mid 2010 11,x iMac. Using special iMac 11,x patch mode."
+        echo "Detected a Late 2009 or Mid 2010 11,x iMac. Using special iMac 11,x patch mode."
         PATCHMODE=--IMAC11
         INSTALL_IMAC0910="YES"
         INSTALL_AGC="YES"
         IMACUSE_OC=YES
         ;;
     iMac12,?)
-        echo "Detected a mid 2011 12,x Mac. Using --2011 patch mode."
+        echo "Detected a Mid 2011 12,x iMac. Using --2011 patch mode."
         PATCHMODE=--2011
         INSTALL_IMAC2011="YES"
         INSTALL_AGC="YES"
