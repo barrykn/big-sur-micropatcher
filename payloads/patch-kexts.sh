@@ -108,7 +108,8 @@ do
         INSTALL_WIFI="mojave-hybrid"
         ;;
     --useOC)
-        echo "Assuming usage of iMac 2011 with OpenCore (K610, K1100M, K2100M, AMD Polaris GPU)."
+        echo "Assuming usage of iMac 2011 with OpenCore (K610, K1100M, K2100M, AMD Polaris"
+        echo "GPU)."
         IMACUSE_OC=YES
         ;;
     --force)
