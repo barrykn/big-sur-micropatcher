@@ -249,7 +249,6 @@ then
         IMACUSE_OC=YES
         ;;
     iMac12,?)
-        # iMac12,? should get a separate case later, so it can show a message
         echo "Detected a mid 2011 12,x Mac. Using --2011 patch mode."
         PATCHMODE=--2011
         INSTALL_IMAC2011="YES"
