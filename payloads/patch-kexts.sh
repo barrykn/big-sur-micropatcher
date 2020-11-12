@@ -107,9 +107,9 @@ do
         echo "Using mojave-hybrid WiFi patch to override default."
         INSTALL_WIFI="mojave-hybrid"
         ;;
-    --i[mM]ac)
-        echo "Enabling 2011 iMac patch (--iMac command line option)."
-        INSTALL_IMAC=YES
+    --useOC)
+        echo "Assuming usage of iMac 2011 with OpenCore (K610, K1100M, K2100M, AMD Polaris GPU)."
+        IMACUSE_OC=YES
         ;;
     --force)
         FORCE=YES
@@ -218,7 +218,7 @@ then
         echo "This Mac has a very old Intel Core 2 CPU which cannot run Big Sur."
         exit 1
         ;;
-    MacBookPro6,?|iMac11,?)
+    MacBookPro6,?)
         echo "This Mac has a 1st gen Intel Core CPU which cannot boot Big Sur."
         exit 1
         ;;
@@ -240,9 +240,20 @@ then
         echo "Detected a 2011 Mac. Using --2011 patch mode."
         PATCHMODE=--2011
         ;;
+    iMac11,?)
+        echo "Detected a late 2009 or mid 2010 11,x iMac. Using special iMac 11,x patch mode."
+        PATCHMODE=--IMAC11
+        INSTALL_IMAC0910="YES"
+        INSTALL_AGC="YES"
+        IMACUSE_OC=YES
+        ;;
     iMac12,?)
-        echo "Detected a 2011 iMac. Using --2011 patch mode."
+        # iMac12,? should get a separate case later, so it can show a message
+        echo "Detected a mid 2011 12,x Mac. Using --2011 patch mode."
         PATCHMODE=--2011
+        INSTALL_IMAC2011="YES"
+        INSTALL_AGC="YES"
+        INSTALL_MCCS="YES"
         ;;
     Macmini6,?|MacBookAir5,?|MacBookPro9,?|MacBookPro10,?|iMac13,?)
         echo "Detected a 2012-2013 Mac. Using --2012 patch mode."
@@ -274,6 +285,11 @@ fi
 
 # Figure out which kexts we're installing.
 case $PATCHMODE in
+--IMAC11)
+    INSTALL_HDA="YES"
+    INSTALL_LEGACY_USB="YES"
+    INSTALL_BCM5701="YES"
+    ;;
 --2010)
     INSTALL_HDA="YES"
     INSTALL_HD3000="YES"
@@ -622,106 +638,178 @@ then
         esac
     fi
 
-    #
-    # it is important to have this part after installing the stock HD3000* because
-    # in case we will fine a new Polaris based AMD card installed we have to use
-    # a patched version of the AppleIntelSNBGraphicsFB.kext which will be replaced
-    # NOW
-    #
-    # added a METAL check, in case we find no metal enabled card we will not
-    # install these patches at all
-    #
-    if [ "x$INSTALL_IMAC" = "xYES" ]
+    if [ "x$INSTALL_MCCS" = "xYES" ]
     then
-
-        CARD=`system_profiler SPDisplaysDataType | grep Vendor | awk '{print $2}'`
-        #echo $CARD
-        # Values: NVIDIA, AMD
-
-        METAL=`system_profiler SPDisplaysDataType | grep Metal | awk '{print $2}'`
-        #echo $METAL
-        # Values: Supported
-
-        if [ "x$METAL"=="xSupported" ]
+        echo 'Installing Catalina (for iMac 2011) AppleMCCSControl.kext'
+        if [ -d AppleMCCSControl.kext.original ]
         then
-            # install the iMacFamily extensions
-            echo "Installing highvoltage12v patched iMac-2011-family.kext"
+            rm -rf AppleMCCSControl.kext
+        else
+            mv AppleMCCSControl.kext AppleMCCSControl.kext.original
+        fi
 
-            if [ -d AppleGraphicsControl.kext.original ]
+        unzip -q "$IMGVOL/kexts/AppleMCCSControl.kext.zip"
+        chown -R 0:0 AppleMCCSControl.kext
+        chmod -R 755 AppleMCCSControl.kext
+    fi
+
+    #
+    # install patches needed by the iMac 2011 family (metal GPU, only)
+    #
+    if [ "x$INSTALL_IMAC2011" = "xYES" ]
+    then
+        # this will any iMac 2011 need
+        # install the iMacFamily extensions
+        echo "Installing highvoltage12v patches for iMac 2011 family"
+        echo "Using SNB and HD3000 VA bundle files"
+
+        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsVADriver.bundle-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/AppleIntelSNBVA.bundle-17G14033.zip"
+        
+        chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
+        chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
+
+        # AMD=`/usr/sbin/ioreg -l | grep Baffin`
+        # NVIDIA=`/usr/sbin/ioreg -l | grep NVArch`
+
+        AMD=`chroot "$VOLUME" ioreg -l | grep Baffin`
+        NVIDIA=`chroot "$VOLUME" ioreg -l | grep NVArch`
+    
+        if [ "$AMD" ]
+        then
+            echo $CARD "Polaris Card found"
+            echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
+            echo "WhateverGreen and Lilu need to be injected by OpenCore"
+            rm -rf AppleIntelSNBGraphicsFB.kext
+            unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB-AMD.kext.zip"
+            # rename AppleIntelSNBGraphicsFB-AMD.kext
+            mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
+            chown -R 0:0 AppleIntelSNBGraphicsFB.kext
+            chmod -R 755 AppleIntelSNBGraphicsFB.kext
+
+        elif [ "$NVIDIA" ]
+        then
+            INSTALL_BACKLIGHT = "YES"
+            # INSTALL_AGC="YES"
+
+            if [ "x$IMACUSE_OC"=="xYES" ]
             then
-                rm -rf AppleGraphicsControl.kext
+                echo "AppleBacklightFixup, WhateverGreen and Lilu need to be injected by OpenCore"
             else
-                mv AppleGraphicsControl.kext AppleGraphicsControl.kext.original
-            fi
-
-            if [ -d AppleMCCSControl.kext.original ]
-            then
-                rm -rf AppleMCCSControl.kext
-            else
-                mv AppleMCCSControl.kext AppleMCCSControl.kext.original
-            fi
-
-            if [ -d AppleBacklight.kext.original ]
-            then
-                rm -rf AppleBacklight.kext
-            else
-                mv AppleBacklight.kext AppleBacklight.kext.original
-            fi
-
-            unzip -q "$IMGVOL/kexts/iMac2011Family-highvoltage12v.zip"
-            rm -rf __MACOSX
-
-            chown -R 0:0 AppleGraphicsControl.kext
-            chmod -R 755 AppleGraphicsControl.kext
-
-            chown -R 0:0 AppleMCCSControl.kext
-            chmod -R 755 AppleMCCSControl.kext
-
-            chown -R 0:0 AppleBacklight*
-            chmod -R 755 AppleBacklight*
-
-            chown -R 0:0 WhateverGreen* Lilu*
-            chmod -R 755 WhateverGreen* Lilu*
-
-
-            if [ "x$CARD" == "xAMD" ]
-            then
-                echo $CARD "Polaris Card found"
-                echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
-                # delete stock High Sierra version
-                rm -rf AppleIntelSNBGraphicsFB.kext
-                # rename AppleIntelSNBGraphicsFB-AMD.kext
-                mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
-                chown -R 0:0 AppleIntelSNBGraphicsFB.kext
-                chmod -R 755 AppleIntelSNBGraphicsFB.kext
-                #
-                # probably delete the AppleBacklightFixup
-                # and
-                # copy back the AppleBacklight.kext.original to AppleBacklight.kext
-                #
-                echo "Using Big Sur AppleBacklight.kext"
-                if [ -d AppleBacklight.kext.original ]
-                then
-                    rm -rf AppleBacklight.kext
-                    mv AppleBacklight.kext.original AppleBacklight.kext
-                fi
-                #
-                # cleaning up Nvidia related files
-                # AppleBacklightFixup: Nvidia only
-                # Whatevergreen: injected with OpenCore
-                # Lilu: injected with OpenCore
-                #
-                rm -rf AppleBacklightFixup.kext WhateverGreen.kext Lilu.kext
-            else [ "x$CARD" == "xNVIDIA" ]
-                echo $CARD "Kepler based graphics adapter found"
-                echo "Using stock NVIDIA compatible version of AppleIntelSNBGraphicsFB.kext"
-                # remove AMD version, the correct version has been installed before
-                rm -rf AppleIntelSNBGraphicsFB-AMD.kext
+                INSTALL_BACKLIGHTFIXUP="YES"
+                INSTALL_VIT9696="YES"
             fi
         else
             echo "No metal supported video card found in this system!"
-            # do not install the iMacFamily at all.
+            echo "Big Sur may boot, but will be barely usable due to lack of any graphics acceleration"
         fi
+    fi
+
+    #
+    # install patches needed by the iMac 2009-2010 family (metal GPU, only)
+    # OC has to be used in any case, assuming injection of
+    # AppleBacklightFixup, FakeSMC, Lilu, WhateverGreen
+    #
+    if [ "x$INSTALL_IMAC0910" = "xYES" ]
+    then
+        AMD=`chroot "$VOLUME" ioreg -l | grep Baffin`
+        NVIDIA=`chroot "$VOLUME" ioreg -l | grep NVArch`
+
+        # AMD=`/usr/sbin/ioreg -l | grep Baffin`
+        # NVIDIA=`/usr/sbin/ioreg -l | grep NVArch`
+    
+        if [ "$AMD" ]
+        then
+            echo $CARD "AMD Polaris Card found"
+        elif [ "$NVIDIA" ]
+        then
+            INSTALL_BACKLIGHT="YES"
+            # INSTALL_AGC="YES"
+            echo $CARD "NVIDIA Kepler Card found"
+        else
+            echo "No metal supported video card found in this system!"
+            echo "Big Sur may boot, but will be barely usable due to lack of any graphics acceleration"
+        fi
+    fi
+
+
+    if [ "x$INSTALL_AGC" = "xYES" ]
+    then
+        # we need the original file because we do an in place Info.plist patching....
+        if [ -f AppleGraphicsControl.kext.zip ]
+        then
+           rm -rf AppleGraphicsControl.kext
+           unzip -q AppleGraphicsControl.kext.zip
+           rm -rf AppleGraphicsControl.kext.zip
+        else
+           # create a backup using a zip archive on disk
+           # could not figure out how to make a 1:1 copy of an kext folder using cp, ditto and others
+           zip -q -r -X AppleGraphicsControl.kext.zip AppleGraphicsControl.kext
+        fi
+
+        echo 'Patching AppleGraphicsControl.kext with iMac 2009-2011 board-id'
+        /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-942B59F58194171B string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+        /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-942B5BF58194151B string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+        /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2268DAE string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+        /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2238AC8 string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+        /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2238BAE string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+        
+        chown -R 0:0 AppleGraphicsControl.kext
+        chmod -R 755 AppleGraphicsControl.kext
+        
+    fi
+
+    if [ "x$INSTALL_AGCOLD" = "xYES" ]
+    then
+        if [ -d AppleGraphicsControl.kext.original ]
+        then
+            rm -rf AppleGraphicsControl.kext
+            mv AppleGraphicsControl.kext.original AppleGraphicsControl.kext
+        else
+            cp -R AppleGraphicsControl.kext AppleGraphicsControl.kext.original
+        fi
+        
+        unzip -q "$IMGVOL/kexts/AppleGraphicsControl.kext.zip"
+        chown -R 0:0 AppleGraphicsControl.kext
+        chmod -R 755 AppleGraphicsControl.kext
+    fi
+
+    if [ "x$INSTALL_BACKLIGHT" = "xYES" ]
+    then
+        echo 'Installing (for iMac NVIDIA 2009-2011) Catalina AppleBacklight.kext'
+        if [ -d AppleBacklight.kext.original ]
+        then
+            rm -rf AppleBacklight.kext
+        else
+            mv AppleBacklight.kext AppleBacklight.kext.original
+        fi
+
+        unzip -q "$IMGVOL/kexts/AppleBacklight.kext.zip"
+        chown -R 0:0 AppleBacklight.kext
+        chmod -R 755 AppleBacklight.kext
+    fi
+
+    if [ "x$INSTALL_BACKLIGHTFIXUP" = "xYES" ]
+    then
+        echo 'Installing (for iMac NVIDIA 2009-2011) AppleBacklightFixup.kext'
+
+        unzip -q "$IMGVOL/kexts/AppleBacklightFixup.kext.zip"
+        chown -R 0:0 AppleBacklightFixup.kext
+        chmod -R 755 AppleBacklightFixup.kext
+    fi
+
+    if [ "x$INSTALL_VIT9696" = "xYES" ]
+    then
+        echo 'Installing (for iMac 2009-2011) WhateverGreen.kext and Lilu.kext'
+
+        rm -rf WhateverGreen.kext
+        unzip -q "$IMGVOL/kexts/WhateverGreen.kext.zip"
+
+        rm -rf Lilu.kext
+        unzip -q "$IMGVOL/kexts/Lilu.kext.zip"
+ 
+        chown -R 0:0 WhateverGreen* Lilu*
+        chmod -R 755 WhateverGreen* Lilu*
     fi
 
     popd > /dev/null
@@ -814,6 +902,14 @@ else
     popd > /dev/null
 
     # And remove kexts which did not overwrite newer versions.
+    if [ -f AppleGraphicsControl.kext.zip ]
+    then
+        echo 'Restoring patched AppleGraphicsControl extension'
+        rm -rf AppleGraphicsControl.kext
+        unzip -q AppleGraphicsControl.kext.zip
+        rm AppleGraphicsControl.kext.zip
+    fi
+    rm -rf AppleGraphicsControl.kext
     echo 'Removing kexts for Intel HD 3000 graphics support'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
     echo 'Removing LegacyUSBInjector'
