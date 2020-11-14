@@ -13,6 +13,14 @@ errorCheck() {
     fi
 }
 
+# Perform unzip with error checking. (exzip = extract zip)
+# I considered playing capitalization tricks with "unzip" but figured
+# that might be more confusing than just using a different name.
+exzip() {
+    unzip -q "$1"
+    errorCheck unzip
+}
+
 # In the current directory, check for kexts which have been renamed from
 # *.kext to *.kext.original, then remove the new versions and rename the
 # old versions back into place.
@@ -522,17 +530,17 @@ then
         case $INSTALL_WIFI in
         hv12v-old)
             echo 'Installing old highvoltage12v WiFi patch'
-            unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
+            exzip "$IMGVOL/kexts/IO80211Family-highvoltage12v-old.kext.zip"
             ;;
         hv12v-new)
             echo 'Installing new highvoltage12v WiFi patch'
-            unzip -q "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
+            exzip "$IMGVOL/kexts/IO80211Family-highvoltage12v-new.kext.zip"
             ;;
         mojave-hybrid)
             echo 'Installing mojave-hybrid WiFi patch'
-            unzip -q "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
+            exzip "$IMGVOL/kexts/IO80211Family-18G6032.kext.zip"
             pushd IO80211Family.kext/Contents/Plugins > /dev/null
-            unzip -q "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
+            exzip "$IMGVOL/kexts/AirPortAtheros40-17G14033+pciid.kext.zip"
             popd > /dev/null
             ;;
         *)
@@ -561,7 +569,7 @@ then
             mv AppleHDA.kext AppleHDA.kext.original
         fi
 
-        unzip -q "$IMGVOL/kexts/AppleHDA-17G14033.kext.zip"
+        exzip "$IMGVOL/kexts/AppleHDA-17G14033.kext.zip"
         fixPerms AppleHDA.kext
     fi
 
@@ -570,10 +578,10 @@ then
         echo 'Installing High Sierra Intel HD 3000 kexts'
         rm -rf AppleIntelHD3000* AppleIntelSNB*
 
-        unzip -q "$IMGVOL/kexts/AppleIntelHD3000Graphics.kext-17G14033.zip"
-        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGA.plugin-17G14033.zip"
-        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsGLDriver.bundle-17G14033.zip"
-        unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB.kext-17G14033.zip"
+        exzip "$IMGVOL/kexts/AppleIntelHD3000Graphics.kext-17G14033.zip"
+        exzip "$IMGVOL/kexts/AppleIntelHD3000GraphicsGA.plugin-17G14033.zip"
+        exzip "$IMGVOL/kexts/AppleIntelHD3000GraphicsGLDriver.bundle-17G14033.zip"
+        exzip "$IMGVOL/kexts/AppleIntelSNBGraphicsFB.kext-17G14033.zip"
         fixPerms AppleIntelHD3000* AppleIntelSNB*
     fi
 
@@ -582,7 +590,7 @@ then
         echo 'Installing LegacyUSBInjector.kext'
         rm -rf LegacyUSBInjector.kext
 
-        unzip -q "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
+        exzip "$IMGVOL/kexts/LegacyUSBInjector.kext.zip"
         fixPerms LegacyUSBInjector.kext
 
         # parameter for kmutil later on
@@ -594,10 +602,10 @@ then
         echo 'Installing GeForce Tesla (9400M/320M) kexts'
         rm -rf *Tesla*
 
-        unzip -q "$IMGVOL/kexts/GeForceTesla-17G14033.zip"
-        unzip -q "$IMGVOL/kexts/NVDANV50HalTesla-17G14033.kext.zip"
+        exzip "$IMGVOL/kexts/GeForceTesla-17G14033.zip"
+        exzip "$IMGVOL/kexts/NVDANV50HalTesla-17G14033.kext.zip"
 
-        unzip -q "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
+        exzip "$IMGVOL/kexts/NVDAResmanTesla-ASentientBot.kext.zip"
         rm -rf __MACOSX
 
         fixPerms *Tesla*
@@ -608,7 +616,7 @@ then
         echo 'Installing High Sierra nvenet.kext'
         pushd IONetworkingFamily.kext/Contents/Plugins > /dev/null
         rm -rf nvenet.kext
-        unzip -q "$IMGVOL/kexts/nvenet-17G14033.kext.zip"
+        exzip "$IMGVOL/kexts/nvenet-17G14033.kext.zip"
         fixPerms nvenet.kext
         popd > /dev/null
     fi
@@ -630,7 +638,7 @@ then
                 mv AppleBCM5701Ethernet.kext AppleBCM5701Ethernet.kext.original
             fi
 
-            unzip -q "$IMGVOL/kexts/AppleBCM5701Ethernet-19H2.kext.zip"
+            exzip "$IMGVOL/kexts/AppleBCM5701Ethernet-19H2.kext.zip"
             fixPerms AppleBCM5701Ethernet.kext
 
             popd > /dev/null
@@ -648,7 +656,7 @@ then
             mv AppleMCCSControl.kext AppleMCCSControl.kext.original
         fi
 
-        unzip -q "$IMGVOL/kexts/AppleMCCSControl.kext.zip"
+        exzip "$IMGVOL/kexts/AppleMCCSControl.kext.zip"
         chown -R 0:0 AppleMCCSControl.kext
         chmod -R 755 AppleMCCSControl.kext
     fi
@@ -663,8 +671,8 @@ then
         echo "Installing highvoltage12v patches for iMac 2011 family"
         echo "Using SNB and HD3000 VA bundle files"
 
-        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsVADriver.bundle-17G14033.zip"
-        unzip -q "$IMGVOL/kexts/AppleIntelSNBVA.bundle-17G14033.zip"
+        exzip "$IMGVOL/kexts/AppleIntelHD3000GraphicsVADriver.bundle-17G14033.zip"
+        exzip "$IMGVOL/kexts/AppleIntelSNBVA.bundle-17G14033.zip"
         
         chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
         chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
@@ -681,7 +689,7 @@ then
             echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
             echo "WhateverGreen and Lilu need to be injected by OpenCore"
             rm -rf AppleIntelSNBGraphicsFB.kext
-            unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB-AMD.kext.zip"
+            exzip "$IMGVOL/kexts/AppleIntelSNBGraphicsFB-AMD.kext.zip"
             # rename AppleIntelSNBGraphicsFB-AMD.kext
             mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
             chown -R 0:0 AppleIntelSNBGraphicsFB.kext
@@ -739,7 +747,7 @@ then
         if [ -f AppleGraphicsControl.kext.zip ]
         then
            rm -rf AppleGraphicsControl.kext
-           unzip -q AppleGraphicsControl.kext.zip
+           exzip AppleGraphicsControl.kext.zip
            rm -rf AppleGraphicsControl.kext.zip
         else
            # create a backup using a zip archive on disk
@@ -769,7 +777,7 @@ then
             cp -R AppleGraphicsControl.kext AppleGraphicsControl.kext.original
         fi
         
-        unzip -q "$IMGVOL/kexts/AppleGraphicsControl.kext.zip"
+        exzip "$IMGVOL/kexts/AppleGraphicsControl.kext.zip"
         chown -R 0:0 AppleGraphicsControl.kext
         chmod -R 755 AppleGraphicsControl.kext
     fi
@@ -784,7 +792,7 @@ then
             mv AppleBacklight.kext AppleBacklight.kext.original
         fi
 
-        unzip -q "$IMGVOL/kexts/AppleBacklight.kext.zip"
+        exzip "$IMGVOL/kexts/AppleBacklight.kext.zip"
         chown -R 0:0 AppleBacklight.kext
         chmod -R 755 AppleBacklight.kext
     fi
@@ -793,7 +801,7 @@ then
     then
         echo 'Installing (for iMac NVIDIA 2009-2011) AppleBacklightFixup.kext'
 
-        unzip -q "$IMGVOL/kexts/AppleBacklightFixup.kext.zip"
+        exzip "$IMGVOL/kexts/AppleBacklightFixup.kext.zip"
         chown -R 0:0 AppleBacklightFixup.kext
         chmod -R 755 AppleBacklightFixup.kext
     fi
@@ -803,10 +811,10 @@ then
         echo 'Installing (for iMac 2009-2011) WhateverGreen.kext and Lilu.kext'
 
         rm -rf WhateverGreen.kext
-        unzip -q "$IMGVOL/kexts/WhateverGreen.kext.zip"
+        exzip "$IMGVOL/kexts/WhateverGreen.kext.zip"
 
         rm -rf Lilu.kext
-        unzip -q "$IMGVOL/kexts/Lilu.kext.zip"
+        exzip "$IMGVOL/kexts/Lilu.kext.zip"
  
         chown -R 0:0 WhateverGreen* Lilu*
         chmod -R 755 WhateverGreen* Lilu*
@@ -906,7 +914,7 @@ else
     then
         echo 'Restoring patched AppleGraphicsControl extension'
         rm -rf AppleGraphicsControl.kext
-        unzip -q AppleGraphicsControl.kext.zip
+        exzip AppleGraphicsControl.kext.zip
         rm AppleGraphicsControl.kext.zip
     fi
     rm -rf AppleGraphicsControl.kext
