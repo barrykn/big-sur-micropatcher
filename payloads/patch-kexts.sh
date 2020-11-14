@@ -748,7 +748,7 @@ then
         then
            rm -rf AppleGraphicsControl.kext
            exzip AppleGraphicsControl.kext.zip
-           rm -rf AppleGraphicsControl.kext.zip
+           rm -f AppleGraphicsControl.kext.zip
         else
            # create a backup using a zip archive on disk
            # could not figure out how to make a 1:1 copy of an kext folder using cp, ditto and others
