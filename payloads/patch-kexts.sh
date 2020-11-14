@@ -917,7 +917,6 @@ else
         exzip AppleGraphicsControl.kext.zip
         rm AppleGraphicsControl.kext.zip
     fi
-    rm -rf AppleGraphicsControl.kext
     echo 'Removing kexts for Intel HD 3000 graphics support'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
     echo 'Removing LegacyUSBInjector'
