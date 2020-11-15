@@ -3,6 +3,15 @@ A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigmac) by StarPlayrX is another patcher worth considering. For 2008 Mac Pros (MacPro3,1) in particular, Big Mac is clearly a better option than this patcher (at least for now).
 
+</br>
+
+## Important news before you install Big Sur!
+
+For some users, WiFi in Big Sur 11.0.1 is so unreliable that it is effectively unusable. This is happening on 802.11ac WiFi cards which are supported natively by Big Sur, as well as on Macs which are officially supported by Big Sur, so this is not due to a patcher bug. To be clear, WiFi does work well in Big Sur for many users. However, be prepared to use Ethernet or USB iPhone tethering if you upgrade to Big Sur. If WiFi **must** work on your Mac, then **do not upgrade to Big Sur at this time**.
+
+</br>
+</br>
+
 Thanks to the following people for their hard work to get Big Sur running on unsupported Macs:
 
 - ASentientBot for developing the Hax series of installer patches which are so incredibly helpful for installing Big Sur on unsupported Macs, as well as for his patch to NVDAResmanTesla.kext which allows the GeForce Tesla (9400M/320M) framebuffer to work in Big Sur.
