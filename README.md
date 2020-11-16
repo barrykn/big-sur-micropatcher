@@ -77,7 +77,7 @@ I *strongly recommend* that you create, and hold onto, an [installer USB for an 
 
 In any case, if you are unable to start Internet Recovery, or it has a version of Safari too old to visit GitHub.com, then it is *vital* that you create an installer USB for an older macOS version and hold onto it in case of emergency.
 
-Once you create the patched installer USB for Big Sur, hold onto it as well. If you ever reset your Mac's NVRAM, then you will need to use the patched installer USB to repeat step 9 of the installation instructions.
+Once you create the patched installer USB for Big Sur, hold onto it as well. If you ever reset your Mac's NVRAM, then you will need to use the patched installer USB to repeat step 9 of the installation instructions. Furthermore, booting into regular (vs. Internet) Recovery with Command-R with Big Sur currently does not work on unsupported Macs; the easy workaround is to boot from the patched installer USB instead.
 
 If you have installed any 3rd-party antivirus program or security suite, make sure to uninstall it before installing Big Sur (or do a fresh installation instead of an upgrade). It is not sufficient to turn the antivirus program off -- it must be uninstalled. If you do not uninstall it, you may have no Internet connection after Big Sur is installed, and the Wi-Fi patch may fail to work.
 
