@@ -30,6 +30,7 @@ I repeat, do a Time Machine backup *before* upgrading!! Big Sur changes how Time
 Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so you can continue using Mojave or Catalina for now. If you are currently running High Sierra, it probably makes more sense to upgrade to Mojave (or maybe Catalina) for now, rather than Big Sur. This patcher definitely needs more time to mature, and considering that Big Sur is the first x.0 release of macOS in roughly 20 years, it would also be a good idea to give Apple more time to fix Big Sur bugs.
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
+- This patcher should work with Big Sur betas -- code for supporting the betas and working around various beta bugs is still present -- but recent testing has been focused on Big Sur 11.0.1 Release Candidate 2 and the Big Sur 11.0.1 release.
 - v0.5.2 (this release): Tested with Big Sur 11.0.1 Release Candidate 2 (20B28) and Big Sur 11.0.1 (20B29).
 - v0.5.1: Tested with 11.0.1 Release Candidate 2 (20B28). There are also many reports of success with Big Sur 11.0.1 (20B29).
 - v0.5.0: Tested with 11.0 beta 10 (20A5395g) and 11.0.1 Release Candidate 2 (20B28). Should also work with Big Sur 11.0.1 (20B29).
