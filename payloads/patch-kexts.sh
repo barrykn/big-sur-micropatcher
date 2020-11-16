@@ -692,7 +692,7 @@ then
             INSTALL_BACKLIGHT="YES"
             # INSTALL_AGC="YES"
 
-            if [ "x$IMACUSE_OC" == "xYES" ]
+            if [ "x$IMACUSE_OC" = "xYES" ]
             then
                 echo "AppleBacklightFixup, WhateverGreen and Lilu need to be injected by OpenCore"
             else
