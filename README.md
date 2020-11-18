@@ -9,6 +9,8 @@ By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigma
 
 For some users, WiFi in Big Sur 11.0.1 is so unreliable that it is effectively unusable. This is happening on 802.11ac WiFi cards which are supported natively by Big Sur, as well as on Macs which are officially supported by Big Sur, so this is not due to a patcher bug. To be clear, WiFi does work well in Big Sur for many users. However, be prepared to use Ethernet or USB iPhone tethering if you upgrade to Big Sur. If WiFi **must** work on your Mac, then **do not upgrade to Big Sur at this time**.
 
+There is another WiFi issue (likely unrelated to any other Big Sur WiFi bugs) where connections to hidden SSIDs or iPhone hotspots fail. For iPhone hotspots, you can work around this bug by connecting using USB instead of WiFi for now. Bug reports so far point in the direction of this being a bug in the WiFi patch (and not Big Sur itself). I will try to address this issue in a future patcher release.
+
 </br>
 </br>
 
