@@ -115,10 +115,13 @@ do
         echo "Using mojave-hybrid WiFi patch to override default."
         INSTALL_WIFI="mojave-hybrid"
         ;;
-    --useOC)
-        echo "Assuming usage of iMac 2011 with OpenCore (K610, K1100M, K2100M, AMD Polaris"
-        echo "GPU)."
-        IMACUSE_OC=YES
+    --ns)
+        echo "Experimental: Using @jackluke patched CoreBrightness.framework to enable Night Shift"
+        INSTALL_NIGHTSHIFT="YES"
+        ;;
+    --gva)
+        echo "Experimental: Using @jackluke patched AppleGVA.framework to enable iGPU support on Sandy Bridge systems"
+        INSTALL_APPLEGVA="YES"
         ;;
     --force)
         FORCE=YES
@@ -229,6 +232,7 @@ then
         ;;
     MacBookPro6,?)
         echo "This Mac has a 1st gen Intel Core CPU which cannot boot Big Sur."
+        echo "You need OpenCore 0.6.3 and the khronokernel DSDT patch to boot this machines!"
         exit 1
         ;;
     # Macs which are not supported by Apple but supported by this patcher.
@@ -251,16 +255,16 @@ then
         ;;
     iMac11,?)
         echo "Detected a Late 2009 or Mid 2010 11,x iMac. Using special iMac 11,x patch mode."
+        echo "You need OpenCore and the khronokernel DSDT patch to boot this machines!"
+        # sleep 10
         PATCHMODE=--IMAC11
         INSTALL_IMAC0910="YES"
-        INSTALL_AGC="YES"
-        IMACUSE_OC=YES
+        INSTALL_APPLEGVA="NO"
         ;;
     iMac12,?)
         echo "Detected a Mid 2011 12,x iMac. Using --2011 patch mode."
         PATCHMODE=--2011
         INSTALL_IMAC2011="YES"
-        INSTALL_AGC="YES"
         INSTALL_MCCS="YES"
         ;;
     Macmini6,?|MacBookAir5,?|MacBookPro9,?|MacBookPro10,?|iMac13,?)
@@ -656,9 +660,9 @@ then
             mv AppleMCCSControl.kext AppleMCCSControl.kext.original
         fi
 
-        exzip "$IMGVOL/kexts/AppleMCCSControl.kext.zip"
-        chown -R 0:0 AppleMCCSControl.kext
-        chmod -R 755 AppleMCCSControl.kext
+        unzip -q "$IMGVOL/kexts/AppleMCCSControl.kext.zip"
+        
+        fixPerms AppleMCCSControl.kext
     fi
 
     #
@@ -671,46 +675,60 @@ then
         echo "Installing highvoltage12v patches for iMac 2011 family"
         echo "Using SNB and HD3000 VA bundle files"
 
-        exzip "$IMGVOL/kexts/AppleIntelHD3000GraphicsVADriver.bundle-17G14033.zip"
-        exzip "$IMGVOL/kexts/AppleIntelSNBVA.bundle-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/AppleIntelHD3000GraphicsVADriver.bundle-17G14033.zip"
+        unzip -q "$IMGVOL/kexts/AppleIntelSNBVA.bundle-17G14033.zip"
         
-        chown -R 0:0 AppleIntelHD3000* AppleIntelSNB*
-        chmod -R 755 AppleIntelHD3000* AppleIntelSNB*
+        fixPerms AppleIntelHD3000GraphicsVADriver.bundle
+        fixPerms AppleIntelSNBVA.bundle
+                
+        DID=`/usr/sbin/chroot "$VOLUME" /usr/sbin/system_profiler SPDisplaysDataType | fgrep "Device ID" | awk '{print $3}'`
 
-        # AMD=`/usr/sbin/ioreg -l | grep Baffin`
-        # NVIDIA=`/usr/sbin/ioreg -l | grep NVArch`
-
-        AMD=`chroot "$VOLUME" ioreg -l | grep Baffin`
-        NVIDIA=`chroot "$VOLUME" ioreg -l | grep NVArch`
-    
-        if [ "$AMD" ]
-        then
-            echo $CARD "Polaris Card found"
+        case $DID in
+            # OpenCore: K610M, K1100M, K2100M
+            0x12b9 | 0x0ff6 | 0x11fc)
+            INSTALL_BACKLIGHT="YES"
+            echo "NVIDIA K610M, K1100M, K2100M found, assume use of OC, device ID: " $DID
+            ;;
+            # OpenCore; AMD Baffin cards
+            0x67e8 | 0x67e0 | 0x67c0 | 0x67df | 0x67ef)
+            echo "AMD Polaris WX4130/WX4150/WX4170/WX7100/RX480 found, assume use of OC, device ID: " $DID
+            INSTALL_AGC="NO"
+            INSTALL_APPLEGVA="NO"
             echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
             echo "WhateverGreen and Lilu need to be injected by OpenCore"
             rm -rf AppleIntelSNBGraphicsFB.kext
-            exzip "$IMGVOL/kexts/AppleIntelSNBGraphicsFB-AMD.kext.zip"
+            unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB-AMD.kext.zip"
             # rename AppleIntelSNBGraphicsFB-AMD.kext
             mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
-            chown -R 0:0 AppleIntelSNBGraphicsFB.kext
-            chmod -R 755 AppleIntelSNBGraphicsFB.kext
-
-        elif [ "$NVIDIA" ]
-        then
+            fixPerms AppleIntelSNBGraphicsFB.kext
+            ;;
+            0x67??)
+            echo "unknow AMD Polaris found, assume use of OC, device ID: " $DID
+            INSTALL_AGC="NO"
+            INSTALL_APPLEGVA="NO"
+            echo "Using iMacPro1,1 enabled version of AppleIntelSNBGraphicsFB.kext"
+            echo "WhateverGreen and Lilu need to be injected by OpenCore"
+            rm -rf AppleIntelSNBGraphicsFB.kext
+            unzip -q "$IMGVOL/kexts/AppleIntelSNBGraphicsFB-AMD.kext.zip"
+            # rename AppleIntelSNBGraphicsFB-AMD.kext
+            mv AppleIntelSNBGraphicsFB-AMD.kext AppleIntelSNBGraphicsFB.kext
+            fixPerms AppleIntelSNBGraphicsFB.kext
+            ;;
+            # NVIDIA witout OpenCore
+            0x1198 | 0x1199 | 0x119A | 0x119f | 0x119e |0x119d |0x11e0 | 0x11e1 | 0x11b8 | 0x11b7 | 0x11b6 | 0x11bc | 0x11bd | 0x11be |0x0ffb | 0x0ffc)
+            echo "NVIDIA Kepler Kx100M, Kx000M, GTX8xx, GTX7xx Card found, assume no use of OC, device ID: " $DID
             INSTALL_BACKLIGHT="YES"
-            # INSTALL_AGC="YES"
+            INSTALL_BACKLIGHTFIXUP="YES"
+            INSTALL_VIT9696="YES"
+            INSTALL_AGC="YES"
+            # INSTALL_APPLEGVA="YES"
+            ;;
+            *)
+            echo "Unknown GPU model. This may be a patcher bug, or the original Apple iMac ATI GPU which"
+            echo "is not really usable with Big Sur and will run without any graphics acceleration, device ID: " $DID
+            ;;
+        esac
 
-            if [ "x$IMACUSE_OC" = "xYES" ]
-            then
-                echo "AppleBacklightFixup, WhateverGreen and Lilu need to be injected by OpenCore"
-            else
-                INSTALL_BACKLIGHTFIXUP="YES"
-                INSTALL_VIT9696="YES"
-            fi
-        else
-            echo "No metal supported video card found in this system!"
-            echo "Big Sur may boot, but will be barely usable due to lack of any graphics acceleration"
-        fi
     fi
 
     #
@@ -720,40 +738,45 @@ then
     #
     if [ "x$INSTALL_IMAC0910" = "xYES" ]
     then
-        AMD=`chroot "$VOLUME" ioreg -l | grep Baffin`
-        NVIDIA=`chroot "$VOLUME" ioreg -l | grep NVArch`
 
-        # AMD=`/usr/sbin/ioreg -l | grep Baffin`
-        # NVIDIA=`/usr/sbin/ioreg -l | grep NVArch`
-    
-        if [ "$AMD" ]
-        then
-            echo $CARD "AMD Polaris Card found"
-        elif [ "$NVIDIA" ]
-        then
+        DID=`/usr/sbin/chroot "$VOLUME" /usr/sbin/system_profiler SPDisplaysDataType | fgrep "Device ID" | awk '{print $3}'`
+
+        case $DID in
+            # OpenCore: K610M, K1100M, K2100M
+            0x12b9 | 0x0ff6 | 0x11fc)
             INSTALL_BACKLIGHT="YES"
-            # INSTALL_AGC="YES"
-            echo $CARD "NVIDIA Kepler Card found"
-        else
-            echo "No metal supported video card found in this system!"
-            echo "Big Sur may boot, but will be barely usable due to lack of any graphics acceleration"
-        fi
-    fi
+            INSTALL_AGC="YES"
+            echo "NVIDIA K610M, K1100M, K2100M found, use of OC, device ID: " $DID
+            ;;
+            # OpenCore; AMD Baffin cards
+            0x67e8 | 0x67e0 | 0x67c0 | 0x67df | 0x67ef)
+            echo "AMD Polaris WX4130/WX4150/WX4170/WX7100/RX480 found, use of OC, device ID: " $DID
+            INSTALL_AGC="NO"
+            ;;
+            0x67??)
+            echo "unknow AMD Polaris found, assume use of OC, device ID: " $DID
+            INSTALL_AGC="NO"
+            ;;
+            # NVIDIA on 11,x with OpenCore
+            0x1198 | 0x1199 | 0x119A | 0x119f | 0x11e0 | 0x11e1 | 0x11b8 | 0x11b7 | 0x11b6 | 0x11bc | 0x11bd | 0x11be |0x0ffb | 0x0ffc)
+            echo "NVIDIA Kepler Kx100M, Kx000M, GTX8xx, GTX7xx Card found, use of OC, device ID: " $DID
+            echo "WhateverGreen and Lilu need to be injected by OpenCore"
+            INSTALL_BACKLIGHT="YES"
+            # IS THIS USEFUL?
+            INSTALL_BACKLIGHTFIXUP="YES"
+            INSTALL_VIT9696="NO"
+            INSTALL_AGC="YES"
+            ;;
+            *)
+            echo "Unknown GPU model. This may be a patcher bug, or the original Apple iMac ATI GPU which"
+            echo "is not really usable with Big Sur and will run without any graphics acceleration, device ID: " $DID
+            ;;
+        esac
 
+    fi
 
     if [ "x$INSTALL_AGC" = "xYES" ]
     then
-        # we need the original file because we do an in place Info.plist patching....
-        if [ -f AppleGraphicsControl.kext.zip ]
-        then
-           rm -rf AppleGraphicsControl.kext
-           exzip AppleGraphicsControl.kext.zip
-           rm -f AppleGraphicsControl.kext.zip
-        else
-           # create a backup using a zip archive on disk
-           # could not figure out how to make a 1:1 copy of an kext folder using cp, ditto and others
-           zip -q -r -X AppleGraphicsControl.kext.zip AppleGraphicsControl.kext
-        fi
 
         echo 'Patching AppleGraphicsControl.kext with iMac 2009-2011 board-id'
         /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-942B59F58194171B string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
@@ -762,24 +785,8 @@ then
         /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2238AC8 string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
         /usr/libexec/PlistBuddy -c 'Add :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2238BAE string none' AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
         
-        chown -R 0:0 AppleGraphicsControl.kext
-        chmod -R 755 AppleGraphicsControl.kext
+        fixPerms AppleGraphicsControl.kext
         
-    fi
-
-    if [ "x$INSTALL_AGCOLD" = "xYES" ]
-    then
-        if [ -d AppleGraphicsControl.kext.original ]
-        then
-            rm -rf AppleGraphicsControl.kext
-            mv AppleGraphicsControl.kext.original AppleGraphicsControl.kext
-        else
-            cp -R AppleGraphicsControl.kext AppleGraphicsControl.kext.original
-        fi
-        
-        exzip "$IMGVOL/kexts/AppleGraphicsControl.kext.zip"
-        chown -R 0:0 AppleGraphicsControl.kext
-        chmod -R 755 AppleGraphicsControl.kext
     fi
 
     if [ "x$INSTALL_BACKLIGHT" = "xYES" ]
@@ -792,18 +799,17 @@ then
             mv AppleBacklight.kext AppleBacklight.kext.original
         fi
 
-        exzip "$IMGVOL/kexts/AppleBacklight.kext.zip"
-        chown -R 0:0 AppleBacklight.kext
-        chmod -R 755 AppleBacklight.kext
+        unzip -q "$IMGVOL/kexts/AppleBacklight.kext.zip"
+        
+        fixPerms AppleBacklight.kext
     fi
 
     if [ "x$INSTALL_BACKLIGHTFIXUP" = "xYES" ]
     then
         echo 'Installing (for iMac NVIDIA 2009-2011) AppleBacklightFixup.kext'
 
-        exzip "$IMGVOL/kexts/AppleBacklightFixup.kext.zip"
-        chown -R 0:0 AppleBacklightFixup.kext
-        chmod -R 755 AppleBacklightFixup.kext
+        unzip -q "$IMGVOL/kexts/AppleBacklightFixup.kext.zip"
+        fixPerms AppleBacklightFixup.kext
     fi
 
     if [ "x$INSTALL_VIT9696" = "xYES" ]
@@ -811,16 +817,82 @@ then
         echo 'Installing (for iMac 2009-2011) WhateverGreen.kext and Lilu.kext'
 
         rm -rf WhateverGreen.kext
-        exzip "$IMGVOL/kexts/WhateverGreen.kext.zip"
+        unzip -q "$IMGVOL/kexts/WhateverGreen.kext.zip"
 
         rm -rf Lilu.kext
-        exzip "$IMGVOL/kexts/Lilu.kext.zip"
- 
-        chown -R 0:0 WhateverGreen* Lilu*
-        chmod -R 755 WhateverGreen* Lilu*
+        unzip -q "$IMGVOL/kexts/Lilu.kext.zip"
+        
+        fixPerms WhateverGreen.kext
+        fixPerms Lilu.kext
     fi
 
     popd > /dev/null
+
+    if [ "x$INSTALL_WIFI" = "xNO" ]
+    then
+        pushd "$VOLUME/System/Library/Frameworks" > /dev/null
+        
+        # getting board-id of the system
+        MYBOARD=`/usr/sbin/ioreg -l | grep board-id | awk -F\" '{ print $4 }' | grep Mac`
+
+        # check if there exist a ContinuitySupport entry for this particular system
+        RESULT=`/usr/libexec/PlistBuddy -c "Print:$MYBOARD:ContinuitySupport" "IOBluetooth.framework/Versions/A/Resources/SystemParameters.plist"`
+
+        if [ "x$RESULT" = "xfalse" ]
+        then
+            echo 'patching for Continuity and HandOff for board-id ' $MYBOARD
+            
+            /usr/libexec/PlistBuddy -c "Set:$MYBOARD:ContinuitySupport true" "IOBluetooth.framework/Versions/A/Resources/SystemParameters.plist"
+            # read again and check
+            RESULT=`/usr/libexec/PlistBuddy -c "Print:$MYBOARD:ContinuitySupport" "IOBluetooth.framework/Versions/A/Resources/SystemParameters.plist"`
+            
+            echo 'Continuity for ' $MYBOARD 'set to: ' $RESULT
+        else
+            echo 'your system with board-id' $MYBOARD 'has not black list entry'
+            echo 'and will possibly support Continuity and HandOff out of the box.'
+        fi
+        
+        popd > /dev/null
+    fi
+
+    if [ "x$INSTALL_NIGHTSHIFT" = "xYES" ]
+    then
+        echo 'Installing patched CoreBrightness.framework for Night Shift'
+
+        pushd "$VOLUME/System/Library/PrivateFrameworks" > /dev/null
+        
+        if [ -d CoreBrightness.framework.original ]
+        then
+            rm -rf CoreBrightness.framework
+        else
+            mv CoreBrightness.framework CoreBrightness.framework.original
+        fi
+        
+        unzip -q "$IMGVOL/kexts/CoreBrightness.framework.zip"
+
+        fixPerms CoreBrightness.framework
+                
+        popd > /dev/null
+    fi
+
+    if [ "x$INSTALL_APPLEGVA" = "xYES" ]
+    then
+        echo 'Installing patched AppleGVA.framework for iGPU support in Sandy Bridge Systems'
+        pushd "$VOLUME/System/Library/PrivateFrameworks" > /dev/null
+        
+        if [ -d AppleGVA.framework.original ]
+        then
+            rm -rf AppleGVA.framework
+        else
+            mv AppleGVA.framework AppleGVA.framework.original
+        fi
+
+        unzip -q "$IMGVOL/kexts/AppleGVA.framework.zip"
+
+        fixPerms AppleGVA.framework
+                
+        popd > /dev/null
+    fi
 
     if [ "x$DEACTIVATE_TELEMETRY" = "xYES" ]
     then
@@ -909,14 +981,21 @@ else
     restoreOriginals
     popd > /dev/null
 
-    # And remove kexts which did not overwrite newer versions.
-    if [ -f AppleGraphicsControl.kext.zip ]
-    then
-        echo 'Restoring patched AppleGraphicsControl extension'
-        rm -rf AppleGraphicsControl.kext
-        exzip AppleGraphicsControl.kext.zip
-        rm AppleGraphicsControl.kext.zip
-    fi
+    # iMac specific additions. If these changes do not exist the commands below
+    #  will not change the AppleGraphicsControl at all
+    
+    /usr/libexec/PlistBuddy -c 'Delete :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-942B59F58194171B' ./AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+
+    /usr/libexec/PlistBuddy -c 'Delete :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-942B5BF58194151B' ./AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+
+    /usr/libexec/PlistBuddy -c 'Delete :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2268DAE' ./AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+
+    /usr/libexec/PlistBuddy -c 'Delete :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2238AC8' ./AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+
+    /usr/libexec/PlistBuddy -c 'Delete :IOKitPersonalities:AppleGraphicsDevicePolicy:ConfigMap:Mac-F2238BAE' ./AppleGraphicsControl.kext/Contents/PlugIns/AppleGraphicsDevicePolicy.kext/Contents/Info.plist
+   
+    fixPerms AppleGraphicsControl.kext
+    
     echo 'Removing kexts for Intel HD 3000 graphics support'
     rm -rf AppleIntelHD3000* AppleIntelSNB*
     echo 'Removing LegacyUSBInjector'
@@ -932,6 +1011,11 @@ else
     echo 'Reactivating telemetry plugin'
     mv -f "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin.disabled" "$VOLUME/System/Library/UserEventPlugins/com.apple.telemetry.plugin"
 
+    popd > /dev/null
+
+    # CoreBrightness.framework and possibly AppleGVA.framework
+    pushd "$VOLUME/System/Library/PrivateFrameworks" > /dev/null
+    restoreOriginals
     popd > /dev/null
 
     # Also, remove kmutil.old (if it exists, it was installed by patch-kexts.sh)
