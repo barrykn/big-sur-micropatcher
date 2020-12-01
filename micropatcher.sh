@@ -187,6 +187,7 @@ touch "$APPPATH"
 # USB stick is booted.
 echo 'Copying shell scripts...'
 cp -f payloads/*.sh "$VOLUME"
+cp -f payloads/*.md "$VOLUME"
 
 # Copy Hax dylibs into place
 echo "Adding Hax dylibs..."
@@ -196,7 +197,7 @@ echo 'Adding kexts and other binaries...'
 cp -rf payloads/kexts payloads/bin "$VOLUME"
 
 # Let's play it safe and ensure the shell scripts, dylibs, etc. are executable.
-chmod -R u+x "$VOLUME"/*.sh "$VOLUME"/Hax*.dylib "$VOLUME"/bin
+chmod -R u+x "$VOLUME"/*.sh "$VOLUME"/*.md "$VOLUME"/Hax*.dylib "$VOLUME"/bin
 
 # Save a file onto the USB stick that says what patcher & version was used,
 # so it can be identified later (e.g. for troubleshooting purposes).
