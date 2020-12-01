@@ -33,8 +33,14 @@ then
     fi
 fi
 
-for XID in `diskutil apfs listSnapshots "$VOLUME"|fgrep XID|awk '{print $3}'`
+#Snapshot deletion code by StarPlayrX 2020
+snapshots=$(diskutil apfs listsnapshots "$VOLUME" | grep +-- | sed 's/^.\{4\}//')
+
+for uuid in $snapshots
 do
-    echo $XID
-    diskutil apfs deleteSnapshot "$VOLUME" -xid $XID
+    printf '📸 Attempting to delete snapshot => '
+    echo $uuid
+    echo ''
+    
+    diskutil apfs deletesnapshot "$VOLUME" -uuid $uuid
 done

@@ -929,6 +929,12 @@ else
 
     # Also, remove kmutil.old (if it exists, it was installed by patch-kexts.sh)
     rm -f "$VOLUME/usr/bin/kmutil.old"
+
+    # patching Music Icon
+    echo 'Patching music icon'
+    cp -v "/Image\ \Volume/bin/AppIcon.icns" "$VOLUME/System/Applications/Music.app/Contents/Resources"
+    cp -v "/Image\ \Volume/bin/Assets.car" "$VOLUME/System/Applications/Music.app/Contents/Resources"
+
 fi
 
 # The way you control kcditto's *destination* is by choosing which volume

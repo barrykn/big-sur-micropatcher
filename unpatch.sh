@@ -110,7 +110,7 @@ rm -f "$VOLUME"/patch.*
 # For v0.5.0 and later
 rm -rf "$VOLUME"/bin
 # For all versions
-rm -f "$VOLUME"/*.sh "$VOLUME/Patch-Version.txt"
+rm -f "$VOLUME"/*.sh "$VOLUME"/*.md "$VOLUME/Patch-Version.txt"
 
 echo 'Remvoing Hax dylibs...'
 rm -f "$VOLUME"/Hax*.dylib
