@@ -22,7 +22,7 @@ handleCopyPermissionsFailure() {
     fi
 }
 
-# Check that we can access the directory that ocntains this script, as well
+# Check that we can access the directory that contains this script, as well
 # as the root directory of the installer USB. Access to both of these
 # directories is vital, and Catalina's TCC controls for Terminal are
 # capable of blocking both. Therefore we must check access to both
