@@ -144,29 +144,6 @@ do
     shift
 done
 
-if [ "x$RECOVERY" = "xNO" ]
-then
-    # Outside the recovery environment, we need to check SIP &
-    # authenticated-root (both need to be disabled)
-    if [ "x$FORCE" != "xYES" ]
-    then
-        CSRVAL="`nvram csr-active-config|sed -e 's/^.*	//'`"
-        case $CSRVAL in
-        w%0[89f]* | %[7f]f%0[89f]*)
-            ;;
-        *)
-            echo csr-active-config appears to be set incorrectly:
-            nvram csr-active-config
-            echo
-            echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
-            echo "and try again. Or if you believe you are seeing this message in error, try the"
-            echo '`--force` command line option.'
-            exit 1
-            ;;
-        esac
-    fi
-fi
-
 # Check if --2010 patch mode was specified on command line without a
 # WiFi option in addition. If so, go ahead and use mojave-hybrid.
 # (This is a situation where patch-kexts.sh is probably being used to
@@ -281,6 +258,29 @@ then
         exit 1
         ;;
     esac
+fi
+
+if [ "x$RECOVERY" = "xNO" ]
+then
+    # Outside the recovery environment, we need to check SIP &
+    # authenticated-root (both need to be disabled)
+    if [ "x$FORCE" != "xYES" ]
+    then
+        CSRVAL="`nvram csr-active-config|sed -e 's/^.*	//'`"
+        case $CSRVAL in
+        w%0[89f]* | %[7f]f%0[89f]*)
+            ;;
+        *)
+            echo csr-active-config appears to be set incorrectly:
+            nvram csr-active-config
+            echo
+            echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
+            echo "and try again. Or if you believe you are seeing this message in error, try the"
+            echo '`--force` command line option.'
+            exit 1
+            ;;
+        esac
+    fi
 fi
 
 # Figure out which kexts we're installing.
