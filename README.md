@@ -32,7 +32,7 @@ I repeat, do a Time Machine backup *before* upgrading! Big Sur changes how Time 
 Keep in mind, Mojave and Catalina will probably receive security updates until roughly September 2021 and September 2022 respectively (give or take a month), so you can continue using Mojave or Catalina for now. If you are currently running High Sierra, it probably makes more sense to upgrade to Mojave (or maybe Catalina) for now, rather than Big Sur. This patcher definitely needs more time to mature, and considering that Big Sur is the first x.0 release of macOS in roughly 20 years, it would also be a good idea to give Apple more time to fix Big Sur bugs.
 
 ## Compatibility between different releases of this patcher and different Big Sur beta releases
-- This patcher should work with Big Sur betas -- code for supporting the betas and working around various beta bugs is still present -- but recent testing has been focused on Big Sur 11.0.1 Release Candidate 2 and the Big Sur 11.0.1 release.
+- This patcher should work with Big Sur betas -- code for supporting the betas and working around various beta bugs is still present -- but recent testing has been focused on Big Sur 11.0.1 Release Candidate 2, the Big Sur 11.0.1 release, and the Big Sur 11.1 release.
 - v0.5.2 (this release): Tested with Big Sur 11.0.1 Release Candidate 2 (20B28) and Big Sur 11.0.1 (20B29).
 - v0.5.1: Tested with 11.0.1 Release Candidate 2 (20B28). There are also many reports of success with Big Sur 11.0.1 (20B29).
 - v0.5.0: Tested with 11.0 beta 10 (20A5395g) and 11.0.1 Release Candidate 2 (20B28). Should also work with Big Sur 11.0.1 (20B29).
@@ -48,7 +48,39 @@ Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except
 - Late 2009 13" MacBook: 23 seconds
 
 ### Mostly compatible Mac models:
-- If you have a 2013 or later Mac, please check [Apple's official list of supported Mac models](https://support.apple.com/en-us/HT211238) first, to make sure that you actually need this patcher.
+#### Macs officially compatible with macOS Big Sur (which does not need a patcher):
+* 2015 and later MacBook
+  * MacBook8,1
+  * MacBook9,1
+  * MacBook10,1
+* 2013 and later MacBook Air
+  * MacBookAir6,x
+  * MacBookAir7,x
+  * MacBookAir8,x
+  * MacBookAir9,1
+* Late 2013 and later MacBook Pro
+  * MacBookPro11,x
+  * MacBookPro12,1
+  * MacBookPro13,x
+  * MacBookPro14,x
+  * MacBookPro15,x
+  * MacBookPro16,x
+* 2014 and later iMac
+  * iMac14,4
+  * iMac15,1
+  * iMac16,x
+  * iMac17,1
+  * iMac18,x
+  * iMac19,x
+* 2017 and later iMac Pro
+  * iMacPro1,1
+* 2014 and later Mac mini
+  * Macmini7,1
+  * Macmini8,1
+* 2013 and later Mac Pro
+  * MacPro6,1
+  * MacPro7,1
+#### Other Macs
 - By the way, with the exception of Mac Pros, all of the Macs in this section officially support Catalina. This section is basically "Macs without official Big Sur support but with Metal support", with the exception of pre-2012 iMacs that have upgraded GPUs. (In fact, a 2011 iMac with upgraded GPU is almost equivalent to this category. Earlier iMacs may have compatibility problems caused by other components; see below.)
 - Late 2013 iMac: Everything should work (and, after step 14, you're finished -- no need for step 15 and later). Note that there have been some reports of very poor performance with Fusion Drives on this model when running Big Sur, which may be why Apple does not support Big Sur on this model.
 - 2010/2012 Mac Pro: You should first upgrade the graphics card, as you would for official compatibility with macOS Mojave. Once you have done that, everything should work after installation except for WiFi (which should work after post-installation patching in step 15) and possibly USB (there were some reports of USB problems with Big Sur betas, and I need to see if they are still happening and, if so, if they are patchable).
@@ -66,7 +98,28 @@ Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except
 - Late 2009 27" iMac: Compatibility will vary based on the CPU. If your Late 2009 27" iMac has a Core 2 Duo CPU, then it is equivalent to a Late 2009 21.5" iMac (see above). If it has a Core i5 or i7, CPU, then it is equivalent to a 2010 iMac (see below).
 
 ### Incompatible Mac models:
-- Any Macs with a pre-Penryn CPU. Basically, this means the original MacBook Air as well as all 2006/2007 Macs (except for iMacs with upgraded CPUs).
+* 2006-2007 Mac Pros, iMacs, MacBook Pros, and Mac Minis:
+  * MacPro1,1
+  * MacPro2,1
+  * iMac4,1
+  * iMac5,x
+  * iMac6,1
+  * iMac7,1
+    * The 2007 iMac 7,1 is compatible with Catalina and potentially Big Sur if the CPU is upgraded to a Penryn-based Core 2 Duo, such as a T9300.
+  * MacBookPro1,1
+  * MacBookPro2,1
+  * MacBookPro3,1
+  * Macmini1,1
+  * Macmini2,1
+* 2006-2008 MacBooks:
+  * MacBook1,1
+  * MacBook2,1
+  * MacBook3,1
+  * MacBook4,1
+* 2008 MacBook Air
+  * MacBookAir 1,1
+* All PowerPC-based Macs
+* All 68k-based Macs
 
 ### Currently not supported by this patcher, but future support may be possible:
 - 2010 15"/17" MacBook Pro, 2010 iMac, (if equipped with a Core i5/i7) Late 2009 27" iMac: A fix has been created, but it requires OpenCore. Even if OpenCore eventually turns out to be absolutely required for these Macs, a future release of this patcher may still be helpful in providing support for these Macs' hardware.
@@ -97,7 +150,7 @@ If you encounter "com.apple.DiskManagement.disenter error 49168" during installa
 
 1. Make sure you have a 16GB or larger USB stick to use for creating the installer.
 2. Download a copy of this patcher. If you are viewing this on GitHub, and you probably are, then click the green "Code" button then "Download ZIP".
-3. Obtain a copy of macOS Big Sur: Use this link to download the [macOS Big Sur 11.0.1 (20C69) InstallAssistant.pkg](http://swcdn.apple.com/content/downloads/00/55/001-86606-A_9SF1TL01U7/5duug9lar1gypwunjfl96dza0upa854qgg/InstallAssistant.pkg). Once the download (approximately 11-12 GB) finishes, open and install InstallAssistant.pkg. This will place "Install macOS Big Sur", the actual Big Sur installer, in your Applications folder.
+3. Obtain a copy of macOS Big Sur: Use this link to download the [macOS Big Sur 11.1 (20C69) InstallAssistant.pkg](http://swcdn.apple.com/content/downloads/00/55/001-86606-A_9SF1TL01U7/5duug9lar1gypwunjfl96dza0upa854qgg/InstallAssistant.pkg) (this will be pre-built into `micropatcher.sh` soon). Once the download (approximately 11-12 GB) finishes, open and install InstallAssistant.pkg. This will place "Install macOS Big Sur", the actual Big Sur installer, in your Applications folder.
 4. Use Disk Utility to erase the USB stick using "Mac OS Extended (Journaled)" format and "GUID Partition Map" scheme. (You may need to choose "Show All Devices" before Disk Utility will allow you to do this.) In order for this patcher to run optimally, the USB stick must use GUID Partition Map and not Master Boot Record. (This is a new requirement as of micropatcher v0.2.0.) Note that the volume name does not particularly matter, since it will be renamed by `createinstallmedia` in the next step. (If this USB stick already contains a patched Big Sur installer created using micropatcher v0.2.0 or later, and you are re-creating it with a newer version of the micropatcher or a newer version of Big Sur, you may skip this step.) 
 5. Use [`createinstallmedia`](https://support.apple.com/en-us/HT201372) as usual to create a bootable USB stick with the installer and recovery environment, as you would on a supported Mac. (This patcher is easier to use if the installer USB stick is not renamed after `createinstallmedia` is used, but it can still work if the USB stick has been renamed.)
 6. Run `micropatcher.sh` to patch the USB stick. If micropatcher.sh is unable to find the USB stick, then try specifying the pathname of the USB stick to micropatcher.sh. The easiest way to do that is to open a Terminal window, drag and drop micropatcher.sh into the Terminal window, go back to Finder, choose Computer from the Go menu, drag and drop the USB stick into the Terminal window, then press Return.
