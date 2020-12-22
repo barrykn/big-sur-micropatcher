@@ -43,6 +43,75 @@ echo 'Macs! (See the README for more information.)'
 # Add a blank line of output to make things easier on the eyes.
 echo
 
+# Check to make sure we can access both our own directory and the root
+# directory of the USB stick. Terminal's TCC permissions in Catalina can
+# prevent access to either of those two directories. However, only do this
+# check on Catalina or higher. (I can add an "else" block later to handle
+# Mojave and earlier, but Catalina is responsible for every single bug
+# report I've received due to this script lacking necessary read permissions.)
+if [ `uname -r | sed -e 's@\..*@@'` -ge 19 ]
+then
+    echo 'Checking read access to necessary directories...'
+    if ! checkDirAccess
+    then
+        echo 'Access check failed.'
+        tccutil reset All com.apple.Terminal
+        echo 'Retrying access check...'
+        if ! checkDirAccess
+        then
+            echo
+            echo 'Access check failed.'
+            tccutil reset All com.apple.Terminal
+            echo 'Retrying access check...'
+            if ! checkDirAccess
+            then
+                echo '3 failed attempts to grant access.'
+                echo 'Please grant access the next time you run this script.'
+                exit 1
+            else
+                echo 'Access check succeeded on third attempt.'
+                echo
+        else
+            echo 'Access check succeeded on second attempt.'
+            echo
+        fi
+    else
+        echo 'Access check succeeded.'
+        echo
+    fi
+fi
+
+read -p "Would you like to download Big Sur macOS 11.1 (20C69)? [y]: " install
+printf '\e[K'
+
+if [[ "$install" == *"y"* ]]
+    then
+        printf '\e[K'
+        [ $UID = 0 ] || exec sudo "$0" "$@"
+        printf '\e[K'
+        
+            #mark="12886109321"
+            #printf 'Evalulating Base System checksum...'
+            #checksum=$(stat ~/Downloads/InstallAssistant.pkg | awk '{printf $2}')
+                        #if [ $checksum != $mark ]
+
+           # if [ "1" == "1" ]
+                #then
+                    rm -Rf ~/Downloads/InstallAssistant.pkg
+                    curl http://swcdn.apple.com/content/downloads/00/55/001-86606-A_9SF1TL01U7/5duug9lar1gypwunjfl96dza0upa854qgg/InstallAssistant.pkg -o ~/Downloads/InstallAssistant.pkg 
+                    printf '\e[K'
+                    echo
+                    printf '\e[K'
+                    echo 'Installing the Install macOS Big Sur.app via InstallAssistant.pkg'
+                    installer -pkg ~/Downloads/InstallAssistant.pkg -target /
+                #else
+                    printf "\nDownload Complete.\n"
+                    
+            #fi
+
+
+echo
+
 # Check for --force option on the command line
 # (currently does nothing, but that will change in the near future)
 if [ "x$1" = "x--force" ]
@@ -57,16 +126,16 @@ fi
 # and beta 1, in that order.)
 if [ -z "$1" ]
 then
-    for x in "Install macOS Big Sur" "Install macOS Big Sur Beta" "Install macOS Beta"
-    do
-        if [ -d "/Volumes/$x/$x.app" ]
-        then
-            VOLUME="/Volumes/$x"
-            APPPATH="$VOLUME/$x.app"
-            break
-        fi
-    done
+    VOLUME="/Volumes/$x"
+    APPPATH="$VOLUME/$x.app"
+    break
+fi
 
+echo "Creating installation medium on $VOLUME ..."
+sudo /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume "$VOLUME" --nointeraction
+
+do
+  do
     if [ ! -d "$APPPATH" ]
     then
         echo "Failed to locate Big Sur recovery USB stick."
@@ -111,36 +180,6 @@ then
     exit 1
 fi
 
-# Check to make sure we can access both our own directory and the root
-# directory of the USB stick. Terminal's TCC permissions in Catalina can
-# prevent access to either of those two directories. However, only do this
-# check on Catalina or higher. (I can add an "else" block later to handle
-# Mojave and earlier, but Catalina is responsible for every single bug
-# report I've received due to this script lacking necessary read permissions.)
-if [ `uname -r | sed -e 's@\..*@@'` -ge 19 ]
-then
-    echo 'Checking read access to necessary directories...'
-    if ! checkDirAccess
-    then
-        echo 'Access check failed.'
-        tccutil reset All com.apple.Terminal
-        echo 'Retrying access check...'
-        if ! checkDirAccess
-        then
-            echo
-            echo 'Access check failed again. Giving up.'
-            echo 'Next time, please give Terminal permission to access removable drives,'
-            echo 'as well as the location where this patcher is stored (for example, Downloads).'
-            exit 1
-        else
-            echo 'Access check succeeded on second attempt.'
-            echo
-        fi
-    else
-        echo 'Access check succeeded.'
-        echo
-    fi
-fi
 
 if [ -e "$VOLUME/Patch-Version.txt" ]
 then
