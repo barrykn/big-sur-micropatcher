@@ -45,7 +45,7 @@ echo 'Macs! (See the README for more information.)'
 echo
 
 # For this script, root permissions are vital (as this automates creating the installation medium).
-[ $UID = 0 ] || exec sudo "$0" "$@"
+[ $UID = 0 ] || echo "Root privileges are required." ; exec sudo "$0" "$@"
 
 # Check to make sure we can access both our own directory and the root
 # directory of the USB stick. Terminal's TCC permissions in Catalina can
