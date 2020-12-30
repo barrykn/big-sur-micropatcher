@@ -1,5 +1,6 @@
 #!/bin/bash
-VERSIONNUM=0.5.2pre
+
+VERSIONNUM=0.5.2
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
 ### begin function definitions ###
@@ -42,6 +43,9 @@ echo 'ParrotGeek for their hard work to get Big Sur running on unsupported'
 echo 'Macs! (See the README for more information.)'
 # Add a blank line of output to make things easier on the eyes.
 echo
+
+# For this script, root permissions are vital (as this automates creating the installation medium).
+[ $UID = 0 ] || exec sudo "$0" "$@"
 
 # Check to make sure we can access both our own directory and the root
 # directory of the USB stick. Terminal's TCC permissions in Catalina can
@@ -247,4 +251,8 @@ echo 'Syncing.'
 sync
 
 echo
-echo 'Micropatcher finished.'
+echo 'Micropatcher finished, running install-setvars.sh.'
+
+sudo ./install-setvars.sh
+
+exit 0
