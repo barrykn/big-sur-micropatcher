@@ -246,6 +246,6 @@ sync
 echo
 echo 'Micropatcher finished, running install-setvars.sh.'
 
-sudo ./install-setvars.sh
+sudo ./install-setvars.sh "$VOLUME"
 
 exit 0
