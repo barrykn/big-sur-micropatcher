@@ -148,7 +148,7 @@ If you encounter "com.apple.DiskManagement.disenter error 49168" during installa
 
 ## Instructions for use
 
-(Note: Step 2-5 might automate the steps with `micropatcher.sh`.)
+(Note: Step 2-5 and 7 might automate the steps with `micropatcher.sh`.)
 1. Make sure you have a 16GB or larger USB stick to use for creating the installer.
 2. Download a copy of this patcher. If you are viewing this on GitHub, and you probably are, then click the green "Code" button then "Download ZIP".
 3. Obtain a copy of macOS Big Sur: Use this link to download the [macOS Big Sur 11.1 (20C69) InstallAssistant.pkg](http://swcdn.apple.com/content/downloads/00/55/001-86606-A_9SF1TL01U7/5duug9lar1gypwunjfl96dza0upa854qgg/InstallAssistant.pkg). Once the download (approximately 11-12 GB) finishes, open and install InstallAssistant.pkg. This will place "Install macOS Big Sur", the actual Big Sur installer, in your Applications folder.
