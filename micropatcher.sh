@@ -78,6 +78,7 @@ then
             else
                 echo 'Access check succeeded on third attempt.'
                 echo
+            fi
         else
             echo 'Access check succeeded on second attempt.'
             echo
