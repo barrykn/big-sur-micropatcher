@@ -67,18 +67,8 @@ then
         if ! checkDirAccess
         then
             echo
-            echo 'Access check failed.'
-            tccutil reset All com.apple.Terminal
-            echo 'Retrying access check...'
-            if ! checkDirAccess
-            then
-                echo '3 failed attempts to grant access.'
-                echo 'Please grant access the next time you run this script.'
-                exit 1
-            else
-                echo 'Access check succeeded on third attempt.'
-                echo
-            fi
+            echo 'Cannot continue because you did not approve permissions.'
+            exit 1
         else
             echo 'Access check succeeded on second attempt.'
             echo
@@ -95,7 +85,6 @@ printf '\e[K'
 if [[ "$install" == *"y"* ]]
     then
         printf '\e[K'
-        [ $UID = 0 ] || exec sudo "$0" "$@"
         printf '\e[K'
         
             #mark="12886109321"
