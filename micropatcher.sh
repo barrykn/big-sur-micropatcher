@@ -1,12 +1,11 @@
 #!/bin/bash
 
 
-# For this script, root permissions are vital (as this automates creating the installation medium).
-[ $UID = 0 ] || exec sudo "$0" "$@"
 
 
 VERSIONNUM=0.5.2
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
+
 
 ### begin function definitions ###
 
@@ -49,6 +48,15 @@ echo 'Macs! (See the README for more information.)'
 # Add a blank line of output to make things easier on the eyes.
 echo
 
+# For this script, root permissions are vital (as this automates creating the installation medium).
+if [ "$EUID" -ne 0 ]
+  then
+    echo "Please note, that this script requires root privileges to run this script."
+    echo "Restarting with root privileges"
+    exec sudo "$0" "$@"
+  else
+    echo
+fi
 
 # Check to make sure we can access both our own directory and the root
 # directory of the USB stick. Terminal's TCC permissions in Catalina can

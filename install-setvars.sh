@@ -26,7 +26,14 @@ then
 fi
 
 # For this script, root permissions are vital.
-[ $UID = 0 ] || exec sudo "$0" "$@"
+if [ "$EUID" -ne 0 ]
+  then
+    echo "Please note, that this script requires root privileges to run this script."
+    echo "Restarting with root privileges"
+    exec sudo "$0" "$@"
+  else
+    echo
+fi
 
 while [[ $1 = -* ]]
 do
