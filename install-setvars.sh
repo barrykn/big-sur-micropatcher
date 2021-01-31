@@ -15,16 +15,6 @@ checkDirAccess() {
 
 ### end function definitions ###
 
-# Make sure there isn't already an "EFI" volume mounted.
-if [ -d "/Volumes/EFI" ]
-then
-    echo 'An "EFI" volume is already mounted. Please unmount it then try again.'
-    echo "If you don't know what this means, then restart your Mac and try again."
-    echo
-    echo "install-setvars cannot continue."
-    exit 1
-fi
-
 # For this script, root permissions are vital.
 if [ "$EUID" -ne 0 ]
   then
@@ -33,6 +23,13 @@ if [ "$EUID" -ne 0 ]
     exec sudo "$0" "$@"
   else
     echo
+fi
+
+# Make sure there isn't already an "EFI" volume mounted.
+# If so, will unmount first.
+if [ -d "/Volumes/EFI" ]
+then
+    umount /Volumes/EFI || diskutil unmount /Volumes/EFI
 fi
 
 while [[ $1 = -* ]]
@@ -134,9 +131,7 @@ then
         if ! checkDirAccess
         then
             echo
-            echo 'Access check failed again. Giving up.'
-            echo 'Next time, please give Terminal permission to access removable drives,'
-            echo 'as well as the location where this patcher is stored (for example, Downloads).'
+            echo 'Cannot continue because you did not approve permissions.'
             exit 1
         else
             echo 'Access check succeeded on second attempt.'
@@ -151,9 +146,9 @@ fi
 MOUNTEDPARTITION=`mount | fgrep "$VOLUME" | awk '{print $1}'`
 if [ -z "$MOUNTEDPARTITION" ]
 then
-    echo Failed to find the partition that
-    echo "$VOLUME"
-    echo is mounted from. install-setvars cannot proceed.
+    echo "Failed to find the partition that"
+    echo '"$VOLUME" is mounted from.'
+    echo 'install-setvars cannot proceed.'
     exit 1
 fi
 
