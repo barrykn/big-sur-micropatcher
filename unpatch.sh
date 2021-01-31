@@ -1,4 +1,15 @@
 #!/bin/bash
+
+# For this script, root permissions are vital.
+if [ "$EUID" -ne 0 ]
+  then
+    echo "Please note, that this script requires root privileges to run this script."
+    echo "Restarting with root privileges"
+    exec sudo "$0" "$@"
+  else
+    echo
+fi
+
 echo 'Unpatcher starting. If this fails, try recreating the installer USB using'
 echo 'createinstallmedia.'
 echo
