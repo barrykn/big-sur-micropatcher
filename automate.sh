@@ -14,13 +14,13 @@ function do_download {
 
 function find_app {
   echo "Finding install app..."
-  if [[ -d "/Applications/Install macOS Big Sur.app" ]]; then
+  if [[ -d "/Applications/Install macOS Big Sur.app" ]]
     APPLOCATION="/Applications/Install macOS Big Sur.app"
-  elif [[ -d "/Applications/Install macOS Big Sur Beta.app" ]]; then
+  elif [[ -d "/Applications/Install macOS Big Sur Beta.app" ]]
     APPLOCATION="/Applications/Install macOS Big Sur Beta.app"
-  elif [[ ! -d "/Applications/Install macOS Beta.app" ]]; then
+  elif [[ ! -d "/Applications/Install macOS Beta.app" ]]
     APPLOCATION="/Applications/Install macOS Beta.app"
-  else; then
+  else
     echo "Please enter the location for the Install macOS Big Sur App. If you don't have one, enter 0"
     read $APPLOCATION
     if [[ $APPLOCATION = 0 ]]
@@ -53,8 +53,8 @@ function final_patch {
   reboot
 }
 
-if [[ $1 = "usb" ]]; then 
+if [[ $1 = "usb" ]]
   full_patch
-elif [[ $1 = "hdd" ]]; then
+elif [[ $1 = "hdd" ]]
   final_patch
 fi
