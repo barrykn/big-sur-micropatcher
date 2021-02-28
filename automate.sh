@@ -49,7 +49,7 @@ function full_patch {
 }
 
 function final_patch {
-  "/Volumes/Image Volume/patch-kexts.sh" "/Volumes/Macintosh HD"
+  "/Volumes/Install macOS Big Sur/patch-kexts.sh" "/Volumes/Macintosh HD"
   reboot
 }
 
