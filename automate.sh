@@ -16,10 +16,6 @@ function find_app {
   echo "Finding install app..."
   if [[ -d "/Applications/Install macOS Big Sur.app" ]]
     APPLOCATION="/Applications/Install macOS Big Sur.app"
-  elif [[ -d "/Applications/Install macOS Big Sur Beta.app" ]]
-    APPLOCATION="/Applications/Install macOS Big Sur Beta.app"
-  elif [[ ! -d "/Applications/Install macOS Beta.app" ]]
-    APPLOCATION="/Applications/Install macOS Beta.app"
   else
     echo "Please enter the location for the Install macOS Big Sur App. If you don't have one, enter 0"
     read $APPLOCATION
