@@ -17,6 +17,8 @@ ecrr() {
 # as root.
 [ $UID = 0 ] || exec sudo --preserve-env=SHELL "$0" "$@"
 
+stty -echo
+
 if [ "x$1" = "x--force" ]
 then
     FORCE=YES
@@ -39,7 +41,7 @@ else
         w%0[89f]* | %[7f]f%0[89f]*)
             ;;
         *)
-            ecrr csr-active-config appears to be set incorrectly:
+            ecrr "csr-active-config appears to be set incorrectly:"
             >&2 nvram csr-active-config
             ecrr
             ecrr "To fix this, please boot the setvars EFI utility, then boot back into macOS"
@@ -203,7 +205,9 @@ echo "or:" \""$REBUILD_KC"\"
 echo "(copy and paste it, including the quotation marks)"
 echo "before you exit."
 pushd "$VOLUME/System/Library/Extensions" > /dev/null
+stty echo
 $NEXTSHELL
+stty -echo
 popd > /dev/null
 
 # Try to unmount the underlying volume if it was mounted by this script.
@@ -218,3 +222,5 @@ then
 fi
 
 echo 'Done.'
+stty echo
+exit 0
