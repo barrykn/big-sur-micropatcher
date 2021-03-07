@@ -17,19 +17,17 @@ checkDirAccess() {
 
 # For this script, root permissions are vital.
 if [ "$EUID" -ne 0 ]
-  then
-    echo "Please note, that this script requires root privileges to run this script."
+then
+    echo "Please note, that install-setvars requires superuser privileges to install the patch using this script."
     echo "Restarting with root privileges"
     exec sudo "$0" "$@"
-  else
-    echo
 fi
 
 # Make sure there isn't already an "EFI" volume mounted.
 # If so, will unmount first.
 if [ -d "/Volumes/EFI" ]
 then
-    umount /Volumes/EFI || diskutil unmount /Volumes/EFI
+    umount /Volumes/EFI || diskutil unmount /Volumes/EFI || exit 1
 fi
 
 while [[ $1 = -* ]]
@@ -126,7 +124,7 @@ then
     if ! checkDirAccess
     then
         echo 'Access check failed.'
-        tccutil reset All com.apple.Terminal
+        tccutil reset All com.apple.Terminal &> /dev/null
         echo 'Retrying access check...'
         if ! checkDirAccess
         then
@@ -236,3 +234,5 @@ umount /Volumes/EFI || diskutil unmount /Volumes/EFI
 
 echo
 echo 'install-setvars finished.'
+stty echo
+exit 0

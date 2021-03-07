@@ -1,11 +1,9 @@
 #!/bin/bash
 
-
-
-
 VERSIONNUM=0.5.2
 VERSION="BarryKN Big Sur Micropatcher v$VERSIONNUM"
 
+stty -echo
 
 ### begin function definitions ###
 
@@ -19,10 +17,12 @@ handleCopyPermissionsFailure() {
         echo 'cp failed. Probably a permissions error. This is not expected, but'
         echo 'patcher will attempt workaround by trying again as root.'
         echo
+        stty echo
         exec sudo "$0" "$@"
     else
         echo 'cp failed, even as root. This is unexpected.'
         echo 'Patcher cannot continue.'
+        stty echo
         exit 1
     fi
 }
@@ -50,12 +50,11 @@ echo
 
 # For this script, root permissions are vital (as this automates creating the installation medium).
 if [ "$EUID" -ne 0 ]
-  then
-    echo "Please note, that this script requires root privileges to run this script."
+then
+    echo "Please note, that micropatcher requires root privileges to install the patch on the target USB using this script."
     echo "Restarting with root privileges"
+    stty echo
     exec sudo "$0" "$@"
-  else
-    echo
 fi
 
 # Check to make sure we can access both our own directory and the root
@@ -87,7 +86,7 @@ then
     fi
 fi
 
-read -p "Would you like to download Big Sur macOS 11.1 (20C69)? [y]: " install
+read -p "Would you like to download Big Sur macOS 11.2.2 (20D80)? [y]: " install
 printf '\e[K'
 
 if [[ "$install" == *"y"* ]]
@@ -102,13 +101,21 @@ if [[ "$install" == *"y"* ]]
 
            # if [ "1" == "1" ]
                 #then
-                    rm -Rf ~/Downloads/InstallAssistant.pkg
-                    curl http://swcdn.apple.com/content/downloads/00/55/001-86606-A_9SF1TL01U7/5duug9lar1gypwunjfl96dza0upa854qgg/InstallAssistant.pkg -o ~/Downloads/InstallAssistant.pkg 
+                    rm -Rf ~/Downloads/InstallAssistant*
+                    echo 'Downloading installer files.'
+                    curl http://swcdn.apple.com/content/downloads/37/23/071-08935-A_VI70PU5ZSV/dxl5i8eyczg8zje0wiks3r03r91euyi9sa/InstallAssistant.pkg -L -s -o ~/Downloads/InstallAssistant.pkg 
                     printf '\e[K'
                     echo
                     printf '\e[K'
-                    echo 'Installing the Install macOS Big Sur.app via InstallAssistant.pkg'
-                    installer -pkg ~/Downloads/InstallAssistant.pkg -target /
+                    echo 'Preparing installer.'
+                    pkgutil --expand ~/Downloads/InstallAssistant.pkg ~/Downloads/InstallAssistant
+                    tar -xf ~/Downloads/InstallAssistant/Payload -C /
+                    if [ ! -d '/Applications/Install macOS Big Sur.app/Contents/SharedSupport/SharedSupport.dmg' ]
+                    then
+                        mkdir -p '/Applications/Install macOS Big Sur.app/Contents/SharedSupport'
+                        cp -rf ~/Downloads/InstallAssistant.pkg '/Applications/Install macOS Big Sur.app/Contents/SharedSupport/SharedSupport.dmg'
+                    fi
+                    rm -rf ~/Downloads/InstallAssistant*
                 #else
                     printf "\nDownload Complete.\n"
                     
@@ -137,7 +144,7 @@ then
 fi
 
 echo "Creating installation medium on $VOLUME ..."
-sudo /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume "$VOLUME" --nointeraction
+sudo /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume "$VOLUME" --nointeraction &> /dev/null
 
 do
   do
@@ -149,6 +156,7 @@ do
         echo "as a command line parameter to this script."
         echo
         echo "Patcher cannot continue and will now exit."
+        stty echo
         exit 1
     fi
 else
@@ -162,6 +170,7 @@ else
         echo "not specifying a volume and allowing the patcher to find"
         echo "the volume itself."
         echo
+        stty echo
         echo "Patcher cannot continue and will now exit."
         exit 1
     fi
@@ -182,6 +191,7 @@ then
     echo '"payloads" folder was not found.'
     echo
     echo "Patcher cannot continue and will now exit."
+    stty echo
     exit 1
 fi
 
@@ -193,9 +203,11 @@ then
      echo
      if ./unpatch.sh --no-sync "$VOLUME"
      then
+         stty -echo
          echo 'Patcher is now continuing.'
      else
          echo 'Unpatcher failed. Patcher cannot continue.'
+         stty echo
          exit 1
      fi
 fi
@@ -254,6 +266,7 @@ sync
 echo
 echo 'Micropatcher finished, running install-setvars.sh.'
 
-sudo ./install-setvars.sh "$VOLUME"
+bash ./install-setvars.sh "$VOLUME"
 
+stty echo
 exit 0

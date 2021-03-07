@@ -1,9 +1,11 @@
 #!/bin/bash
 
+stty -echo
+
 # For this script, root permissions are vital.
 if [ "$EUID" -ne 0 ]
   then
-    echo "Please note, that this script requires root privileges to run this script."
+    echo "Please note, that the unpatcher requires root privileges to remove the patch using this script."
     echo "Restarting with root privileges"
     exec sudo "$0" "$@"
   else
@@ -44,6 +46,7 @@ then
         echo "as a command line parameter to this script."
         echo
         echo "Unpatcher cannot continue and will now exit."
+        stty echo
         exit 1
     fi
 else
@@ -57,6 +60,7 @@ else
         echo "not specifying a volume and allowing the unpatcher to find"
         echo "the volume itself."
         echo
+        stty echo
         echo "Unpatcher cannot continue and will now exit."
         exit 1
     fi
@@ -136,3 +140,4 @@ fi
 
 echo
 echo 'Unpatcher finished.'
+exit 0
