@@ -9,6 +9,7 @@ errorCheck() {
     then
         echo "$1 failed. See above output for more information."
         echo "patch-kexts.sh cannot continue."
+        stty echo
         exit 1
     fi
 }
@@ -49,6 +50,8 @@ fixPerms() {
 # as root.
 [ $UID = 0 ] || exec sudo "$0" "$@"
 
+stty -echo
+
 IMGVOL="/Volumes/Image Volume"
 if [ -d "$IMGVOL" ]
 then
@@ -75,6 +78,7 @@ if [ ! -d "$IMGVOL" ]
 then
     echo "You must run this script from a patched macOS Big Sur"
     echo "installer USB."
+    stty echo
     exit 1
 fi
 
@@ -163,7 +167,7 @@ then
         w%0[89f]* | %[7f]f%0[89f]*)
             ;;
         *)
-            echo csr-active-config appears to be set incorrectly:
+            echo "csr-active-config appears to be set incorrectly:"
             nvram csr-active-config
             echo
             echo "To fix this, please boot the setvars EFI utility, then boot back into macOS"
@@ -217,18 +221,22 @@ then
     # to catch darn near everything in a non-default case if possible.
     iMac,1|Power*|RackMac*|[0-9][0-9][0-9])
         echo "Big Sur cannot run on PowerPC Macs."
+        stty echo
         exit 1
         ;;
     MacBookPro1,?|MacBook1,1|Macmini1,1)
         echo "Big Sur cannot run on 32-bit Macs."
+        stty echo
         exit 1
         ;;
     MacBook[23],1|Macmini2,1|MacPro[12],1|MacBookAir1,1|MacBookPro[23],?|Xserve1,?)
         echo "This Mac has a very old Intel Core 2 CPU which cannot run Big Sur."
+        stty echo
         exit 1
         ;;
     MacBookPro6,?)
         echo "This Mac has a 1st gen Intel Core CPU which cannot boot Big Sur."
+        stty echo
         exit 1
         ;;
     # Macs which are not supported by Apple but supported by this patcher.
@@ -273,6 +281,7 @@ then
         ;;
     iMac14,[123])
         echo "Detected a Late 2013 iMac. patch-kexts.sh is not necessary on this model."
+        stty echo
         exit 1
         ;;
     # Macs which are supported by Apple and which do not need this patcher.
@@ -280,12 +289,14 @@ then
     # exist yet.
     iMac14,4|iMac1[5-9],?|iMac[2-9][0-9],?|iMacPro*|MacPro[6-9],?|Macmini[7-9],?|MacBook[89],1|MacBook[1-9][0-9],?|MacBookAir[6-9],?|MacBookAir[1-9][0-9],?|MacBookPro1[1-9],?)
         echo "This Mac is supported by Big Sur and does not need this patch."
+        stty echo
         exit 1
         ;;
     # Default case. Ideally, this code will never execute.
     *)
         echo "Unknown Mac model. This may be a patcher bug, or a recent Mac model which is"
         echo "already supported by Big Sur and does not need this patch."
+        stty echo
         exit 1
         ;;
     esac
@@ -318,6 +329,7 @@ case $PATCHMODE in
     then
         echo "Attempting --2012 mode without WiFi, which means no patch will be installed."
         echo "Exiting."
+        stty echo
         exit 2
     fi
     ;;
@@ -330,6 +342,7 @@ case $PATCHMODE in
     echo "determine patch mode. This is a patcher bug."
     echo
     echo "patch-kexts.sh cannot continue."
+    stty echo
     exit 1
     ;;
 esac
@@ -345,6 +358,7 @@ then
         # checks eventually kick in, but the error messages get confusing.)
         echo 'You must specify a target volume (such as /Volumes/Macintosh\ HD)'
         echo 'on the command line.'
+        stty echo
         exit 1
     else
         # Running under live installation, so use / as default
@@ -370,6 +384,7 @@ if [ ! -d "$VOLUME" ]
 then
     echo "Unable to find the volume."
     echo "Cannot proceed. Make sure you specified the correct volume."
+    stty echo
     exit 1
 fi
 
@@ -382,6 +397,7 @@ then
     echo "Unable to find /System/Library/Extensions on the volume."
     echo "Cannot proceed. Make sure you specified the correct volume."
     echo "(Make sure to specify the system volume, not the data volume.)"
+    stty echo
     exit 1
 fi
 
@@ -405,6 +421,7 @@ else
         echo 'Please make sure you specified the correct volume.'
     fi
 
+    stty echo
     exit 1
 fi
 
@@ -464,6 +481,7 @@ then
     if ! mount -uw "$VOLUME"
     then
         echo "Remount failed. Kext installation cannot proceed."
+        stty echo
         exit 1
     fi
 fi
@@ -502,11 +520,10 @@ then
         if [ $? -ne 0 ]
         then
             echo "tar or compression_tool failed. See above output for more information."
-
-            echo "Attempting to remove incomplete backup..."
             rm -f "$BACKUP_FILE"
 
             echo "patch-kexts.sh cannot continue."
+            stty echo
             exit 1
         fi
     fi
@@ -547,6 +564,7 @@ then
             echo 'patch-kexts.sh encountered an internal error while installing the WiFi patch.'
             echo "Invalid value for INSTALL_WIFI variable:"
             echo "INSTALL_WIFI=$INSTALL_WIFI"
+            stty echo
             echo 'This is a patcher bug. patch-kexts.sh cannot continue.'
             exit 1
             ;;
@@ -881,6 +899,7 @@ else
         echo "Looked for KernelCollections backup at:"
         echo "`pwd`"/"$BACKUP_FILE"
         echo "but could not find it. unpatch-kexts.sh cannot continue."
+        stty echo
         exit 1
     fi
 
@@ -991,3 +1010,5 @@ then
 else
     echo 'Uninstalled patch kexts successfully.'
 fi
+stty echo
+exit 0

@@ -33,7 +33,7 @@ INSTALLERNAME="$BASE/$APPNAME/Contents/MacOS/InstallAssistant"
 # The installer **MUST** be backgrounded using &, or else the "Close Other
 # Applications" button in the installer fails to close Terminal and the
 # installer fails to reboot.
-"$INSTALLERNAME" $* &
+"$INSTALLERNAME" $* &> /dev/null
 
 # Try hiding output from the installer binary...
 #2>/dev/null >/dev/null "$INSTALLERNAME" $* &

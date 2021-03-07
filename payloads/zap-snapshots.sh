@@ -7,6 +7,9 @@
 
 # Check whether we have already been provided a volume via the VOLUME
 # environment variable set by remount-sysvol.sh.
+
+stty -echo
+
 if [ -z "$VOLUME" ]
 then
     VOLUME="$1"
@@ -18,6 +21,7 @@ then
         echo 'on the command line, or you must first use remount-sysvol.sh,'
         echo 'then run zap-snapshots.sh from inside the remount-sysvol.sh'
         echo 'subshell.'
+        stty echo
         exit 1
     fi
 
@@ -29,6 +33,7 @@ then
     if ! mount -uw "$VOLUME"
     then
         echo "Remount failed. Cannot proceed."
+        stty echo
         exit 1
     fi
 fi
@@ -38,3 +43,6 @@ do
     echo $XID
     diskutil apfs deleteSnapshot "$VOLUME" -xid $XID
 done
+
+stty echo
+exit 0

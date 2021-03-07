@@ -1,4 +1,5 @@
 #!/bin/sh
+stty -echo
 defaults delete -g NSAutomaticWindowAnimationsEnabled
 defaults delete -g NSScrollAnimationEnabled
 defaults delete -g NSWindowResizeTime
@@ -17,3 +18,4 @@ defaults delete com.apple.finder DisableAllAnimations
 defaults delete com.apple.Mail DisableSendAnimations
 defaults delete com.apple.Mail DisableReplyAnimations
 defaults delete NSGlobalDomain NSWindowResizeTime
+stty echo

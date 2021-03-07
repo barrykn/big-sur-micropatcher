@@ -8,8 +8,6 @@ if [ "$EUID" -ne 0 ]
     echo "Please note, that the unpatcher requires root privileges to remove the patch using this script."
     echo "Restarting with root privileges"
     exec sudo "$0" "$@"
-  else
-    echo
 fi
 
 echo 'Unpatcher starting. If this fails, try recreating the installer USB using'
@@ -60,8 +58,8 @@ else
         echo "not specifying a volume and allowing the unpatcher to find"
         echo "the volume itself."
         echo
-        stty echo
         echo "Unpatcher cannot continue and will now exit."
+        stty echo
         exit 1
     fi
 fi
@@ -140,4 +138,5 @@ fi
 
 echo
 echo 'Unpatcher finished.'
+stty echo
 exit 0

@@ -2,6 +2,8 @@
 # This script adds user-specified parameters to the boot args, such as -v
 # for verbose boot.
 
+stty -echo
+
 # Use --seal as the first argument to have the installer do volume sealing.
 if [ "x$1" = "x--seal" ]
 then
@@ -28,9 +30,9 @@ nvram boot-args
 if [ -n "`nvram boot-args | grep \'-no`" ]
 then
     echo
-    echo boot-args setting failed. This is a patcher bug which must be fixed.
-    echo Clearing boot-args and exiting script. csrutil settings remain
-    echo untouched.
+    echo "boot-args setting failed. This is a patcher bug which must be fixed."
+    echo "Clearing boot-args and exiting script. csrutil settings remain"
+    echo "untouched."
     nvram -d boot-args
     exit 1
 fi
@@ -39,7 +41,7 @@ fi
 # and rebooting earlier undoes insert-hax.sh, preventing the Installer
 # from working properly.
 (csrutil disable; csrutil authenticated-root disable) |
-sed -e 's@Please restart the machine for the changes to take effect.@@'
+sed -e 's@Restart the machine for the changes to take effect.@@'
 
 echo
 echo 'Done changing boot-args and csrutil settings.'
@@ -47,3 +49,6 @@ echo
 
 # Now set things up to run the installer.
 "/Volumes/Image Volume/insert-hax.sh" $SEAL
+
+stty echo
+exit 0

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+stty -echo
+
 BASE='/Volumes/Image Volume'
 
 if [ "x$1" = "x--seal" ]
@@ -30,3 +32,5 @@ launchctl setenv DYLD_INSERT_LIBRARIES "$LIBPATH"
 
 echo
 echo 'You may now quit Terminal and start the Installer as normal.'
+stty echo
+exit 0

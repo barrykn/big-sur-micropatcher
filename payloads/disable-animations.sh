@@ -1,4 +1,5 @@
 #!/bin/sh
+stty -echo
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 defaults write -g NSScrollAnimationEnabled -bool false
 defaults write -g NSWindowResizeTime -float 0.001
@@ -17,3 +18,4 @@ defaults write com.apple.finder DisableAllAnimations -bool true
 defaults write com.apple.Mail DisableSendAnimations -bool true
 defaults write com.apple.Mail DisableReplyAnimations -bool true
 defaults write NSGlobalDomain NSWindowResizeTime .001
+stty echo

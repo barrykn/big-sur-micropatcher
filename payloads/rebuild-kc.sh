@@ -6,6 +6,7 @@ checkVar() {
     if [ -z ${!1} ]
     then
         echo "Error: $1 is not defined"
+        stty echo
         exit 1
     fi
 }
@@ -18,6 +19,7 @@ kmutilErrorCheck() {
         echo 'kmutil failed. See above output for more information.'
         echo 'rebuild-kc.sh cannot continue, but you may make further'
         echo 'changes and try rebuild-kc.sh again.'
+        stty echo
         exit 1
     fi
 }
@@ -27,6 +29,7 @@ kmutilErrorCheck() {
 # Make sure this script is running as root, otherwise use sudo to try again
 # as root.
 [ $UID = 0 ] || exec sudo "$0" "$@"
+stty -echo
 
 checkVar VOLUME
 checkVar WASSNAPSHOT
@@ -123,6 +126,7 @@ then
     echo
     echo 'kcditto failed. See above output for more information.'
     echo 'patch-kexts.sh cannot continue.'
+    stty echo
     exit 1
 fi
 
@@ -139,6 +143,7 @@ then
         echo
         echo 'bless failed. See above output for more information.'
         echo 'rebuild-kc.sh cannot continue.'
+        stty echo
         exit 1
     fi
 else
@@ -150,3 +155,4 @@ fi
 
 echo 'Rebuilt kernel/kext collections successfully.'
 echo "You may now run 'exit' to exit the subshell."
+exit 0
