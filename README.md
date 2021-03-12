@@ -3,7 +3,7 @@ A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
 By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigmac) by StarPlayrX is another patcher worth considering. For 2008 Mac Pros (MacPro3,1) in particular, Big Mac is clearly a better option than this patcher (at least for now).
 
-</br>
+<br>
 
 ## Important news before you install Big Sur!
 
@@ -11,7 +11,6 @@ For some users, WiFi in Big Sur 11.0.1 is so unreliable that it is effectively u
 
 There is another WiFi issue (likely unrelated to any other Big Sur WiFi bugs) where connections to hidden SSIDs or iPhone hotspots fail. For iPhone/iPad hotspots, you can work around this bug by connecting using USB instead of WiFi for now. Bug reports so far point in the direction of this being a bug in the Wi-Fi patch (and not Big Sur itself). I will try to address this issue in a future patcher release.
 
-</br>
 </br>
 
 Thanks to the following people for their hard work to get Big Sur running on unsupported Macs:
@@ -48,6 +47,7 @@ Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except
 - Late 2009 13" MacBook: 23 seconds
 
 ### Mostly compatible Mac models:
+
 #### Macs officially compatible with macOS Big Sur (which does not need a patcher):
 * 2015 and later MacBook
   * MacBook8,1
@@ -80,6 +80,7 @@ Also, note that Macs without Metal GPUs (basically 2011 and earlier Macs, except
 * 2013 and later Mac Pro
   * MacPro6,1
   * MacPro7,1
+
 #### Other Macs
 - By the way, with the exception of Mac Pros, all of the Macs in this section officially support Catalina. This section is basically "Macs without official Big Sur support but with Metal support", with the exception of pre-2012 iMacs that have upgraded GPUs. (In fact, a 2011 iMac with upgraded GPU is almost equivalent to this category. Earlier iMacs may have compatibility problems caused by other components; see below.)
 - Late 2013 iMac: Everything should work (and, after step 14, you're finished -- no need for step 15 and later). Note that there have been some reports of very poor performance with Fusion Drives on this model when running Big Sur, which may be why Apple does not support Big Sur on this model.
@@ -151,7 +152,7 @@ If you encounter "com.apple.DiskManagement.disenter error 49168" during installa
 (Note: Step 2-5 and 7 might automate the steps with `micropatcher.sh`.)
 1. Make sure you have a 16GB or larger USB stick to use for creating the installer.
 2. Download a copy of this patcher. If you are viewing this on GitHub, and you probably are, then click the green "Code" button then "Download ZIP".
-3. Obtain a copy of macOS Big Sur: Use this link to download the [macOS Big Sur 11.1 (20C69) InstallAssistant.pkg](http://swcdn.apple.com/content/downloads/00/55/001-86606-A_9SF1TL01U7/5duug9lar1gypwunjfl96dza0upa854qgg/InstallAssistant.pkg). Once the download (approximately 11-12 GB) finishes, open and install InstallAssistant.pkg. This will place "Install macOS Big Sur", the actual Big Sur installer, in your Applications folder.
+3. Obtain a copy of macOS Big Sur: Use this link to download the [macOS Big Sur 11.2.3 (20D91) InstallAssistant.pkg](http://swcdn.apple.com/content/downloads/12/32/071-14766-A_Q2H6ELXGVG/zx8saim8tei7fezrmvu4vuab80m0e8a5ll/InstallAssistant.pkg). Once the download (approximately 11-12 GB) finishes, open and install InstallAssistant.pkg. This will place "Install macOS Big Sur", the actual Big Sur installer, in your Applications folder.
 4. Use Disk Utility to erase the USB stick using "Mac OS Extended (Journaled)" format and "GUID Partition Map" scheme. (You may need to choose "Show All Devices" before Disk Utility will allow you to do this.) In order for this patcher to run optimally, the USB stick must use GUID Partition Map and not Master Boot Record. (This is a new requirement as of micropatcher v0.2.0.) Note that the volume name does not particularly matter, since it will be renamed by `createinstallmedia` in the next step. (If this USB stick already contains a patched Big Sur installer created using micropatcher v0.2.0 or later, and you are re-creating it with a newer version of the micropatcher or a newer version of Big Sur, you may skip this step.) 
 5. Use [`createinstallmedia`](https://support.apple.com/en-us/HT201372) as usual to create a bootable USB stick with the installer and recovery environment, as you would on a supported Mac. (This patcher is easier to use if the installer USB stick is not renamed after `createinstallmedia` is used, but it can still work if the USB stick has been renamed.)
 6. Run `micropatcher.sh` to patch the USB stick. If micropatcher.sh is unable to find the USB stick, then try specifying the pathname of the USB stick to micropatcher.sh. The easiest way to do that is to open a Terminal window, drag and drop micropatcher.sh into the Terminal window, go back to Finder, choose Computer from the Go menu, drag and drop the USB stick into the Terminal window, then press Return.

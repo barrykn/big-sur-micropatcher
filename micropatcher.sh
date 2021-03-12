@@ -57,42 +57,10 @@ then
     exec sudo "$0" "$@"
 fi
 
-# Check to make sure we can access both our own directory and the root
-# directory of the USB stick. Terminal's TCC permissions in Catalina can
-# prevent access to either of those two directories. However, only do this
-# check on Catalina or higher. (I can add an "else" block later to handle
-# Mojave and earlier, but Catalina is responsible for every single bug
-# report I've received due to this script lacking necessary read permissions.)
-if [ `uname -r | sed -e 's@\..*@@'` -ge 19 ]
-then
-    echo 'Checking read access to necessary directories...'
-    if ! checkDirAccess
-    then
-        echo 'Access check failed.'
-        tccutil reset All com.apple.Terminal
-        echo 'Retrying access check...'
-        if ! checkDirAccess
-        then
-            echo
-            echo 'Cannot continue because you did not approve permissions.'
-            exit 1
-        else
-            echo 'Access check succeeded on second attempt.'
-            echo
-        fi
-    else
-        echo 'Access check succeeded.'
-        echo
-    fi
-fi
-
-read -p "Would you like to download Big Sur macOS 11.2.2 (20D80)? [y]: " install
-printf '\e[K'
+install=y
 
 if [[ "$install" == *"y"* ]]
     then
-        printf '\e[K'
-        printf '\e[K'
         
             #mark="12886109321"
             #printf 'Evalulating Base System checksum...'
@@ -102,22 +70,13 @@ if [[ "$install" == *"y"* ]]
            # if [ "1" == "1" ]
                 #then
                     rm -Rf ~/Downloads/InstallAssistant*
-                    echo 'Downloading installer files.'
-                    curl http://swcdn.apple.com/content/downloads/37/23/071-08935-A_VI70PU5ZSV/dxl5i8eyczg8zje0wiks3r03r91euyi9sa/InstallAssistant.pkg -L -s -o ~/Downloads/InstallAssistant.pkg 
-                    printf '\e[K'
-                    echo
-                    printf '\e[K'
-                    echo 'Preparing installer.'
-                    pkgutil --expand ~/Downloads/InstallAssistant.pkg ~/Downloads/InstallAssistant
-                    tar -xf ~/Downloads/InstallAssistant/Payload -C /
-                    if [ ! -d '/Applications/Install macOS Big Sur.app/Contents/SharedSupport/SharedSupport.dmg' ]
-                    then
-                        mkdir -p '/Applications/Install macOS Big Sur.app/Contents/SharedSupport'
-                        cp -rf ~/Downloads/InstallAssistant.pkg '/Applications/Install macOS Big Sur.app/Contents/SharedSupport/SharedSupport.dmg'
-                    fi
+                    echo 'Downloading installer files...'
+                    curl http://swcdn.apple.com/content/downloads/12/32/071-14766-A_Q2H6ELXGVG/zx8saim8tei7fezrmvu4vuab80m0e8a5ll/InstallAssistant.pkg -L -o ~/Downloads/InstallAssistant.pkg &> /dev/null
+                    echo 'Preparing installer...'
+                    installer -pkg ~/Downloads/InstallAssistant.pkg -target / -verboseR &> /dev/null
                     rm -rf ~/Downloads/InstallAssistant*
                 #else
-                    printf "\nDownload Complete.\n"
+                    echo "Download finished."
                     
             #fi
 
@@ -143,8 +102,41 @@ then
     break
 fi
 
+
+# Check to make sure we can access both our own directory and the root
+# directory of the USB stick. Terminal's TCC permissions in Catalina can
+# prevent access to either of those two directories. However, only do this
+# check on Catalina or higher. (I can add an "else" block later to handle
+# Mojave and earlier, but Catalina is responsible for every single bug
+# report I've received due to this script lacking necessary read permissions.)
+if [ `uname -r | sed -e 's@\..*@@'` -ge 19 ]
+then
+    echo 'Checking read access to necessary directories...'
+    if ! checkDirAccess
+    then
+        echo 'Access check failed.'
+        tccutil reset All com.apple.Terminal &> /dev/null
+        echo 'Retrying access check...'
+        if ! checkDirAccess
+        then
+            echo
+            echo 'Cannot continue because you did not approve permissions.'
+            stty echo
+            exit 1
+        else
+            echo 'Access check succeeded on second attempt.'
+            echo
+        fi
+    else
+        echo 'Access check succeeded.'
+        echo
+    fi
+fi
+
 echo "Creating installation medium on $VOLUME ..."
 sudo /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume "$VOLUME" --nointeraction &> /dev/null
+
+if
 
 do
   do
