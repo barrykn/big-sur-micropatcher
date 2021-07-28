@@ -1,6 +1,20 @@
 # big-sur-micropatcher (Version 0.5.1)
 A primitive USB patcher for installing macOS Big Sur on unsupported Macs
 
+## tl;dr Instructions Summary
+ (make sure to read the *full instructions* at the end of the document)
+1. Use a 16+GB USB Drive --> Format with Disk Utility to "Mac OS Extended (Journaled)" and and "GUID Partition Map". Name it "installer".
+2. Download a Big Sur installer application
+3. go to the download directory and `sudo Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume /Volumes/installer/`
+4. Download this Repository as Zip and open in Terminal or `git clone https://github.com/barrykn/big-sur-micropatcher.git && cd big-sur-micropatcher/`
+5. `chmod +x micropatcher.sh && ./micropatcher.sh /Volumes/Install\ macOS\ Big\ Sur/`
+6. `chmod +x install-setvars.sh && sudo ./install-setvars.sh` should automatically find the USB and mount EFI otherwise look in Instructions section
+7. Reboot and hold ALT/Option key while booting.
+8. In boot menu choose EFI Boot (Yellow). The Mac will Power down immediately.
+9. Repeat Step 7 to get to boot menu
+10. Select "Install macOS Big Sur". If you see a prohibited sign repeat Steps 7-8.
+11. Install as usual
+
 By the way, if you have a Mac Pro, [Big Mac](https://github.com/StarPlayrX/bigmac) by StarPlayrX is another patcher worth considering. For 2008 Mac Pros (MacPro3,1) in particular, Big Mac is clearly a better option than this patcher (at least for now).
 
 Thanks to the following people for their hard work to get Big Sur running on unsupported Macs:
